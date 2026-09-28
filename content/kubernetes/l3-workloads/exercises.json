@@ -1,0 +1,156 @@
+{
+  "exercises": [
+    {
+      "id": "elegir-workload",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Necesitas un agente que recoja los logs de **cada** Node del clúster, incluidos los que se añadan en el futuro. ¿Qué usas?",
+      "hints": ["Uno por Node."],
+      "options": [
+        { "id": "a", "text": "Un Deployment con tantas réplicas como Nodes", "correct": false, "explanation": "No garantiza uno por Node ni se adapta a Nodes nuevos." },
+        { "id": "b", "text": "Un DaemonSet", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Un StatefulSet", "correct": false, "explanation": "Da identidad y almacenamiento estables, no uno por Node." }
+      ],
+      "solution": {
+        "answer": "DaemonSet",
+        "explanation": "Un DaemonSet ejecuta un Pod en cada Node (o en los que elijas) y lo crea automáticamente en los Nodes nuevos."
+      }
+    },
+    {
+      "id": "statefulset-nombres",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un StatefulSet llamado `db` con 3 réplicas. ¿Cómo se llaman sus Pods?",
+      "hints": ["Nombre del StatefulSet más un ordinal que empieza en 0."],
+      "options": [
+        { "id": "a", "text": "`db-0`, `db-1`, `db-2`", "correct": true, "explanation": "Correcto: nombres fijos y ordenados." },
+        { "id": "b", "text": "`db-7d9c6b5f4-x2k8p`…", "correct": false, "explanation": "Esos nombres aleatorios son de un Deployment." },
+        { "id": "c", "text": "`db-1`, `db-2`, `db-3`", "correct": false, "explanation": "El ordinal empieza en 0." }
+      ],
+      "solution": {
+        "answer": "db-0, db-1, db-2",
+        "explanation": "Los Pods de un StatefulSet tienen identidad estable `<nombre>-<ordinal>` y, con el headless Service, un DNS propio cada uno."
+      }
+    },
+    {
+      "id": "statefulset-pvc",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Al escalar un StatefulSet de 3 a 1 réplica, Kubernetes borra por defecto los PVC de `db-1` y `db-2`.",
+      "hints": ["¿Qué prefiere Kubernetes: ahorrar espacio o no perder datos?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Por defecto los PVC se conservan." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: se conservan para no perder datos; si vuelves a escalar, los Pods recuperan su disco." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Por defecto los PVC de un StatefulSet se conservan al escalar hacia abajo o al borrarlo. Se puede cambiar con persistentVolumeClaimRetentionPolicy."
+      }
+    },
+    {
+      "id": "job-restart",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué `restartPolicy` **no** se puede usar en la plantilla de Pod de un Job?",
+      "hints": ["Un Job está pensado para Pods que terminan."],
+      "options": [
+        { "id": "a", "text": "`Never`", "correct": false, "explanation": "Es válido." },
+        { "id": "b", "text": "`OnFailure`", "correct": false, "explanation": "Es válido." },
+        { "id": "c", "text": "`Always`", "correct": true, "explanation": "Correcto: un Pod que siempre se reinicia nunca terminaría." }
+      ],
+      "solution": {
+        "answer": "Always",
+        "explanation": "En un Job solo se admiten `Never` y `OnFailure`. `Always` es el de los Deployments."
+      }
+    },
+    {
+      "id": "backofflimit",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Si no indicas `backoffLimit`, ¿cuántas veces reintenta un Job antes de darse por fallido?",
+      "hints": ["Es un número pequeño, entre 5 y 10."],
+      "options": [
+        { "id": "a", "text": "0", "correct": false, "explanation": "Sí hay reintentos por defecto." },
+        { "id": "b", "text": "6", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Infinitas", "correct": false, "explanation": "Hay un límite." }
+      ],
+      "solution": {
+        "answer": "6",
+        "explanation": "`backoffLimit` vale 6 por defecto; los reintentos se espacian cada vez más (backoff exponencial)."
+      }
+    },
+    {
+      "id": "cron-sintaxis",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué `schedule` ejecuta un CronJob **todos los lunes a las 09:00**?",
+      "hints": ["Campos: minuto hora día-del-mes mes día-de-la-semana (domingo = 0)."],
+      "options": [
+        { "id": "a", "text": "`0 9 * * 1`", "correct": true, "explanation": "Correcto: minuto 0, hora 9, cualquier día del mes y mes, día de la semana 1 (lunes)." },
+        { "id": "b", "text": "`9 0 * * 1`", "correct": false, "explanation": "Sería a las 00:09." },
+        { "id": "c", "text": "`0 9 1 * *`", "correct": false, "explanation": "Sería el día 1 de cada mes." }
+      ],
+      "solution": {
+        "answer": "0 9 * * 1",
+        "explanation": "Orden de los 5 campos: minuto, hora, día del mes, mes, día de la semana."
+      }
+    },
+    {
+      "id": "concurrency",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una copia de seguridad programada a veces tarda más que el intervalo entre ejecuciones. Quieres que **no se lance otra** mientras la anterior sigue. ¿Qué `concurrencyPolicy` usas?",
+      "hints": ["Allow, Forbid o Replace."],
+      "options": [
+        { "id": "a", "text": "`Allow`", "correct": false, "explanation": "Es el valor por defecto: permitiría ejecuciones simultáneas." },
+        { "id": "b", "text": "`Forbid`", "correct": true, "explanation": "Correcto: se salta la nueva ejecución." },
+        { "id": "c", "text": "`Replace`", "correct": false, "explanation": "Cancelaría la copia en curso para empezar otra." }
+      ],
+      "solution": {
+        "answer": "Forbid",
+        "explanation": "`Forbid` salta la ejecución nueva si la anterior no ha terminado; `Replace` la sustituye; `Allow` (por defecto) permite que se solapen."
+      }
+    },
+    {
+      "id": "lanzar-cronjob",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lanza **ahora** una ejecución del CronJob `backup-db` creando un Job llamado `backup-manual`.",
+      "hints": [
+        "Es `kubectl create job <nombre>` con un flag que indica de dónde sale.",
+        "El flag es `--from=cronjob/<nombre>`."
+      ],
+      "accepted": ["kubectl create job backup-manual --from=cronjob/backup-db"],
+      "output": "job.batch/backup-manual created",
+      "solution": {
+        "answer": "kubectl create job backup-manual --from=cronjob/backup-db",
+        "explanation": "`--from=cronjob/...` crea un Job con la plantilla del CronJob, sin esperar al horario. Muy útil para probar."
+      }
+    },
+    {
+      "id": "manifest-cronjob",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el CronJob `backup-db`: cada día a las 03:00 (`0 3 * * *`) en la zona `Europe/Madrid`, con `concurrencyPolicy: Forbid`, y un Pod con `restartPolicy: OnFailure` y un contenedor `backup` con la imagen `ghcr.io/tienda/backup:1.3.0`.",
+      "starter": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: backup-db\nspec:\n",
+      "assertions": [
+        { "path": "apiVersion", "op": "equals", "value": "batch/v1", "message": "apiVersion es batch/v1" },
+        { "path": "spec.schedule", "op": "equals", "value": "0 3 * * *", "message": "schedule: \"0 3 * * *\" (entre comillas: empieza por número y lleva asteriscos)" },
+        { "path": "spec.timeZone", "op": "equals", "value": "Europe/Madrid", "message": "timeZone: Europe/Madrid" },
+        { "path": "spec.concurrencyPolicy", "op": "equals", "value": "Forbid", "message": "concurrencyPolicy: Forbid" },
+        { "path": "spec.jobTemplate.spec.template.spec.restartPolicy", "op": "equals", "value": "OnFailure", "message": "restartPolicy: OnFailure (en jobTemplate.spec.template.spec)" },
+        { "path": "spec.jobTemplate.spec.template.spec.containers[0].name", "op": "equals", "value": "backup", "message": "El contenedor se llama backup" },
+        { "path": "spec.jobTemplate.spec.template.spec.containers[0].image", "op": "equals", "value": "ghcr.io/tienda/backup:1.3.0", "message": "La imagen es ghcr.io/tienda/backup:1.3.0" }
+      ],
+      "hints": [
+        "El anidamiento es: `spec` → `jobTemplate` → `spec` → `template` → `spec` → `containers`.",
+        "`schedule`, `timeZone` y `concurrencyPolicy` van directamente en el `spec` del CronJob.",
+        "Pon el horario entre comillas: `schedule: \"0 3 * * *\"`."
+      ],
+      "solution": {
+        "answer": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: backup-db\nspec:\n  schedule: \"0 3 * * *\"\n  timeZone: Europe/Madrid\n  concurrencyPolicy: Forbid\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          restartPolicy: OnFailure\n          containers:\n            - name: backup\n              image: ghcr.io/tienda/backup:1.3.0\n",
+        "explanation": "El CronJob define horario y política; `jobTemplate` es un Job, y dentro, `template` es el Pod. Tres niveles de `spec`: el del CronJob, el del Job y el del Pod."
+      }
+    }
+  ]
+}

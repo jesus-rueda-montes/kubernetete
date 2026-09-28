@@ -1,0 +1,8 @@
+{
+  "title": "Serverless: Cloud Run",
+  "summary": "Cloud Run (servicios, revisiones, escalado a cero, concurrencia y jobs), Cloud Run functions con eventos, y cuándo elegir serverless, GKE o VMs.",
+  "level": 3,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

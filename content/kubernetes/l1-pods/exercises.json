@@ -1,0 +1,100 @@
+{
+  "exercises": [
+    {
+      "id": "pod-red-compartida",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Dos contenedores están en **el mismo Pod**. ¿Cómo se comunica uno con el otro de la forma más directa?",
+      "hints": [
+        "Piensa en qué comparten los contenedores de un mismo Pod.",
+        "Comparten la misma IP y el mismo espacio de red."
+      ],
+      "options": [
+        { "id": "a", "text": "Por `localhost` y el puerto del otro contenedor", "correct": true, "explanation": "Correcto: comparten la red del Pod, así que se ven como si estuvieran en la misma máquina." },
+        { "id": "b", "text": "Mediante un Service obligatoriamente", "correct": false, "explanation": "Un Service da una dirección estable para llegar a Pods desde fuera de ellos; dentro del mismo Pod no hace falta." },
+        { "id": "c", "text": "Por la IP del Node", "correct": false, "explanation": "La IP del Node es la de la máquina, no la forma de hablar entre contenedores del mismo Pod." },
+        { "id": "d", "text": "No pueden comunicarse", "correct": false, "explanation": "Sí pueden: compartir red es precisamente una de las razones de existir del Pod." }
+      ],
+      "solution": {
+        "answer": "Por localhost",
+        "explanation": "Todos los contenedores de un Pod comparten una IP y el espacio de puertos, así que se comunican por `localhost`."
+      }
+    },
+    {
+      "id": "pod-efimero",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si el Node donde corre un Pod falla, Kubernetes **repara ese mismo Pod** y conserva su IP.",
+      "hints": ["Recuerda la palabra clave de la lección sobre la vida de un Pod: son ..."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Los Pods no se reparan. Un controlador crea un Pod nuevo, normalmente con otra IP." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: los Pods son efímeros. Se sustituyen por otros nuevos, con IP distinta." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Los Pods son efímeros: si mueren, un controlador (como un Deployment) crea otro nuevo. Por eso no debes depender de la IP de un Pod."
+      }
+    },
+    {
+      "id": "listar-pods",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista los Pods del namespace actual.",
+      "hints": [
+        "El verbo de kubectl para listar recursos es el que en inglés significa \"obtener\".",
+        "Es `kubectl get` seguido del tipo de recurso."
+      ],
+      "accepted": ["kubectl get pods", "kubectl get pod", "kubectl get po"],
+      "output": "NAME   READY   STATUS    RESTARTS   AGE\nweb    1/1     Running   0          2m",
+      "solution": {
+        "answer": "kubectl get pods",
+        "explanation": "`kubectl get <recurso>` lista objetos. `pods`, `pod` y la abreviatura `po` son equivalentes."
+      }
+    },
+    {
+      "id": "crear-pod-run",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para crear un Pod llamado `web` con la imagen `nginx:1.27` sin usar un archivo.",
+      "template": "kubectl {{verbo}} web --{{flag}}=nginx:1.27",
+      "blanks": [
+        { "id": "verbo", "accepted": ["run"] },
+        { "id": "flag", "accepted": ["image"] }
+      ],
+      "hints": [
+        "El verbo significa \"ejecutar\" en inglés.",
+        "El flag indica qué imagen de contenedor usar."
+      ],
+      "solution": {
+        "answer": "kubectl run web --image=nginx:1.27",
+        "explanation": "`kubectl run` crea un Pod rápidamente; `--image` indica la imagen del contenedor."
+      }
+    },
+    {
+      "id": "manifest-pod-web",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el manifest de un Pod llamado `web`, con la etiqueta `app: web` y **un** contenedor llamado `nginx` que use la imagen `nginx:1.27` y escuche en el puerto `80`.",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: \nspec:\n  containers:\n",
+      "assertions": [
+        { "path": "apiVersion", "op": "equals", "value": "v1", "message": "apiVersion es v1 (los Pods están en el grupo core)" },
+        { "path": "kind", "op": "equals", "value": "Pod", "message": "kind es Pod (con P mayúscula)" },
+        { "path": "metadata.name", "op": "equals", "value": "web", "message": "El Pod se llama web (metadata.name)" },
+        { "path": "metadata.labels.app", "op": "equals", "value": "web", "message": "Tiene la etiqueta app: web (dentro de metadata.labels)" },
+        { "path": "spec.containers", "op": "count", "value": 1, "message": "spec.containers es una lista con un único contenedor" },
+        { "path": "spec.containers[0].name", "op": "equals", "value": "nginx", "message": "El contenedor se llama nginx" },
+        { "path": "spec.containers[0].image", "op": "equals", "value": "nginx:1.27", "message": "La imagen es nginx:1.27 (con versión fija)" },
+        { "path": "spec.containers[0].ports[*].containerPort", "op": "equals", "value": 80, "message": "El contenedor declara containerPort: 80 (dentro de una lista ports)" }
+      ],
+      "hints": [
+        "Las etiquetas van en `metadata.labels`, al mismo nivel que `name`.",
+        "`containers` es una **lista**: cada contenedor empieza con un guion (`- name: ...`).",
+        "Los puertos también son una lista: `ports:` y debajo `- containerPort: 80`, todo indentado dentro del contenedor."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: web\n  labels:\n    app: web\nspec:\n  containers:\n    - name: nginx\n      image: nginx:1.27\n      ports:\n        - containerPort: 80\n",
+        "explanation": "`metadata` identifica el objeto (nombre y etiquetas) y `spec` describe lo que queremos: una lista `containers` con un elemento (`- name: nginx`). Dentro del contenedor, `ports` es otra lista. La indentación marca qué pertenece a qué: usa siempre espacios, nunca tabuladores."
+      }
+    }
+  ]
+}

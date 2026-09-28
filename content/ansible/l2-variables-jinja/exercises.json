@@ -1,0 +1,136 @@
+{
+  "exercises": [
+    {
+      "id": "precedencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "`puerto_web` vale 80 en `group_vars/all.yml`, 443 en `group_vars/produccion.yml` y 8443 en `host_vars/web2.yml`. `web2` está en el grupo `produccion`. ¿Qué valor usa `web2`?",
+      "hints": ["Lo más específico gana a lo más general."],
+      "options": [
+        { "id": "a", "text": "80", "correct": false, "explanation": "all es lo más general: pierde." },
+        { "id": "b", "text": "443", "correct": false, "explanation": "El grupo gana a all, pero host_vars es más específico." },
+        { "id": "c", "text": "8443", "correct": true, "explanation": "Correcto: host_vars gana a group_vars." }
+      ],
+      "solution": {
+        "answer": "8443",
+        "explanation": "Orden (de menos a más): group_vars/all → group_vars/<grupo> → host_vars/<host>. Y por encima de todo, `-e`."
+      }
+    },
+    {
+      "id": "extra-vars",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué forma de dar valor a una variable tiene la **máxima** precedencia?",
+      "hints": ["Es algo que escribes al lanzar el playbook."],
+      "options": [
+        { "id": "a", "text": "`host_vars/`", "correct": false, "explanation": "Es alta, pero no la máxima." },
+        { "id": "b", "text": "`-e` / `--extra-vars` en la línea de comandos", "correct": true, "explanation": "Correcto: las extra vars ganan siempre." },
+        { "id": "c", "text": "`defaults/main.yml` de un rol", "correct": false, "explanation": "Es la más débil: valores por defecto." }
+      ],
+      "solution": {
+        "answer": "-e",
+        "explanation": "Las extra vars (`-e`) sobrescriben cualquier otra definición. Los defaults de los roles son lo más débil."
+      }
+    },
+    {
+      "id": "comillas-jinja",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál de estas líneas es YAML válido en una tarea?",
+      "hints": ["Si el valor empieza por `{{`, YAML lo confunde con un mapa."],
+      "options": [
+        { "id": "a", "text": "`dest: {{ base }}/logs`", "correct": false, "explanation": "Empieza por `{{` sin comillas: error de sintaxis YAML." },
+        { "id": "b", "text": "`dest: \"{{ base }}/logs\"`", "correct": true, "explanation": "Correcto: todo el valor entre comillas." },
+        { "id": "c", "text": "`dest: {{ \"base\" }}/logs`", "correct": false, "explanation": "Las comillas deben envolver todo el valor." }
+      ],
+      "solution": {
+        "answer": "dest: \"{{ base }}/logs\"",
+        "explanation": "Cuando un valor empieza por `{{`, hay que entrecomillar la expresión completa."
+      }
+    },
+    {
+      "id": "nombre-variable",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es un nombre de variable válido en Ansible?",
+      "hints": ["Letras, números y guiones bajos; sin empezar por número."],
+      "options": [
+        { "id": "a", "text": "`puerto-web`", "correct": false, "explanation": "Los guiones no están permitidos." },
+        { "id": "b", "text": "`puerto_web`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "`2puerto`", "correct": false, "explanation": "No puede empezar por número." }
+      ],
+      "solution": {
+        "answer": "puerto_web",
+        "explanation": "Solo letras, números y guiones bajos, sin empezar por número, y sin usar palabras reservadas."
+      }
+    },
+    {
+      "id": "copy-template",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Necesitas un archivo de configuración que incluya el nombre y la IP de **cada** servidor. ¿Qué módulo usas?",
+      "hints": ["Uno copia tal cual; el otro rellena huecos con variables."],
+      "options": [
+        { "id": "a", "text": "`ansible.builtin.copy`", "correct": false, "explanation": "Copiaría el mismo archivo en todos." },
+        { "id": "b", "text": "`ansible.builtin.template`", "correct": true, "explanation": "Correcto: procesa una plantilla Jinja2 con las variables de cada host." },
+        { "id": "c", "text": "`ansible.builtin.file`", "correct": false, "explanation": "`file` gestiona carpetas, permisos y enlaces, no contenidos." }
+      ],
+      "solution": {
+        "answer": "template",
+        "explanation": "`template` renderiza una plantilla `.j2` con las variables y facts de cada host y copia el resultado."
+      }
+    },
+    {
+      "id": "ver-facts",
+      "type": "command",
+      "cli": "ansible",
+      "prompt": "Muestra todos los facts del host `web1` (inventario `inventario.ini`).",
+      "hints": [
+        "Es un comando ad-hoc con el módulo que recoge los facts.",
+        "El módulo se llama `setup`."
+      ],
+      "accepted": ["ansible web1 -i inventario.ini -m setup", "ansible web1 -i inventario.ini -m ansible.builtin.setup"],
+      "output": "web1 | SUCCESS => {\n    \"ansible_facts\": {\n        \"ansible_distribution\": \"Ubuntu\",\n        \"ansible_os_family\": \"Debian\",\n        \"ansible_default_ipv4\": { \"address\": \"10.0.0.11\", ... },\n        ...",
+      "solution": {
+        "answer": "ansible web1 -i inventario.ini -m setup",
+        "explanation": "El módulo `setup` es el que ejecuta la tarea «Gathering Facts». Lanzado ad-hoc, muestra todos los facts del host."
+      }
+    },
+    {
+      "id": "filtro-default",
+      "type": "fill",
+      "language": "yaml",
+      "prompt": "Completa la línea de la plantilla para que use `puerto_web` y, si no está definida, `80`.",
+      "template": "listen {{ puerto_web | {{f}}(80) }};",
+      "blanks": [{ "id": "f", "accepted": ["default"] }],
+      "hints": ["El filtro se llama «valor por defecto» en inglés."],
+      "solution": {
+        "answer": "listen {{ puerto_web | default(80) }};",
+        "explanation": "El filtro `default` devuelve el valor indicado cuando la variable no está definida, en vez de fallar."
+      }
+    },
+    {
+      "id": "tarea-template",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la tarea: genera `/etc/nginx/conf.d/tienda.conf` a partir de la plantilla `tienda.conf.j2` con el módulo `ansible.builtin.template` y permisos `\"0644\"`. Añade al play la variable `puerto_web: 8080` en `vars`.",
+      "starter": "---\n- name: Configurar nginx\n  hosts: web\n  become: true\n  tasks:\n    - name: Configuración de la tienda\n",
+      "assertions": [
+        { "path": "[0].vars.puerto_web", "op": "equals", "value": 8080, "message": "El play tiene vars con puerto_web: 8080 (número)" },
+        { "path": "[0].tasks[0]['ansible.builtin.template'].src", "op": "equals", "value": "tienda.conf.j2", "message": "La tarea usa ansible.builtin.template con src: tienda.conf.j2" },
+        { "path": "[0].tasks[0]['ansible.builtin.template'].dest", "op": "equals", "value": "/etc/nginx/conf.d/tienda.conf", "message": "dest: /etc/nginx/conf.d/tienda.conf" },
+        { "path": "[0].tasks[0]['ansible.builtin.template'].mode", "op": "equals", "value": "0644", "message": "mode: \"0644\" (entre comillas)" },
+        { "path": "[0].tasks[0].name", "op": "equals", "value": "Configuración de la tienda", "message": "La tarea conserva su name" }
+      ],
+      "hints": [
+        "`vars:` va al nivel del play (junto a `hosts` y `become`) y dentro, `puerto_web: 8080`.",
+        "El módulo va debajo de `- name: ...`, a la misma altura que `name`.",
+        "`src`, `dest` y `mode` van indentados dentro de `ansible.builtin.template:`."
+      ],
+      "solution": {
+        "answer": "---\n- name: Configurar nginx\n  hosts: web\n  become: true\n  vars:\n    puerto_web: 8080\n  tasks:\n    - name: Configuración de la tienda\n      ansible.builtin.template:\n        src: tienda.conf.j2\n        dest: /etc/nginx/conf.d/tienda.conf\n        mode: \"0644\"\n",
+        "explanation": "La variable del play estará disponible en la plantilla como `{{ puerto_web }}`. `template` busca `tienda.conf.j2` en la carpeta `templates/` junto al playbook (o del rol)."
+      }
+    }
+  ]
+}

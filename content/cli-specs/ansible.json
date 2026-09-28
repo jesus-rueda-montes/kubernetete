@@ -1,0 +1,25 @@
+{
+  "cli": "ansible",
+  "description": "Ansible: ejecuta una tarea suelta (ad-hoc) en los hosts que coinciden con un patrón",
+  "source": "https://docs.ansible.com/ansible/latest/cli/ansible.html",
+  "args": [{ "name": "PATRÓN" }],
+  "globalFlags": [
+    { "name": "module-name", "short": "m", "takesValue": true, "values": ["ping", "ansible.builtin.ping", "command", "ansible.builtin.command", "shell", "ansible.builtin.shell", "setup", "ansible.builtin.setup", "apt", "ansible.builtin.apt", "dnf", "ansible.builtin.dnf", "copy", "ansible.builtin.copy", "service", "ansible.builtin.service", "user", "ansible.builtin.user"], "description": "Módulo a ejecutar (por defecto, command)" },
+    { "name": "args", "short": "a", "takesValue": true, "description": "Argumentos del módulo" },
+    { "name": "inventory", "short": "i", "takesValue": true, "description": "Archivo de inventario o lista de hosts separados por comas" },
+    { "name": "limit", "short": "l", "takesValue": true, "description": "Restringe aún más los hosts seleccionados" },
+    { "name": "user", "short": "u", "takesValue": true, "description": "Usuario remoto para conectar" },
+    { "name": "become", "short": "b", "takesValue": false, "description": "Escala privilegios (sudo por defecto)" },
+    { "name": "ask-become-pass", "short": "K", "takesValue": false, "description": "Pide la contraseña para escalar privilegios" },
+    { "name": "become-user", "takesValue": true, "description": "Usuario al que escalar (root por defecto)" },
+    { "name": "ask-pass", "short": "k", "takesValue": false, "description": "Pide la contraseña de conexión" },
+    { "name": "check", "short": "C", "takesValue": false, "description": "Modo simulación: no cambia nada" },
+    { "name": "diff", "short": "D", "takesValue": false, "description": "Muestra las diferencias en archivos y plantillas" },
+    { "name": "extra-vars", "short": "e", "takesValue": true, "description": "Variables extra (clave=valor, YAML o JSON)" },
+    { "name": "forks", "short": "f", "takesValue": true, "description": "Número de hosts en paralelo" },
+    { "name": "list-hosts", "takesValue": false, "description": "Lista los hosts que coinciden, sin ejecutar nada" },
+    { "name": "one-line", "short": "o", "takesValue": false, "description": "Salida condensada, una línea por host" },
+    { "name": "private-key", "takesValue": true, "description": "Clave privada SSH para conectar" },
+    { "name": "verbose", "short": "v", "takesValue": false, "description": "Más detalle (-vvv para depurar conexiones)" }
+  ]
+}

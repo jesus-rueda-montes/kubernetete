@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "agentless", "front": "¿Qué significa que Ansible es agentless?", "back": "No instala nada propio en los nodos gestionados: se conecta por SSH (o WinRM) y ejecuta los módulos con Python." },
+    { "id": "push", "front": "¿Ansible es push o pull?", "back": "Push: el nodo de control envía los cambios cuando lo ejecutas." },
+    { "id": "idempotencia", "front": "Idempotencia en Ansible", "back": "Ejecutar una tarea varias veces deja el sistema igual que una sola vez: `ok` si ya estaba bien, `changed` si ha tenido que cambiar algo." },
+    { "id": "grupos-defecto", "front": "Grupos que existen siempre en un inventario", "back": "`all` (todos) y `ungrouped` (los que no están en ningún otro grupo)." },
+    { "id": "patrones", "front": "Patrones: unión, intersección y exclusión", "back": "`web:db` (unión), `web:&prod` (intersección), `web:!web2` (exclusión)." },
+    { "id": "command-shell", "front": "Módulo `command` frente a `shell`", "back": "`command` (el de por defecto) no pasa por una shell: sin tuberías ni redirecciones. `shell` sí las admite." },
+    { "id": "become", "front": "¿Qué hace `-b` / `--become`?", "back": "Ejecuta con privilegios elevados (sudo, por defecto como root)." },
+    { "id": "ansible-terraform", "front": "Ansible frente a Terraform", "back": "Terraform crea infraestructura y guarda un state; Ansible configura lo que hay dentro de las máquinas y no guarda estado. Se usan juntos." }
+  ]
+}

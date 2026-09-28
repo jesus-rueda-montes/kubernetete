@@ -1,0 +1,8 @@
+{
+  "title": "Módulos",
+  "summary": "Agrupar recursos en módulos reutilizables: estructura, inputs y outputs, fuentes (local, Registry, git) y versionado.",
+  "level": 3,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

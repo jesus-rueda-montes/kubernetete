@@ -1,0 +1,8 @@
+{
+  "title": "IAM: identidades y permisos",
+  "summary": "Quién puede hacer qué: principals, roles y políticas, herencia en la jerarquía, cuentas de servicio y mínimo privilegio.",
+  "level": 2,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

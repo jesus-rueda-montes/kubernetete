@@ -1,0 +1,8 @@
+{
+  "title": "Probes, requests y limits",
+  "summary": "Que Kubernetes sepa si tu app está viva y lista (probes) y cuánta CPU y memoria necesita y puede usar (requests, limits y QoS).",
+  "level": 2,
+  "order": 4,
+  "xp": 100,
+  "prereqs": []
+}

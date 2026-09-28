@@ -1,0 +1,146 @@
+{
+  "exercises": [
+    {
+      "id": "sin-plugin",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas una NetworkPolicy de denegar todo en un clúster cuyo plugin de red no soporta NetworkPolicies. ¿Qué pasa?",
+      "hints": ["¿Quién aplica realmente las políticas?"],
+      "options": [
+        { "id": "a", "text": "`kubectl apply` da un error", "correct": false, "explanation": "La API acepta el objeto igualmente." },
+        { "id": "b", "text": "La política se crea, pero no tiene ningún efecto", "correct": true, "explanation": "Correcto: nadie la aplica." },
+        { "id": "c", "text": "Se bloquea todo el tráfico del clúster", "correct": false, "explanation": "Sin un plugin que la aplique, no se bloquea nada." }
+      ],
+      "solution": {
+        "answer": "No tiene efecto",
+        "explanation": "Las NetworkPolicies las aplica el plugin de red. Sin soporte, el objeto existe en la API pero no filtra nada, y no hay ningún aviso."
+      }
+    },
+    {
+      "id": "seleccionado-aislado",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Los Pods `app: db` no tenían políticas. Creas una que solo permite la entrada desde `app: api`. ¿Qué pasa con el tráfico desde `app: informes`, que antes funcionaba?",
+      "hints": ["¿Qué le pasa a un Pod cuando una política lo selecciona?"],
+      "options": [
+        { "id": "a", "text": "Sigue funcionando: la política solo añade un permiso", "correct": false, "explanation": "Al seleccionar el Pod, lo aísla." },
+        { "id": "b", "text": "Se bloquea: el Pod queda aislado y solo entra lo permitido", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Se bloquea",
+        "explanation": "En cuanto una política con Ingress selecciona un Pod, solo entra el tráfico que permita alguna política. Habría que añadir `app: informes` si debe seguir accediendo."
+      }
+    },
+    {
+      "id": "and-or",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En `from` hay un **único** elemento con `namespaceSelector` (namespace `monitoring`) y `podSelector` (`app: prometheus`). ¿Qué tráfico se permite?",
+      "hints": ["Mismo elemento o elementos separados: ¿AND u OR?"],
+      "options": [
+        { "id": "a", "text": "Solo los Pods `app: prometheus` del namespace `monitoring`", "correct": true, "explanation": "Correcto: en el mismo elemento, se exigen los dos." },
+        { "id": "b", "text": "Todos los Pods de `monitoring` y además los `app: prometheus` de mi namespace", "correct": false, "explanation": "Eso sería con dos elementos separados (OR)." },
+        { "id": "c", "text": "Ninguno: no se pueden combinar", "correct": false, "explanation": "Sí se pueden combinar." }
+      ],
+      "solution": {
+        "answer": "AND",
+        "explanation": "Dentro del mismo elemento de `from`, los selectores se combinan con AND. Con un guion más (dos elementos), sería OR."
+      }
+    },
+    {
+      "id": "dns",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Añades una política con `policyTypes: [Egress]` que solo permite salir a los Pods `app: db` en el 5432. La app ahora falla con «could not resolve host db». ¿Por qué?",
+      "hints": ["¿Cómo sabe la app qué IP tiene `db`?"],
+      "options": [
+        { "id": "a", "text": "La política bloquea la salida hacia el DNS del clúster", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El Service `db` se ha borrado", "correct": false, "explanation": "Crear una política no borra nada." },
+        { "id": "c", "text": "Las políticas de egress no permiten el puerto 5432", "correct": false, "explanation": "Sí lo permiten; el problema es previo: resolver el nombre." }
+      ],
+      "solution": {
+        "answer": "Falta permitir el DNS",
+        "explanation": "Añade una regla de egress hacia CoreDNS (`k8s-app: kube-dns` en `kube-system`) en el puerto 53, UDP y TCP."
+      }
+    },
+    {
+      "id": "otro-namespace",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres permitir la entrada a tu web desde el Ingress controller, que corre en el namespace `traefik`. ¿Qué selector usas?",
+      "hints": ["`podSelector` solo mira el namespace de la política."],
+      "options": [
+        { "id": "a", "text": "`podSelector` con las labels del Ingress controller", "correct": false, "explanation": "Buscaría esos Pods en tu namespace, no en `traefik`." },
+        { "id": "b", "text": "`namespaceSelector` con `kubernetes.io/metadata.name: traefik`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "`ipBlock` con la IP del Pod del controller", "correct": false, "explanation": "Las IPs de los Pods cambian." }
+      ],
+      "solution": {
+        "answer": "namespaceSelector",
+        "explanation": "Para Pods de otros namespaces se usa `namespaceSelector` (opcionalmente combinado con `podSelector` en el mismo elemento). La label `kubernetes.io/metadata.name` la pone Kubernetes automáticamente."
+      }
+    },
+    {
+      "id": "cmd-get-netpol",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista las NetworkPolicies del namespace `tienda`.",
+      "hints": [
+        "Es un `kubectl get`.",
+        "El recurso es `networkpolicies` (o `netpol`)."
+      ],
+      "accepted": [
+        "kubectl get networkpolicies -n tienda",
+        "kubectl get networkpolicy -n tienda",
+        "kubectl get netpol -n tienda"
+      ],
+      "output": "NAME              POD-SELECTOR   AGE\napi-desde-web     app=api        3d\ndb-desde-api      app=db         3d\ndenegar-entrada   <none>         3d",
+      "solution": {
+        "answer": "kubectl get networkpolicies -n tienda",
+        "explanation": "`POD-SELECTOR` muestra a qué Pods se aplica cada una; `<none>` significa `podSelector: {}`, es decir, todos los Pods del namespace."
+      }
+    },
+    {
+      "id": "editor-deny",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la política `denegar-todo` para que aísle **todos** los Pods del namespace `pagos` tanto para la entrada como para la salida, sin permitir nada.",
+      "starter": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: denegar-todo\n  namespace: pagos\nspec:\n",
+      "assertions": [
+        { "path": "spec.podSelector", "op": "equals", "value": {}, "message": "podSelector: {} (todos los Pods del namespace)" },
+        { "path": "spec.policyTypes", "op": "count", "value": 2, "message": "policyTypes con dos elementos" },
+        { "path": "spec.policyTypes", "op": "equals", "value": ["Ingress", "Egress"], "message": "policyTypes: [Ingress, Egress]" }
+      ],
+      "hints": [
+        "`podSelector: {}` selecciona todos los Pods del namespace.",
+        "Con `Ingress` y `Egress` en `policyTypes`, y sin reglas `ingress` ni `egress`, no se permite nada."
+      ],
+      "solution": {
+        "answer": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: denegar-todo\n  namespace: pagos\nspec:\n  podSelector: {}\n  policyTypes:\n    - Ingress\n    - Egress\n",
+        "explanation": "Es el punto de partida recomendado. Después se añaden políticas que abren solo lo necesario, empezando por el DNS en la salida."
+      }
+    },
+    {
+      "id": "editor-db",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la política para que los Pods `app: db` solo acepten tráfico de entrada desde los Pods `app: api` (del mismo namespace) en el puerto TCP `5432`.",
+      "starter": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: db-desde-api\n  namespace: tienda\nspec:\n  podSelector:\n    matchLabels:\n      app: db\n",
+      "assertions": [
+        { "path": "spec.podSelector.matchLabels.app", "op": "equals", "value": "db", "message": "Se aplica a los Pods app: db" },
+        { "path": "spec.policyTypes", "op": "equals", "value": ["Ingress"], "message": "policyTypes: [Ingress]" },
+        { "path": "spec.ingress[0].from[0].podSelector.matchLabels.app", "op": "equals", "value": "api", "message": "ingress[0].from con podSelector app: api" },
+        { "path": "spec.ingress[0].ports[0].port", "op": "equals", "value": 5432, "message": "ports: puerto 5432" },
+        { "path": "spec.ingress[0].ports[0].protocol", "op": "equals", "value": "TCP", "message": "protocol: TCP" }
+      ],
+      "hints": [
+        "Añade `policyTypes: [Ingress]` y una lista `ingress`.",
+        "Cada regla de `ingress` tiene `from` (lista de orígenes) y `ports` (lista de puertos), al mismo nivel.",
+        "Origen: `- podSelector: { matchLabels: { app: api } }`."
+      ],
+      "solution": {
+        "answer": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: db-desde-api\n  namespace: tienda\nspec:\n  podSelector:\n    matchLabels:\n      app: db\n  policyTypes:\n    - Ingress\n  ingress:\n    - from:\n        - podSelector:\n            matchLabels:\n              app: api\n      ports:\n        - protocol: TCP\n          port: 5432\n",
+        "explanation": "`from` y `ports` están en la misma regla: se permite desde la API **y** solo al 5432. Cualquier otro tráfico hacia la base de datos queda bloqueado."
+      }
+    }
+  ]
+}

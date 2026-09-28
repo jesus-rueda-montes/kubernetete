@@ -1,0 +1,171 @@
+{
+  "exercises": [
+    {
+      "id": "autopilot-standard",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un equipo pequeño quiere ejecutar varios microservicios en Kubernetes sin ocuparse de los nodos, pagando por lo que piden sus Pods. ¿Qué modo de GKE eligen?",
+      "hints": ["¿En qué modo gestiona Google también los nodos?"],
+      "options": [
+        { "id": "a", "text": "Autopilot", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Standard con un node pool grande", "correct": false, "explanation": "Tendrían que gestionar los nodos y pagar por ellos aunque estén vacíos." },
+        { "id": "c", "text": "Un clúster zonal Standard", "correct": false, "explanation": "Sigue siendo Standard, y además menos disponible." }
+      ],
+      "solution": {
+        "answer": "Autopilot",
+        "explanation": "En Autopilot Google crea, escala y actualiza los nodos, y en general se paga por los requests de los Pods. Es el modo recomendado salvo que haga falta control del nodo."
+      }
+    },
+    {
+      "id": "zonal-api",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu clúster de GKE es zonal. Durante la actualización del control plane, ¿qué pasa?",
+      "hints": ["¿Cuántas réplicas del control plane tiene un clúster zonal?"],
+      "options": [
+        { "id": "a", "text": "Los Pods siguen funcionando, pero no puedes usar la API (kubectl, despliegues)", "correct": true, "explanation": "Correcto: hay un único control plane." },
+        { "id": "b", "text": "Todos los Pods se paran", "correct": false, "explanation": "Los Pods en marcha siguen en sus nodos." },
+        { "id": "c", "text": "Nada: el control plane tiene réplicas en otras zonas", "correct": false, "explanation": "Eso es un clúster regional." }
+      ],
+      "solution": {
+        "answer": "API no disponible",
+        "explanation": "Un clúster zonal tiene un solo control plane. Mientras se actualiza o si cae su zona, no se puede usar la API ni reprogramar Pods. Por eso en producción se usan clústeres regionales."
+      }
+    },
+    {
+      "id": "num-nodes",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un clúster Standard con `--region=europe-west1` (3 zonas) y `--num-nodes=2`. ¿Cuántos nodos tendrá?",
+      "hints": ["`--num-nodes` se aplica a cada zona."],
+      "options": [
+        { "id": "a", "text": "2", "correct": false, "explanation": "Serían 2 si fuera zonal." },
+        { "id": "b", "text": "6", "correct": true, "explanation": "Correcto: 2 nodos × 3 zonas." },
+        { "id": "c", "text": "3", "correct": false, "explanation": "No es un nodo por zona." }
+      ],
+      "solution": {
+        "answer": "6",
+        "explanation": "En clústeres regionales `--num-nodes` es por zona. Tenlo en cuenta al calcular el coste."
+      }
+    },
+    {
+      "id": "clave-json",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod necesita escribir en un bucket. ¿Cuál es la forma recomendada de darle acceso?",
+      "hints": ["La mejor clave es la que no existe."],
+      "options": [
+        { "id": "a", "text": "Una clave JSON de una cuenta de servicio guardada en un Secret", "correct": false, "explanation": "Una clave filtrada da acceso hasta que se revoca, y hay que rotarla." },
+        { "id": "b", "text": "Dar el rol a la cuenta de servicio de los nodos", "correct": false, "explanation": "Todos los Pods de esos nodos heredarían el permiso." },
+        { "id": "c", "text": "Workload Identity Federation: dar el rol en IAM a la ServiceAccount de Kubernetes del Pod", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Workload Identity Federation",
+        "explanation": "La ServiceAccount de Kubernetes obtiene una identidad de IAM y solo los roles que le des. No hay claves que robar ni que rotar."
+      }
+    },
+    {
+      "id": "vpc-native",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En un clúster VPC-native, ¿de dónde salen las IPs de los Pods?",
+      "hints": ["La subred tiene más de un rango."],
+      "options": [
+        { "id": "a", "text": "Del rango principal de la subred, igual que los nodos", "correct": false, "explanation": "El rango principal es para los nodos." },
+        { "id": "b", "text": "De un rango secundario de la subred (alias IP)", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "De una red interna de Kubernetes invisible para la VPC", "correct": false, "explanation": "En VPC-native, los Pods tienen IPs de la VPC." }
+      ],
+      "solution": {
+        "answer": "Rango secundario",
+        "explanation": "Pods y Services usan rangos secundarios de la subred. Si el rango de Pods se queda pequeño, el clúster no puede añadir más nodos."
+      }
+    },
+    {
+      "id": "lb-ingress",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un Ingress de clase `gce` en GKE. ¿Qué crea Google Cloud?",
+      "hints": ["Un Ingress trabaja con HTTP: capa 7."],
+      "options": [
+        { "id": "a", "text": "Un Application Load Balancer", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Un Network Load Balancer passthrough", "correct": false, "explanation": "Eso lo crea un Service de tipo LoadBalancer." },
+        { "id": "c", "text": "Nada: hay que crear el balanceador a mano", "correct": false, "explanation": "GKE lo crea y lo configura por ti." }
+      ],
+      "solution": {
+        "answer": "Application Load Balancer",
+        "explanation": "El controlador de Ingress de GKE crea un Application Load Balancer (capa 7). Un Service LoadBalancer crea un Network Load Balancer (capa 4)."
+      }
+    },
+    {
+      "id": "cmd-credenciales",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Configura `kubectl` para usar el clúster `tienda-pro`, que está en la región `europe-west1`.",
+      "hints": [
+        "Es un subcomando de `gcloud container clusters`.",
+        "Obtiene las credenciales: `get-credentials`."
+      ],
+      "accepted": [
+        "gcloud container clusters get-credentials tienda-pro --region=europe-west1",
+        "gcloud container clusters get-credentials tienda-pro --location=europe-west1"
+      ],
+      "output": "Fetching cluster endpoint and auth data.\nkubeconfig entry generated for tienda-pro.",
+      "solution": {
+        "answer": "gcloud container clusters get-credentials tienda-pro --region=europe-west1",
+        "explanation": "Escribe en tu kubeconfig el endpoint y la autenticación del clúster, y lo deja como contexto actual. Después, `kubectl get nodes`."
+      }
+    },
+    {
+      "id": "cmd-autopilot",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea un clúster Autopilot llamado `tienda-pro` en `europe-west1`.",
+      "hints": [
+        "Los clústeres Autopilot tienen su propio subcomando de creación.",
+        "Es `gcloud container clusters create-auto`."
+      ],
+      "accepted": ["gcloud container clusters create-auto tienda-pro --region=europe-west1"],
+      "output": "Creating cluster tienda-pro in europe-west1... Cluster is being health-checked (Kubernetes Control Plane is healthy)...done.\nCreated [https://container.googleapis.com/v1/projects/tienda/locations/europe-west1/clusters/tienda-pro].\nkubeconfig entry generated for tienda-pro.",
+      "solution": {
+        "answer": "gcloud container clusters create-auto tienda-pro --region=europe-west1",
+        "explanation": "`create-auto` crea un clúster Autopilot (siempre regional). `create` crea uno Standard."
+      }
+    },
+    {
+      "id": "cmd-node-pool",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "En el clúster Standard `tienda-std` (región `europe-west1`), crea el node pool `lotes` con VMs Spot.",
+      "hints": [
+        "Es `gcloud container node-pools create NOMBRE`.",
+        "Indica el clúster con `--cluster`, la región y el flag de VMs Spot."
+      ],
+      "accepted": ["gcloud container node-pools create lotes --cluster=tienda-std --region=europe-west1 --spot"],
+      "output": "Creating node pool lotes...done.\nCreated [https://container.googleapis.com/v1/projects/tienda/locations/europe-west1/clusters/tienda-std/nodePools/lotes].",
+      "solution": {
+        "answer": "gcloud container node-pools create lotes --cluster=tienda-std --region=europe-west1 --spot",
+        "explanation": "Las VMs Spot son mucho más baratas pero pueden interrumpirse. Añadir un taint (`--node-taints`) evita que acaben allí Pods que no lo toleren."
+      }
+    },
+    {
+      "id": "editor-sa",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el Deployment `facturas` para que sus Pods usen la ServiceAccount de Kubernetes `facturas` (la que tiene permisos en IAM con Workload Identity Federation).",
+      "starter": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: facturas\n  namespace: pro\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: facturas\n  template:\n    metadata:\n      labels:\n        app: facturas\n    spec:\n      containers:\n        - name: facturas\n          image: europe-west1-docker.pkg.dev/tienda/apps/facturas:1.0.0\n",
+      "assertions": [
+        { "path": "spec.template.spec.serviceAccountName", "op": "equals", "value": "facturas", "message": "serviceAccountName: facturas en el spec del Pod (spec.template.spec)" },
+        { "path": "spec.template.spec.containers[0].image", "op": "equals", "value": "europe-west1-docker.pkg.dev/tienda/apps/facturas:1.0.0", "message": "El contenedor sigue igual" },
+        { "path": "spec.replicas", "op": "equals", "value": 2, "message": "replicas: 2" }
+      ],
+      "hints": [
+        "La ServiceAccount es una propiedad del Pod, así que va en la plantilla.",
+        "El campo es `serviceAccountName`, al mismo nivel que `containers`."
+      ],
+      "solution": {
+        "answer": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: facturas\n  namespace: pro\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: facturas\n  template:\n    metadata:\n      labels:\n        app: facturas\n    spec:\n      serviceAccountName: facturas\n      containers:\n        - name: facturas\n          image: europe-west1-docker.pkg.dev/tienda/apps/facturas:1.0.0\n",
+        "explanation": "Sin `serviceAccountName`, los Pods usarían la ServiceAccount `default` del namespace, que no tiene los permisos de IAM."
+      }
+    }
+  ]
+}

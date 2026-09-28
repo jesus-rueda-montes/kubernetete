@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "gke", "front": "¿Qué gestiona Google en GKE?", "back": "El control plane (API server, etcd, scheduler…), su disponibilidad y sus actualizaciones. En Autopilot, también los nodos." },
+    { "id": "autopilot", "front": "Autopilot frente a Standard", "back": "Autopilot: Google gestiona los nodos, pagas por los requests de los Pods, seguridad endurecida. Standard: gestionas node pools y pagas por nodo." },
+    { "id": "regional", "front": "Clúster regional frente a zonal", "back": "Regional: control plane replicado en varias zonas (producción). Zonal: un solo control plane; sin API si cae la zona o durante su actualización." },
+    { "id": "num-nodes", "front": "`--num-nodes=3` en un clúster regional de 3 zonas", "back": "9 nodos: el valor es por zona." },
+    { "id": "node-pool", "front": "¿Qué es un node pool?", "back": "Un grupo de nodos con la misma configuración (máquina, labels, taints, Spot). Un clúster Standard puede tener varios, con autoescalado." },
+    { "id": "canales", "front": "Canales de versiones de GKE", "back": "Rapid (probar), Regular (por defecto), Stable (estabilidad), Extended (más tiempo en una versión menor)." },
+    { "id": "credenciales", "front": "¿Cómo configuras kubectl para un clúster de GKE?", "back": "`gcloud container clusters get-credentials NOMBRE --region=REGIÓN`." },
+    { "id": "vpc-native", "front": "Clúster VPC-native", "back": "Nodos en el rango principal de la subred; Pods y Services en rangos secundarios (alias IP)." },
+    { "id": "privados", "front": "Nodos privados: ¿qué necesitan para descargar imágenes externas?", "back": "Cloud NAT en la región." },
+    { "id": "lb", "front": "¿Qué crea GKE para un Service LoadBalancer y para un Ingress?", "back": "LoadBalancer → Network Load Balancer (capa 4). Ingress/Gateway → Application Load Balancer (capa 7)." },
+    { "id": "wif", "front": "Workload Identity Federation for GKE", "back": "La ServiceAccount de Kubernetes recibe roles de IAM: el Pod usa APIs de Google sin claves JSON." }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "cards": [
+    { "id": "piezas", "front": "Las tres piezas de YAML", "back": "Mapas (`clave: valor`), listas (`- elemento`) e indentación con espacios para anidar." },
+    { "id": "tabs", "front": "¿Tabuladores en YAML?", "back": "Prohibidos para indentar. Solo espacios (normalmente 2)." },
+    { "id": "comillas", "front": "¿Cuándo poner comillas a un valor YAML?", "back": "Cuando parece otro tipo (`\"1.10\"`, `\"true\"`, `\"0644\"`), empieza por un carácter especial o contiene `: `." },
+    { "id": "pipe-mayor", "front": "`|` frente a `>` en YAML", "back": "`|` conserva los saltos de línea; `>` los une en una sola línea." },
+    { "id": "tres-guiones", "front": "¿Para qué sirve `---` en YAML?", "back": "Separa varios documentos en un mismo archivo (p. ej. varios objetos de Kubernetes)." },
+    { "id": "json-yaml", "front": "Relación entre JSON y YAML", "back": "JSON es casi un subconjunto de YAML: un JSON válido suele ser también YAML válido." }
+  ]
+}

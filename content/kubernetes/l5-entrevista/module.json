@@ -1,0 +1,8 @@
+{
+  "title": "Preparación de entrevista",
+  "summary": "Las preguntas de Kubernetes que más se repiten, con respuestas modelo, y cómo razonar en voz alta un escenario de diseño: desplegar una aplicación lista para producción, sin caídas y segura.",
+  "level": 5,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

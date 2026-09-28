@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "flujo", "front": "Pasos de Terraform en una pull request", "back": "`fmt -check`, `init`, `validate`, `plan -out=tfplan` (publicado en la PR). Tras el merge: `apply tfplan`." },
+    { "id": "fmt-check", "front": "`terraform fmt -check`", "back": "No modifica nada: devuelve error si algún archivo no tiene el formato canónico." },
+    { "id": "validate", "front": "¿Qué comprueba `terraform validate`?", "back": "Sintaxis y coherencia interna (referencias, tipos), sin llamar a la nube." },
+    { "id": "plan-out", "front": "¿Por qué `plan -out` + `apply ARCHIVO`?", "back": "Se aplica exactamente lo revisado, sin recalcular ni pedir confirmación; si el state cambió, Terraform lo rechaza." },
+    { "id": "input", "front": "`-input=false` en un pipeline", "back": "Terraform falla en vez de esperar a que alguien escriba un valor." },
+    { "id": "lock", "front": "¿Se sube `.terraform.lock.hcl` a git?", "back": "Sí: fija versión y checksums de los providers para todos. Se actualiza con `init -upgrade`." },
+    { "id": "wif", "front": "Credenciales del pipeline en GCP", "back": "Workload Identity Federation (sin claves JSON) y una cuenta de servicio de mínimo privilegio." },
+    { "id": "sensitive", "front": "¿`sensitive = true` protege el state?", "back": "No: oculta el valor en plan y logs, pero el state lo guarda en claro." },
+    { "id": "write-only", "front": "Argumentos write-only", "back": "Acaban en `_wo` (p. ej. `password_wo`): se envían al proveedor y nunca se guardan en plan ni state (Terraform 1.11+)." },
+    { "id": "tf-var", "front": "Pasar un secreto a Terraform en CI", "back": "Variable de entorno `TF_VAR_nombre` desde el gestor de secretos del CI." }
+  ]
+}

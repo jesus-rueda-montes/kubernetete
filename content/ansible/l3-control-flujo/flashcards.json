@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "handler", "front": "¿Cuándo se ejecuta un handler?", "back": "Solo si una tarea con `notify` da `changed`. Una vez, al final del bloque de tareas, en el orden en que está definido." },
+    { "id": "flush", "front": "¿Cómo ejecutar los handlers antes del final?", "back": "Con la tarea `ansible.builtin.meta: flush_handlers`." },
+    { "id": "listen", "front": "¿Para qué sirve `listen` en un handler?", "back": "Para que varios handlers respondan al mismo aviso (`notify: reiniciar web`)." },
+    { "id": "fallo-handler", "front": "¿Qué pasa con un handler notificado si luego falla una tarea en ese host?", "back": "No se ejecuta (salvo con `--force-handlers`)." },
+    { "id": "tags", "front": "Opciones de tags en `ansible-playbook`", "back": "`--tags`/`-t`, `--skip-tags`, `--list-tags`, `--list-tasks`." },
+    { "id": "tags-especiales", "front": "Tags `always` y `never`", "back": "`always`: se ejecuta siempre (salvo `--skip-tags always`). `never`: solo si pides uno de sus tags." },
+    { "id": "when", "front": "Sintaxis de `when`", "back": "Jinja2 sin llaves: `when: x == 1`. Una lista de condiciones = AND." },
+    { "id": "loop", "front": "`loop`: variable y opciones", "back": "Cada elemento en `item`. `loop_control`: `label` (salida más corta) y `loop_var` (otro nombre). `with_items` es la sintaxis antigua." },
+    { "id": "register", "front": "Campos de una variable registrada", "back": "`stdout`, `stderr`, `rc`, `changed`, `failed`. Con `loop`, una lista `results`." },
+    { "id": "block", "front": "`block`, `rescue` y `always`", "back": "`rescue` solo si falla una tarea del bloque; `always` siempre. No los activa un host inalcanzable." },
+    { "id": "failed-when", "front": "`failed_when` frente a `ignore_errors`", "back": "`failed_when` define exactamente qué es un fallo; `ignore_errors` sigue aunque falle (esconde errores)." }
+  ]
+}

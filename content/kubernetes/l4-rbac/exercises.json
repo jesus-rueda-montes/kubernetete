@@ -1,0 +1,178 @@
+{
+  "exercises": [
+    {
+      "id": "rb-clusterrole",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un RoleBinding en el namespace `pagos` que apunta al ClusterRole `view`. ¿Dónde puede leer recursos el usuario?",
+      "hints": ["¿Qué objeto decide el alcance: el rol o el binding?"],
+      "options": [
+        { "id": "a", "text": "Solo en el namespace `pagos`", "correct": true, "explanation": "Correcto: el RoleBinding limita el alcance a su namespace." },
+        { "id": "b", "text": "En todo el clúster, porque `view` es un ClusterRole", "correct": false, "explanation": "Para eso haría falta un ClusterRoleBinding." },
+        { "id": "c", "text": "En ningún sitio: un RoleBinding no puede apuntar a un ClusterRole", "correct": false, "explanation": "Sí puede, y es la forma habitual de reutilizar roles." }
+      ],
+      "solution": {
+        "answer": "Solo en pagos",
+        "explanation": "Un RoleBinding da los permisos del rol al que apunta solo dentro de su namespace, aunque ese rol sea un ClusterRole."
+      }
+    },
+    {
+      "id": "denegar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Ana tiene el ClusterRole `edit` en el namespace `pro` y quieres impedirle borrar Deployments allí. ¿Qué haces?",
+      "hints": ["RBAC solo suma permisos."],
+      "options": [
+        { "id": "a", "text": "Crear un Role con una regla de denegar `delete` sobre deployments", "correct": false, "explanation": "RBAC no tiene reglas de denegar." },
+        { "id": "b", "text": "Quitarle el binding a `edit` y darle un rol propio sin `delete` sobre deployments", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Darle además el ClusterRole `view`", "correct": false, "explanation": "Los permisos se suman: seguiría pudiendo borrar." }
+      ],
+      "solution": {
+        "answer": "Rol más limitado",
+        "explanation": "Como RBAC es solo aditivo, para quitar un permiso hay que quitar el binding que lo da y asignar un rol con solo lo necesario."
+      }
+    },
+    {
+      "id": "apigroup",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Role tiene `apiGroups: [\"\"]`, `resources: [\"deployments\"]`, `verbs: [\"get\", \"list\"]`. El usuario recibe `Forbidden` al listar Deployments. ¿Por qué?",
+      "hints": ["¿En qué grupo de API están los Deployments?"],
+      "options": [
+        { "id": "a", "text": "Los Deployments están en el grupo `apps`, no en el core (`\"\"`)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Falta el verbo `watch`", "correct": false, "explanation": "`list` basta para listar." },
+        { "id": "c", "text": "Los Roles no pueden dar permisos sobre Deployments", "correct": false, "explanation": "Sí pueden, con el apiGroup correcto." }
+      ],
+      "solution": {
+        "answer": "apiGroups: [\"apps\"]",
+        "explanation": "Pods, Services, ConfigMaps y Secrets están en el grupo core (`\"\"`); Deployments, StatefulSets y DaemonSets, en `apps`. `kubectl api-resources` lo muestra."
+      }
+    },
+    {
+      "id": "default-sa",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod no tiene `serviceAccountName`. ¿Con qué identidad habla con la API?",
+      "hints": ["Cada namespace tiene una ServiceAccount creada automáticamente."],
+      "options": [
+        { "id": "a", "text": "Con la ServiceAccount `default` de su namespace", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Con la identidad del nodo", "correct": false, "explanation": "Los Pods no usan la identidad del kubelet." },
+        { "id": "c", "text": "Con `cluster-admin`", "correct": false, "explanation": "Por supuesto que no." }
+      ],
+      "solution": {
+        "answer": "default",
+        "explanation": "Por eso no conviene dar permisos a `default`: todos los Pods del namespace sin ServiceAccount propia los heredarían."
+      }
+    },
+    {
+      "id": "list-secrets",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Dar el verbo `list` sobre `secrets` es seguro porque solo permite ver los nombres, no el contenido.",
+      "hints": ["¿Qué devuelve la API al listar?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "`list` devuelve los objetos completos." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: incluye el contenido." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "`list` (y `watch`) devuelven los Secrets completos, con sus datos. Trátalo como si fuera `get` sobre todos."
+      }
+    },
+    {
+      "id": "cmd-role",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea en el namespace `pagos` un Role llamado `lector-pods` que permita `get`, `list` y `watch` sobre `pods`.",
+      "hints": [
+        "Es `kubectl create role NOMBRE`.",
+        "Flags: `--verb` (con los verbos separados por comas), `--resource` y `-n`."
+      ],
+      "accepted": [
+        "kubectl create role lector-pods --verb=get,list,watch --resource=pods -n pagos",
+        "kubectl create role lector-pods --verb=get --verb=list --verb=watch --resource=pods -n pagos"
+      ],
+      "output": "role.rbac.authorization.k8s.io/lector-pods created",
+      "solution": {
+        "answer": "kubectl create role lector-pods --verb=get,list,watch --resource=pods -n pagos",
+        "explanation": "El Role solo define permisos. Para dárselos a alguien hace falta un RoleBinding."
+      }
+    },
+    {
+      "id": "cmd-rolebinding",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "En el namespace `pagos`, da el Role `lector-pods` a la ServiceAccount `monitor` del mismo namespace, con un RoleBinding llamado `monitor-lector`.",
+      "hints": [
+        "Es `kubectl create rolebinding NOMBRE`.",
+        "`--role` indica el rol y `--serviceaccount` el sujeto, con el formato `NAMESPACE:NOMBRE`."
+      ],
+      "accepted": ["kubectl create rolebinding monitor-lector --role=lector-pods --serviceaccount=pagos:monitor -n pagos"],
+      "output": "rolebinding.rbac.authorization.k8s.io/monitor-lector created",
+      "solution": {
+        "answer": "kubectl create rolebinding monitor-lector --role=lector-pods --serviceaccount=pagos:monitor -n pagos",
+        "explanation": "`--serviceaccount` usa `NAMESPACE:NOMBRE`. Para un ClusterRole usarías `--clusterrole` en lugar de `--role`."
+      }
+    },
+    {
+      "id": "cmd-can-i",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Comprueba si la ServiceAccount `monitor` del namespace `pagos` puede listar `pods` en ese namespace.",
+      "hints": [
+        "Es `kubectl auth can-i VERBO RECURSO`.",
+        "Para actuar como la ServiceAccount: `--as=system:serviceaccount:NAMESPACE:NOMBRE`."
+      ],
+      "accepted": ["kubectl auth can-i list pods -n pagos --as=system:serviceaccount:pagos:monitor"],
+      "output": "yes",
+      "solution": {
+        "answer": "kubectl auth can-i list pods -n pagos --as=system:serviceaccount:pagos:monitor",
+        "explanation": "`can-i` responde `yes` o `no`. Con `--list` verías todas las acciones permitidas."
+      }
+    },
+    {
+      "id": "editor-role",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el Role `lector-config` del namespace `pro` para que permita `get` y `list` sobre `configmaps` (grupo core).",
+      "starter": "apiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: lector-config\n  namespace: pro\nrules:\n  - apiGroups: []\n    resources: []\n    verbs: []\n",
+      "assertions": [
+        { "path": "rules", "op": "count", "value": 1, "message": "Hay una regla" },
+        { "path": "rules[0].apiGroups", "op": "equals", "value": [""], "message": "apiGroups: [\"\"] (el grupo core es un texto vacío)" },
+        { "path": "rules[0].resources", "op": "equals", "value": ["configmaps"], "message": "resources: [\"configmaps\"]" },
+        { "path": "rules[0].verbs", "op": "equals", "value": ["get", "list"], "message": "verbs: [\"get\", \"list\"]" }
+      ],
+      "hints": [
+        "El grupo core se escribe como un texto vacío entre comillas: `\"\"`.",
+        "Los recursos van en plural y en minúsculas: `configmaps`."
+      ],
+      "solution": {
+        "answer": "apiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: lector-config\n  namespace: pro\nrules:\n  - apiGroups: [\"\"]\n    resources: [\"configmaps\"]\n    verbs: [\"get\", \"list\"]\n",
+        "explanation": "`\"\"` es el grupo core, donde están los ConfigMaps. Solo da lectura: nada de `update` ni `delete`."
+      }
+    },
+    {
+      "id": "editor-binding",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el RoleBinding para que la ServiceAccount `app` del namespace `pro` reciba el Role `lector-config`.",
+      "starter": "apiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: app-lector-config\n  namespace: pro\nsubjects:\nroleRef:\n",
+      "assertions": [
+        { "path": "subjects[0].kind", "op": "equals", "value": "ServiceAccount", "message": "subjects: un sujeto con kind: ServiceAccount" },
+        { "path": "subjects[0].name", "op": "equals", "value": "app", "message": "name: app" },
+        { "path": "subjects[0].namespace", "op": "equals", "value": "pro", "message": "namespace: pro en el sujeto" },
+        { "path": "roleRef.kind", "op": "equals", "value": "Role", "message": "roleRef.kind: Role" },
+        { "path": "roleRef.name", "op": "equals", "value": "lector-config", "message": "roleRef.name: lector-config" },
+        { "path": "roleRef.apiGroup", "op": "equals", "value": "rbac.authorization.k8s.io", "message": "roleRef.apiGroup: rbac.authorization.k8s.io" }
+      ],
+      "hints": [
+        "`subjects` es una lista: `- kind: ServiceAccount` con `name` y `namespace`.",
+        "`roleRef` es un objeto con `kind`, `name` y `apiGroup`."
+      ],
+      "solution": {
+        "answer": "apiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: app-lector-config\n  namespace: pro\nsubjects:\n  - kind: ServiceAccount\n    name: app\n    namespace: pro\nroleRef:\n  kind: Role\n  name: lector-config\n  apiGroup: rbac.authorization.k8s.io\n",
+        "explanation": "El sujeto de tipo ServiceAccount lleva su namespace. El `roleRef` no se puede cambiar después: para apuntar a otro rol hay que recrear el binding."
+      }
+    }
+  ]
+}

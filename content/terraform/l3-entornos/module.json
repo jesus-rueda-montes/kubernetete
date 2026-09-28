@@ -1,0 +1,8 @@
+{
+  "title": "Entornos: workspaces y directorios",
+  "summary": "Cómo gestionar dev, staging y pro: workspaces de la CLI frente a un directorio por entorno, la estructura de un repositorio real y cómo compartir datos entre configuraciones.",
+  "level": 3,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

@@ -1,0 +1,590 @@
+{
+  "cli": "helm",
+  "description": "Gestor de paquetes (charts) de Kubernetes",
+  "source": "https://helm.sh/docs/helm/helm/",
+  "globalFlags": [
+    {
+      "name": "namespace",
+      "takesValue": true,
+      "description": "Namespace de la release",
+      "short": "n"
+    },
+    {
+      "name": "kube-context",
+      "takesValue": true,
+      "description": "Contexto del kubeconfig"
+    }
+  ],
+  "commands": [
+    {
+      "name": "install",
+      "description": "Instala un chart como una release nueva",
+      "source": "https://helm.sh/docs/helm/helm_install/",
+      "args": [
+        {
+          "name": "RELEASE"
+        },
+        {
+          "name": "CHART"
+        }
+      ],
+      "flags": [
+        {
+          "name": "values",
+          "takesValue": true,
+          "description": "Archivo de valores YAML (se puede repetir)",
+          "short": "f"
+        },
+        {
+          "name": "set",
+          "takesValue": true,
+          "description": "Valor en línea: clave=valor (se puede repetir)"
+        },
+        {
+          "name": "version",
+          "takesValue": true,
+          "description": "Versión del chart"
+        },
+        {
+          "name": "create-namespace",
+          "takesValue": false,
+          "description": "Crea el namespace si no existe"
+        },
+        {
+          "name": "wait",
+          "takesValue": false,
+          "description": "Espera a que los recursos estén listos (hasta --timeout)"
+        },
+        {
+          "name": "timeout",
+          "takesValue": true,
+          "description": "Tiempo máximo de espera (por defecto 5m0s)"
+        },
+        {
+          "name": "rollback-on-failure",
+          "takesValue": false,
+          "description": "Si falla, deshace la operación (en Helm 3 era --atomic)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "description": "Simula sin aplicar",
+          "values": [
+            "none",
+            "client",
+            "server"
+          ],
+          "strict": true
+        },
+        {
+          "name": "generate-name",
+          "takesValue": false,
+          "description": "Genera el nombre de la release",
+          "short": "g"
+        }
+      ]
+    },
+    {
+      "name": "upgrade",
+      "description": "Actualiza una release a otra versión del chart o con otros valores",
+      "source": "https://helm.sh/docs/helm/helm_upgrade/",
+      "args": [
+        {
+          "name": "RELEASE"
+        },
+        {
+          "name": "CHART"
+        }
+      ],
+      "flags": [
+        {
+          "name": "install",
+          "takesValue": false,
+          "description": "Si la release no existe, la instala",
+          "short": "i"
+        },
+        {
+          "name": "values",
+          "takesValue": true,
+          "description": "Archivo de valores YAML (se puede repetir)",
+          "short": "f"
+        },
+        {
+          "name": "set",
+          "takesValue": true,
+          "description": "Valor en línea: clave=valor (se puede repetir)"
+        },
+        {
+          "name": "version",
+          "takesValue": true,
+          "description": "Versión del chart"
+        },
+        {
+          "name": "create-namespace",
+          "takesValue": false,
+          "description": "Crea el namespace si no existe"
+        },
+        {
+          "name": "wait",
+          "takesValue": false,
+          "description": "Espera a que los recursos estén listos (hasta --timeout)"
+        },
+        {
+          "name": "timeout",
+          "takesValue": true,
+          "description": "Tiempo máximo de espera (por defecto 5m0s)"
+        },
+        {
+          "name": "rollback-on-failure",
+          "takesValue": false,
+          "description": "Si falla, deshace la operación (en Helm 3 era --atomic)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "description": "Simula sin aplicar",
+          "values": [
+            "none",
+            "client",
+            "server"
+          ],
+          "strict": true
+        },
+        {
+          "name": "reuse-values",
+          "takesValue": false,
+          "description": "Reutiliza los valores de la última release y aplica los nuevos encima"
+        },
+        {
+          "name": "reset-values",
+          "takesValue": false,
+          "description": "Vuelve a los valores por defecto del chart"
+        }
+      ]
+    },
+    {
+      "name": "rollback",
+      "description": "Vuelve a una revisión anterior de una release",
+      "source": "https://helm.sh/docs/helm/helm_rollback/",
+      "args": [
+        {
+          "name": "RELEASE"
+        },
+        {
+          "name": "REVISIÓN"
+        }
+      ],
+      "flags": [
+        {
+          "name": "wait",
+          "takesValue": false,
+          "description": "Espera a que los recursos estén listos (hasta --timeout)"
+        },
+        {
+          "name": "timeout",
+          "takesValue": true,
+          "description": "Tiempo máximo de espera (por defecto 5m0s)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "description": "Simula sin aplicar",
+          "values": [
+            "none",
+            "client",
+            "server"
+          ],
+          "strict": true
+        }
+      ]
+    },
+    {
+      "name": "uninstall",
+      "aliases": [
+        "delete"
+      ],
+      "description": "Desinstala una release",
+      "source": "https://helm.sh/docs/helm/helm_uninstall/",
+      "args": [
+        {
+          "name": "RELEASE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "keep-history",
+          "takesValue": false,
+          "description": "Conserva el historial de la release"
+        },
+        {
+          "name": "wait",
+          "takesValue": false,
+          "description": "Espera a que los recursos estén listos (hasta --timeout)"
+        },
+        {
+          "name": "timeout",
+          "takesValue": true,
+          "description": "Tiempo máximo de espera (por defecto 5m0s)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "description": "Simula sin aplicar",
+          "values": [
+            "none",
+            "client",
+            "server"
+          ],
+          "strict": true
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "aliases": [
+        "ls"
+      ],
+      "description": "Lista las releases",
+      "source": "https://helm.sh/docs/helm/helm_list/",
+      "flags": [
+        {
+          "name": "all-namespaces",
+          "takesValue": false,
+          "description": "Todos los namespaces",
+          "short": "A"
+        },
+        {
+          "name": "failed",
+          "takesValue": false,
+          "description": "Solo las fallidas"
+        },
+        {
+          "name": "pending",
+          "takesValue": false,
+          "description": "Solo las pendientes"
+        },
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Formato de salida",
+          "short": "o",
+          "values": [
+            "table",
+            "json",
+            "yaml"
+          ],
+          "strict": true
+        }
+      ]
+    },
+    {
+      "name": "history",
+      "description": "Muestra las revisiones de una release",
+      "source": "https://helm.sh/docs/helm/helm_history/",
+      "args": [
+        {
+          "name": "RELEASE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "max",
+          "takesValue": true,
+          "description": "Número máximo de revisiones"
+        },
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Formato de salida",
+          "short": "o",
+          "values": [
+            "table",
+            "json",
+            "yaml"
+          ],
+          "strict": true
+        }
+      ]
+    },
+    {
+      "name": "status",
+      "description": "Muestra el estado de una release",
+      "source": "https://helm.sh/docs/helm/helm_status/",
+      "args": [
+        {
+          "name": "RELEASE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "revision",
+          "takesValue": true,
+          "description": "Revisión concreta"
+        },
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Formato de salida",
+          "short": "o",
+          "values": [
+            "table",
+            "json",
+            "yaml"
+          ],
+          "strict": true
+        }
+      ]
+    },
+    {
+      "name": "template",
+      "description": "Genera los manifiestos en local, sin instalar nada",
+      "source": "https://helm.sh/docs/helm/helm_template/",
+      "args": [
+        {
+          "name": "RELEASE"
+        },
+        {
+          "name": "CHART"
+        }
+      ],
+      "flags": [
+        {
+          "name": "values",
+          "takesValue": true,
+          "description": "Archivo de valores YAML (se puede repetir)",
+          "short": "f"
+        },
+        {
+          "name": "set",
+          "takesValue": true,
+          "description": "Valor en línea: clave=valor (se puede repetir)"
+        },
+        {
+          "name": "version",
+          "takesValue": true,
+          "description": "Versión del chart"
+        },
+        {
+          "name": "output-dir",
+          "takesValue": true,
+          "description": "Escribe los manifiestos en ese directorio"
+        },
+        {
+          "name": "show-only",
+          "takesValue": true,
+          "description": "Solo esa plantilla",
+          "short": "s"
+        }
+      ]
+    },
+    {
+      "name": "lint",
+      "description": "Revisa un chart en busca de errores",
+      "source": "https://helm.sh/docs/helm/helm_lint/",
+      "args": [
+        {
+          "name": "RUTA"
+        }
+      ],
+      "flags": [
+        {
+          "name": "values",
+          "takesValue": true,
+          "description": "Archivo de valores YAML (se puede repetir)",
+          "short": "f"
+        },
+        {
+          "name": "set",
+          "takesValue": true,
+          "description": "Valor en línea: clave=valor (se puede repetir)"
+        },
+        {
+          "name": "strict",
+          "takesValue": false,
+          "description": "Trata los avisos como errores"
+        }
+      ]
+    },
+    {
+      "name": "create",
+      "description": "Crea el esqueleto de un chart",
+      "source": "https://helm.sh/docs/helm/helm_create/",
+      "args": [
+        {
+          "name": "NOMBRE"
+        }
+      ]
+    },
+    {
+      "name": "repo",
+      "description": "Repositorios de charts",
+      "source": "https://helm.sh/docs/helm/helm_repo/",
+      "subcommands": [
+        {
+          "name": "add",
+          "description": "Añade un repositorio",
+          "source": "https://helm.sh/docs/helm/helm_repo_add/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            },
+            {
+              "name": "URL"
+            }
+          ]
+        },
+        {
+          "name": "update",
+          "aliases": [
+            "up"
+          ],
+          "description": "Actualiza el índice de los repositorios",
+          "source": "https://helm.sh/docs/helm/helm_repo_update/",
+          "args": [
+            {
+              "name": "REPO"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "aliases": [
+            "ls"
+          ],
+          "description": "Lista los repositorios",
+          "source": "https://helm.sh/docs/helm/helm_repo_list/"
+        }
+      ]
+    },
+    {
+      "name": "search",
+      "description": "Busca charts",
+      "source": "https://helm.sh/docs/helm/helm_search/",
+      "subcommands": [
+        {
+          "name": "repo",
+          "description": "Busca en los repositorios añadidos",
+          "source": "https://helm.sh/docs/helm/helm_search_repo/",
+          "args": [
+            {
+              "name": "PALABRA"
+            }
+          ],
+          "flags": [
+            {
+              "name": "versions",
+              "takesValue": false,
+              "description": "Muestra todas las versiones",
+              "short": "l"
+            },
+            {
+              "name": "version",
+              "takesValue": true,
+              "description": "Versión del chart"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "show",
+      "description": "Información de un chart",
+      "source": "https://helm.sh/docs/helm/helm_show/",
+      "subcommands": [
+        {
+          "name": "values",
+          "description": "Muestra el values.yaml por defecto del chart",
+          "source": "https://helm.sh/docs/helm/helm_show_values/",
+          "args": [
+            {
+              "name": "CHART"
+            }
+          ],
+          "flags": [
+            {
+              "name": "version",
+              "takesValue": true,
+              "description": "Versión del chart"
+            }
+          ]
+        },
+        {
+          "name": "chart",
+          "description": "Muestra el Chart.yaml",
+          "source": "https://helm.sh/docs/helm/helm_show_chart/",
+          "args": [
+            {
+              "name": "CHART"
+            }
+          ],
+          "flags": [
+            {
+              "name": "version",
+              "takesValue": true,
+              "description": "Versión del chart"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get",
+      "description": "Información de una release instalada",
+      "source": "https://helm.sh/docs/helm/helm_get/",
+      "subcommands": [
+        {
+          "name": "values",
+          "description": "Valores usados en una release",
+          "source": "https://helm.sh/docs/helm/helm_get_values/",
+          "args": [
+            {
+              "name": "RELEASE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "all",
+              "takesValue": false,
+              "description": "Todos los valores, también los por defecto",
+              "short": "a"
+            },
+            {
+              "name": "revision",
+              "takesValue": true,
+              "description": "Revisión concreta"
+            },
+            {
+              "name": "output",
+              "takesValue": true,
+              "description": "Formato de salida",
+              "short": "o",
+              "values": [
+                "table",
+                "json",
+                "yaml"
+              ],
+              "strict": true
+            }
+          ]
+        },
+        {
+          "name": "manifest",
+          "description": "Manifiestos aplicados en una release",
+          "source": "https://helm.sh/docs/helm/helm_get_manifest/",
+          "args": [
+            {
+              "name": "RELEASE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "revision",
+              "takesValue": true,
+              "description": "Revisión concreta"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

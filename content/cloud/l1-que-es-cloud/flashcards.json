@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "nist-5", "front": "Las 5 características esenciales de la nube (NIST)", "back": "Autoservicio bajo demanda, acceso amplio por red, recursos compartidos, elasticidad rápida y servicio medido." },
+    { "id": "capex-opex", "front": "CapEx frente a OpEx", "back": "CapEx: inversión por adelantado (comprar servidores). OpEx: gasto operativo según consumo (la nube)." },
+    { "id": "iaas", "front": "IaaS: qué es y ejemplo", "back": "Infraestructura (VMs, discos, redes); gestionas desde el sistema operativo hacia arriba. Compute Engine, EC2, Azure VMs." },
+    { "id": "paas", "front": "PaaS: qué es y ejemplo", "back": "Plataforma gestionada donde despliegas tu código o contenedor. Cloud Run, App Engine, Azure App Service." },
+    { "id": "saas", "front": "SaaS: qué es y ejemplo", "back": "Aplicación terminada que solo usas y configuras. Google Workspace, Microsoft 365." },
+    { "id": "responsabilidad", "front": "Modelo de responsabilidad compartida", "back": "El proveedor asegura la nube (hardware, centros de datos, virtualización); el cliente, lo que pone en ella. Datos y accesos son siempre del cliente." },
+    { "id": "hibrida-multicloud", "front": "Híbrida frente a multicloud", "back": "Híbrida: infraestructura propia + nube pública. Multicloud: varios proveedores públicos." }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "exercises": [
+    {
+      "id": "calculo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un HPA con objetivo de CPU del 50 % ve 3 réplicas al 100 %. ¿Cuántas réplicas pide (con maxReplicas 10)?",
+      "hints": ["ceil(réplicas actuales × valor actual / objetivo)."],
+      "options": [
+        { "id": "a", "text": "4", "correct": false, "explanation": "3 × 100 / 50 = 6." },
+        { "id": "b", "text": "6", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "10", "correct": false, "explanation": "No salta al máximo: calcula lo necesario." }
+      ],
+      "solution": {
+        "answer": "6",
+        "explanation": "ceil(3 × 100 / 50) = 6. Con el doble de réplicas, cada una debería quedar cerca del 50 %."
+      }
+    },
+    {
+      "id": "sin-requests",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un HPA con objetivo `averageUtilization: 60` de CPU no escala y la columna TARGETS muestra `<unknown>/60%`. metrics-server funciona. ¿Qué falta probablemente?",
+      "hints": ["El porcentaje se calcula sobre algo."],
+      "options": [
+        { "id": "a", "text": "`resources.requests.cpu` en los contenedores", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`resources.limits.memory`", "correct": false, "explanation": "No afecta al cálculo del uso de CPU." },
+        { "id": "c", "text": "Un Service para el Deployment", "correct": false, "explanation": "El HPA no necesita Services." }
+      ],
+      "solution": {
+        "answer": "Requests de CPU",
+        "explanation": "La utilización se calcula como porcentaje de los requests. Sin requests de CPU no hay denominador."
+      }
+    },
+    {
+      "id": "baja-despacio",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El tráfico baja de golpe. ¿Qué hace el HPA por defecto?",
+      "hints": ["Sube rápido, pero ¿y al bajar?"],
+      "options": [
+        { "id": "a", "text": "Quita las réplicas sobrantes en el siguiente ciclo de 15 s", "correct": false, "explanation": "Para bajar usa una ventana de estabilización." },
+        { "id": "b", "text": "Espera una ventana de estabilización de 5 minutos antes de reducir", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Nunca reduce réplicas automáticamente", "correct": false, "explanation": "Sí reduce, pero con calma." }
+      ],
+      "solution": {
+        "answer": "5 minutos",
+        "explanation": "La ventana de estabilización evita quitar Pods que enseguida vuelvan a hacer falta (flapping). Se puede ajustar con `behavior.scaleDown`."
+      }
+    },
+    {
+      "id": "pending",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El HPA ha subido un Deployment a 12 réplicas, pero 4 están en `Pending` por falta de CPU en los nodos. ¿Qué componente lo resuelve?",
+      "hints": ["No faltan réplicas: faltan máquinas."],
+      "options": [
+        { "id": "a", "text": "El VPA", "correct": false, "explanation": "Ajusta requests, no crea nodos." },
+        { "id": "b", "text": "El autoescalado de nodos (Cluster Autoscaler)", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Otro HPA", "correct": false, "explanation": "Más réplicas no ayudan si no caben." }
+      ],
+      "solution": {
+        "answer": "Autoescalado de nodos",
+        "explanation": "Cluster Autoscaler (o Karpenter) añade nodos cuando hay Pods sin programar por falta de recursos, según sus requests."
+      }
+    },
+    {
+      "id": "vpa-hpa",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Es buena idea usar un VPA en modo automático y un HPA por CPU sobre el mismo Deployment.",
+      "hints": ["¿Sobre qué calcula el HPA el porcentaje? ¿Qué cambia el VPA?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Se pelean." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El VPA cambia los requests y el HPA calcula la utilización sobre esos requests. Usa el VPA en modo `Off` para recomendaciones, o el HPA con otras métricas."
+      }
+    },
+    {
+      "id": "cmd-autoscale",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un autoescalado para el Deployment `web`: entre 2 y 10 réplicas, con objetivo del 60 % de CPU.",
+      "hints": [
+        "Es `kubectl autoscale deployment NOMBRE`.",
+        "Flags: `--min`, `--max` y `--cpu` (con el porcentaje, `60%`)."
+      ],
+      "accepted": [
+        "kubectl autoscale deployment web --min=2 --max=10 --cpu=60%",
+        "kubectl autoscale deploy web --min=2 --max=10 --cpu=60%",
+        "kubectl autoscale deployment/web --min=2 --max=10 --cpu=60%"
+      ],
+      "output": "horizontalpodautoscaler.autoscaling/web autoscaled",
+      "solution": {
+        "answer": "kubectl autoscale deployment web --min=2 --max=10 --cpu=60%",
+        "explanation": "Crea un HorizontalPodAutoscaler llamado `web`. Con `60%` el objetivo es la utilización media sobre los requests; con `500m` sería un valor absoluto."
+      }
+    },
+    {
+      "id": "cmd-top",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Muestra el consumo de CPU y memoria de los Pods del namespace `tienda`, ordenados por CPU.",
+      "hints": [
+        "Es `kubectl top pod`.",
+        "El flag de orden es `--sort-by=cpu`."
+      ],
+      "accepted": [
+        "kubectl top pod -n tienda --sort-by=cpu",
+        "kubectl top pods -n tienda --sort-by=cpu"
+      ],
+      "output": "NAME                   CPU(cores)   MEMORY(bytes)\nweb-7d9c6b5f4-2xk8p    412m         180Mi\nweb-7d9c6b5f4-9lm2q    398m         176Mi\napi-5c8d7f9b8-kq2zt    120m         240Mi",
+      "solution": {
+        "answer": "kubectl top pod -n tienda --sort-by=cpu",
+        "explanation": "`kubectl top` usa los datos de metrics-server, los mismos que usa el HPA. Si falla, el HPA tampoco tendrá métricas."
+      }
+    },
+    {
+      "id": "editor-hpa",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el HPA para el Deployment `api`: entre 3 y 15 réplicas, con un objetivo de utilización media de CPU del 70 %.",
+      "starter": "apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: api\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: api\n",
+      "assertions": [
+        { "path": "spec.scaleTargetRef.name", "op": "equals", "value": "api", "message": "scaleTargetRef apunta al Deployment api" },
+        { "path": "spec.minReplicas", "op": "equals", "value": 3, "message": "minReplicas: 3" },
+        { "path": "spec.maxReplicas", "op": "equals", "value": 15, "message": "maxReplicas: 15" },
+        { "path": "spec.metrics[0].type", "op": "equals", "value": "Resource", "message": "metrics[0].type: Resource" },
+        { "path": "spec.metrics[0].resource.name", "op": "equals", "value": "cpu", "message": "resource.name: cpu" },
+        { "path": "spec.metrics[0].resource.target.type", "op": "equals", "value": "Utilization", "message": "target.type: Utilization" },
+        { "path": "spec.metrics[0].resource.target.averageUtilization", "op": "equals", "value": 70, "message": "target.averageUtilization: 70" }
+      ],
+      "hints": [
+        "`minReplicas` y `maxReplicas` van en `spec`, al nivel de `scaleTargetRef`.",
+        "`metrics` es una lista: `- type: Resource` y debajo `resource:` con `name` y `target`.",
+        "El objetivo: `target: { type: Utilization, averageUtilization: 70 }`."
+      ],
+      "solution": {
+        "answer": "apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: api\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: api\n  minReplicas: 3\n  maxReplicas: 15\n  metrics:\n    - type: Resource\n      resource:\n        name: cpu\n        target:\n          type: Utilization\n          averageUtilization: 70\n",
+        "explanation": "`Utilization` es un porcentaje de los requests de CPU de los contenedores. Recuerda quitar `replicas` del Deployment para que no pelee con el HPA."
+      }
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "exercises": [
+    {
+      "id": "latest",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El pipeline publica siempre la imagen como `web:latest`. Algo falla en producción. ¿Cuál es el problema principal de esta práctica?",
+      "hints": ["¿Puedes saber qué versión corre y volver a la anterior?"],
+      "options": [
+        { "id": "a", "text": "No sabes qué versión exacta está desplegada ni puedes volver a una concreta con seguridad", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`latest` ocupa más espacio en el registro", "correct": false, "explanation": "El tamaño no depende de la etiqueta." },
+        { "id": "c", "text": "Cloud Run no admite la etiqueta `latest`", "correct": false, "explanation": "La admite; el problema es de trazabilidad." }
+      ],
+      "solution": {
+        "answer": "Sin trazabilidad",
+        "explanation": "Etiqueta cada imagen con el commit (`$SHORT_SHA`) o una versión, y despliega por etiqueta inmutable o digest."
+      }
+    },
+    {
+      "id": "sustitucion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es un nombre válido para una sustitución definida por ti en Cloud Build?",
+      "hints": ["Las de usuario siguen una regla de nombre concreta."],
+      "options": [
+        { "id": "a", "text": "`_ENTORNO`", "correct": true, "explanation": "Correcto: empieza por guion bajo y va en mayúsculas." },
+        { "id": "b", "text": "`ENTORNO`", "correct": false, "explanation": "Las propias deben empezar por `_`." },
+        { "id": "c", "text": "`$entorno`", "correct": false, "explanation": "Deben empezar por `_` y usar mayúsculas, números y guiones bajos." }
+      ],
+      "solution": {
+        "answer": "_ENTORNO",
+        "explanation": "Las sustituciones de usuario cumplen `_[A-Z0-9_]+`. Las que no empiezan por `_` son las integradas (`$PROJECT_ID`, `$SHORT_SHA`…)."
+      }
+    },
+    {
+      "id": "gcr",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Para un proyecto nuevo, lo recomendable es publicar las imágenes en Container Registry (`gcr.io/PROYECTO/imagen`).",
+      "hints": ["Container Registry tiene una fecha importante en 2025."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Está cerrado para escribir." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: se usa Artifact Registry." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Container Registry se cerró el 18 de marzo de 2025 para escribir imágenes. Artifact Registry es su sustituto."
+      }
+    },
+    {
+      "id": "promocionar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Con Cloud Deploy, ¿qué llega a producción cuando promocionas una release desde staging?",
+      "hints": ["Las releases son inmutables."],
+      "options": [
+        { "id": "a", "text": "Exactamente las mismas imágenes y manifiestos que se probaron en staging", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Una imagen reconstruida desde la rama main", "correct": false, "explanation": "No se reconstruye nada al promocionar." },
+        { "id": "c", "text": "La última imagen del registro", "correct": false, "explanation": "La release fija sus imágenes." }
+      ],
+      "solution": {
+        "answer": "Lo mismo que en staging",
+        "explanation": "La release es inmutable: se promociona tal cual. Construir una vez y promocionar evita sorpresas entre entornos."
+      }
+    },
+    {
+      "id": "estrategia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que, si la versión nueva tiene un error, solo lo sufra un 5 % de los usuarios mientras compruebas las métricas. ¿Qué estrategia usas?",
+      "hints": ["Un porcentaje pequeño de tráfico que va creciendo."],
+      "options": [
+        { "id": "a", "text": "Canary", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Blue/green", "correct": false, "explanation": "Cambia todo el tráfico de golpe." },
+        { "id": "c", "text": "Recrear (parar todo y arrancar la nueva)", "correct": false, "explanation": "Todos los usuarios sufrirían la caída y el error." }
+      ],
+      "solution": {
+        "answer": "Canary",
+        "explanation": "El canary envía un porcentaje pequeño a la versión nueva y lo aumenta si las métricas son buenas. Cloud Deploy lo soporta en GKE y Cloud Run."
+      }
+    },
+    {
+      "id": "cmd-repo",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea en Artifact Registry un repositorio Docker llamado `apps` en `europe-west1`.",
+      "hints": [
+        "Es `gcloud artifacts repositories create NOMBRE`.",
+        "Flags: `--repository-format=docker` y `--location`."
+      ],
+      "accepted": ["gcloud artifacts repositories create apps --repository-format=docker --location=europe-west1"],
+      "output": "Create request issued for: [apps]\nWaiting for operation [projects/tienda/locations/europe-west1/operations/6f1c2a3b-...] to complete...done.\nCreated repository [apps].",
+      "solution": {
+        "answer": "gcloud artifacts repositories create apps --repository-format=docker --location=europe-west1",
+        "explanation": "Las imágenes se llamarán `europe-west1-docker.pkg.dev/tienda/apps/IMAGEN:ETIQUETA`. Con `--immutable-tags` no se podrán reutilizar etiquetas."
+      }
+    },
+    {
+      "id": "cmd-submit",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Construye con el Dockerfile del directorio actual y publica la imagen `europe-west1-docker.pkg.dev/tienda/apps/web:1.4.0`.",
+      "hints": [
+        "Es `gcloud builds submit`.",
+        "El flag que construye con Dockerfile y publica es `--tag`."
+      ],
+      "accepted": [
+        "gcloud builds submit --tag=europe-west1-docker.pkg.dev/tienda/apps/web:1.4.0",
+        "gcloud builds submit --tag europe-west1-docker.pkg.dev/tienda/apps/web:1.4.0",
+        "gcloud builds submit . --tag=europe-west1-docker.pkg.dev/tienda/apps/web:1.4.0"
+      ],
+      "output": "Creating temporary archive of 42 file(s) totalling 1.2 MiB before compression.\nUploading tarball of [.] to [gs://tienda_cloudbuild/source/...tgz]\n...\nDONE\n----------------------------------------------------------------\nID                                    STATUS\n3f2a9c1e-7b8d-4e6f-a1b2-c3d4e5f60718  SUCCESS",
+      "solution": {
+        "answer": "gcloud builds submit --tag=europe-west1-docker.pkg.dev/tienda/apps/web:1.4.0",
+        "explanation": "Sube el código a Cloud Build, que construye la imagen y la publica en Artifact Registry. Para pasos adicionales (tests), usa `--config=cloudbuild.yaml`."
+      }
+    },
+    {
+      "id": "cmd-promote",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Promociona la release `web-1-4-0` del pipeline de entrega `web` (región `europe-west1`) al siguiente target.",
+      "hints": [
+        "Es `gcloud deploy releases promote`.",
+        "Flags: `--release`, `--delivery-pipeline` y `--region`."
+      ],
+      "accepted": ["gcloud deploy releases promote --release=web-1-4-0 --delivery-pipeline=web --region=europe-west1"],
+      "output": "Promoting release web-1-4-0 to target staging.\nCreating rollout projects/tienda/locations/europe-west1/deliveryPipelines/web/releases/web-1-4-0/rollouts/web-1-4-0-to-staging-0001 in target staging...done.",
+      "solution": {
+        "answer": "gcloud deploy releases promote --release=web-1-4-0 --delivery-pipeline=web --region=europe-west1",
+        "explanation": "Sin `--to-target`, se promociona al siguiente target de la secuencia. Si el target exige aprobación, el rollout espera a que alguien lo apruebe."
+      }
+    },
+    {
+      "id": "editor-cloudbuild",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el `cloudbuild.yaml`: un paso con la imagen `gcr.io/cloud-builders/docker` que ejecute `build -t IMAGEN .` y la lista `images` con la misma imagen. Usa como imagen `europe-west1-docker.pkg.dev/$PROJECT_ID/apps/web:$SHORT_SHA`.",
+      "starter": "steps:\n",
+      "assertions": [
+        { "path": "steps[0].name", "op": "equals", "value": "gcr.io/cloud-builders/docker", "message": "El paso usa name: gcr.io/cloud-builders/docker" },
+        { "path": "steps[0].args", "op": "equals", "value": ["build", "-t", "europe-west1-docker.pkg.dev/$PROJECT_ID/apps/web:$SHORT_SHA", "."], "message": "args: [build, -t, IMAGEN, .]" },
+        { "path": "images", "op": "equals", "value": ["europe-west1-docker.pkg.dev/$PROJECT_ID/apps/web:$SHORT_SHA"], "message": "images con la imagen, al nivel de steps" }
+      ],
+      "hints": [
+        "`steps` es una lista: `- name: ...` y `args: [...]`.",
+        "`args` es una lista de textos: `[\"build\", \"-t\", \"IMAGEN\", \".\"]`.",
+        "`images` va al nivel de `steps`, no dentro del paso."
+      ],
+      "solution": {
+        "answer": "steps:\n  - name: gcr.io/cloud-builders/docker\n    args: [\"build\", \"-t\", \"europe-west1-docker.pkg.dev/$PROJECT_ID/apps/web:$SHORT_SHA\", \".\"]\nimages:\n  - europe-west1-docker.pkg.dev/$PROJECT_ID/apps/web:$SHORT_SHA\n",
+        "explanation": "El paso construye la imagen dentro de Cloud Build; la lista `images` hace que se publique en Artifact Registry al terminar. `$SHORT_SHA` lo rellena el trigger."
+      }
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "exercises": [
+    {
+      "id": "egress",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué transferencia de datos es gratuita en Google Cloud?",
+      "hints": ["Los proveedores quieren que tus datos entren fácilmente."],
+      "options": [
+        { "id": "a", "text": "La entrada de datos desde Internet (ingress)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "La salida de datos hacia Internet (egress)", "correct": false, "explanation": "Se cobra por GB." },
+        { "id": "c", "text": "La copia entre regiones", "correct": false, "explanation": "También se cobra." }
+      ],
+      "solution": {
+        "answer": "Ingress",
+        "explanation": "El ingress es gratis; el egress hacia Internet o entre regiones se cobra por GB y a menudo sorprende en la factura."
+      }
+    },
+    {
+      "id": "sud",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Para recibir los descuentos por uso sostenido (SUD) hay que firmar un compromiso de 1 año.",
+      "hints": ["¿Cuál de los dos descuentos exige comprometerse?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Eso son los CUD." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: son automáticos." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Los SUD se aplican solos a las máquinas elegibles que funcionan más del 25 % del mes. Los CUD son los que exigen 1 o 3 años de compromiso."
+      }
+    },
+    {
+      "id": "elegir-modelo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Cada noche se procesan miles de imágenes en lotes. Si una máquina desaparece, el trabajo se reintenta. ¿Qué modelo sale más barato?",
+      "hints": ["El trabajo tolera interrupciones."],
+      "options": [
+        { "id": "a", "text": "Spot VMs", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "CUD de 3 años", "correct": false, "explanation": "Pagarías todo el día por un trabajo de unas horas." },
+        { "id": "c", "text": "VMs bajo demanda", "correct": false, "explanation": "Funcionan, pero cuestan mucho más que Spot." }
+      ],
+      "solution": {
+        "answer": "Spot VMs",
+        "explanation": "Hasta un 91 % de descuento. Como Google puede expropiarlas, solo sirven para trabajos tolerantes a fallos, como este."
+      }
+    },
+    {
+      "id": "cud-cancelar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Compraste un CUD de 3 años y a los 6 meses migras la aplicación a Cloud Run. ¿Qué pasa con el compromiso?",
+      "hints": ["Piensa en el abono anual."],
+      "options": [
+        { "id": "a", "text": "Sigues pagándolo hasta el final del plazo, lo uses o no", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Se cancela automáticamente al no usarlo", "correct": false, "explanation": "No se cancela." },
+        { "id": "c", "text": "Puedes cancelarlo pagando una penalización del 10 %", "correct": false, "explanation": "Los compromisos no se pueden cancelar." }
+      ],
+      "solution": {
+        "answer": "Sigues pagando",
+        "explanation": "Un compromiso no se puede cancelar tras comprarlo. Por eso se compra solo la carga base que ya es estable."
+      }
+    },
+    {
+      "id": "presupuesto-corta",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un presupuesto de alertas de 500 € en un proyecto. Un error dispara el gasto a 3000 €. ¿Qué ocurre?",
+      "hints": ["¿Qué hace exactamente un presupuesto de alertas?"],
+      "options": [
+        { "id": "a", "text": "Recibes avisos al cruzar los umbrales, pero el gasto no se detiene", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Google apaga los recursos al llegar a 500 €", "correct": false, "explanation": "Un presupuesto de alertas solo avisa." },
+        { "id": "c", "text": "La factura se limita a 500 €", "correct": false, "explanation": "Pagas todo lo consumido." }
+      ],
+      "solution": {
+        "answer": "Solo avisa",
+        "explanation": "Para reaccionar automáticamente, los avisos se envían a Pub/Sub y una función actúa (por ejemplo, desactiva la facturación de un proyecto de pruebas)."
+      }
+    },
+    {
+      "id": "repartir",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "Quieres saber cuánto gasta cada equipo en la nube. ¿Qué necesitas?",
+      "hints": ["Hace falta marcar los recursos y poder analizar el gasto."],
+      "options": [
+        { "id": "a", "text": "Etiquetas (labels) como `equipo=pagos` en los recursos", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Exportar la facturación a BigQuery y agrupar por la etiqueta", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Network tags en las VMs", "correct": false, "explanation": "Son para el firewall, no aparecen como etiquetas de coste." },
+        { "id": "d", "text": "Un CUD por equipo", "correct": false, "explanation": "Es un descuento, no un reparto." }
+      ],
+      "solution": {
+        "answer": "a y b",
+        "explanation": "Las labels aparecen en los datos de facturación; la exportación a BigQuery permite agruparlas con SQL."
+      }
+    },
+    {
+      "id": "cmd-spot",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea la VM Spot `lote-1` en la zona `europe-west1-b`, que se borre si Google la expropia.",
+      "hints": [
+        "Es `gcloud compute instances create` con `--zone`.",
+        "`--provisioning-model=SPOT` y `--instance-termination-action=DELETE`."
+      ],
+      "accepted": [
+        "gcloud compute instances create lote-1 --zone=europe-west1-b --provisioning-model=SPOT --instance-termination-action=DELETE"
+      ],
+      "output": "Created [https://www.googleapis.com/compute/v1/projects/tienda/zones/europe-west1-b/instances/lote-1].\nNAME    ZONE            MACHINE_TYPE   PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS\nlote-1  europe-west1-b  n1-standard-1  true         10.132.0.7   34.78.121.45   RUNNING",
+      "solution": {
+        "answer": "gcloud compute instances create lote-1 --zone=europe-west1-b --provisioning-model=SPOT --instance-termination-action=DELETE",
+        "explanation": "Por defecto una Spot VM se detiene (STOP) al ser expropiada; con DELETE se borra, útil para trabajos por lotes que no guardan estado."
+      }
+    },
+    {
+      "id": "cmd-budget",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "En la cuenta de facturación `0A1B2C-3D4E5F-6A7B8C`, crea el presupuesto `dev-mensual` de `500EUR` con una alerta al 90 %.",
+      "hints": [
+        "Es `gcloud billing budgets create` con `--billing-account` y `--display-name`.",
+        "`--budget-amount=500EUR` y `--threshold-rule=percent=0.9`."
+      ],
+      "accepted": [
+        "gcloud billing budgets create --billing-account=0A1B2C-3D4E5F-6A7B8C --display-name=dev-mensual --budget-amount=500EUR --threshold-rule=percent=0.9",
+        "gcloud billing budgets create --billing-account=0A1B2C-3D4E5F-6A7B8C --display-name=\"dev-mensual\" --budget-amount=500EUR --threshold-rule=percent=0.9"
+      ],
+      "output": "Created budget [billingAccounts/0A1B2C-3D4E5F-6A7B8C/budgets/3f1e9d2c-6b7a-4c5d-8e9f-0a1b2c3d4e5f].",
+      "solution": {
+        "answer": "gcloud billing budgets create --billing-account=0A1B2C-3D4E5F-6A7B8C --display-name=dev-mensual --budget-amount=500EUR --threshold-rule=percent=0.9",
+        "explanation": "`--threshold-rule` se puede repetir para varios umbrales, y con `basis=forecasted-spend` avisa por el gasto previsto. Recuerda: solo avisa, no corta."
+      }
+    },
+    {
+      "id": "cmd-labels",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Añade a la VM `web-1` (zona `europe-west1-b`) las etiquetas `equipo=tienda` y `entorno=prod`.",
+      "hints": [
+        "Es `gcloud compute instances add-labels INSTANCIA`.",
+        "`--labels=clave=valor,clave=valor` y `--zone`."
+      ],
+      "accepted": [
+        "gcloud compute instances add-labels web-1 --zone=europe-west1-b --labels=equipo=tienda,entorno=prod",
+        "gcloud compute instances add-labels web-1 --zone=europe-west1-b --labels=entorno=prod,equipo=tienda"
+      ],
+      "output": "Updating labels of instance [web-1]...done.",
+      "solution": {
+        "answer": "gcloud compute instances add-labels web-1 --zone=europe-west1-b --labels=equipo=tienda,entorno=prod",
+        "explanation": "Las etiquetas aparecen en los datos de facturación y permiten repartir el coste por equipo y entorno."
+      }
+    }
+  ]
+}

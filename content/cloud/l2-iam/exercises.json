@@ -1,0 +1,132 @@
+{
+  "exercises": [
+    {
+      "id": "permiso-rol",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Google Cloud IAM, ¿cómo se da a alguien el permiso `storage.objects.get`?",
+      "hints": ["Los permisos nunca se conceden sueltos."],
+      "options": [
+        { "id": "a", "text": "Concediéndole un rol que incluya ese permiso", "correct": true, "explanation": "Correcto: los permisos se agrupan en roles." },
+        { "id": "b", "text": "Añadiendo el permiso directamente a su cuenta", "correct": false, "explanation": "No se pueden conceder permisos sueltos." },
+        { "id": "c", "text": "Creando una cuenta de servicio con ese nombre", "correct": false, "explanation": "El nombre de una cuenta no da permisos." }
+      ],
+      "solution": {
+        "answer": "Mediante un rol",
+        "explanation": "Una política IAM asocia principals con roles, y cada rol es un conjunto de permisos (`servicio.recurso.verbo`). Aquí, por ejemplo, `roles/storage.objectViewer`."
+      }
+    },
+    {
+      "id": "roles-basicos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un desarrollador solo necesita reiniciar VMs en un proyecto de producción. ¿Qué rol le das?",
+      "hints": ["Piensa en el mínimo privilegio: ¿un rol amplio o uno específico?"],
+      "options": [
+        { "id": "a", "text": "`roles/editor`", "correct": false, "explanation": "Es un rol básico con miles de permisos: podría borrar bases de datos." },
+        { "id": "b", "text": "`roles/owner`", "correct": false, "explanation": "Aún peor: incluye gestionar permisos y facturación." },
+        { "id": "c", "text": "Un rol predefinido de Compute Engine (o uno personalizado con solo esos permisos)", "correct": true, "explanation": "Correcto: mínimo privilegio." }
+      ],
+      "solution": {
+        "answer": "Un rol predefinido específico",
+        "explanation": "Los roles básicos (owner, editor, viewer) son demasiado amplios para producción. Se usan predefinidos específicos o, si ninguno encaja, personalizados."
+      }
+    },
+    {
+      "id": "grupos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Diez analistas necesitan el mismo acceso. ¿Cuál es la mejor forma de concedérselo?",
+      "hints": ["¿Qué pasará cuando entre o salga alguien del equipo?"],
+      "options": [
+        { "id": "a", "text": "Diez bindings, uno por persona (`user:...`)", "correct": false, "explanation": "Funciona, pero con el tiempo es inmanejable y se olvida retirar accesos." },
+        { "id": "b", "text": "Un binding al grupo `group:analistas@ejemplo.com`", "correct": true, "explanation": "Correcto: las altas y bajas se gestionan en el grupo." },
+        { "id": "c", "text": "Una cuenta de servicio compartida con su clave", "correct": false, "explanation": "Las cuentas de servicio son para aplicaciones, y compartir claves es muy mala práctica." }
+      ],
+      "solution": {
+        "answer": "Al grupo",
+        "explanation": "Conceder roles a grupos simplifica la gestión: cuando alguien cambia de equipo, basta con moverlo de grupo."
+      }
+    },
+    {
+      "id": "all-users",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué significa conceder `roles/storage.objectViewer` a `allUsers` en un bucket?",
+      "hints": ["`allUsers` incluye incluso a quien no tiene cuenta."],
+      "options": [
+        { "id": "a", "text": "Todos los usuarios de tu organización pueden leer los objetos", "correct": false, "explanation": "Para eso sería `domain:` o un grupo." },
+        { "id": "b", "text": "Cualquiera en internet puede leer los objetos: el bucket es público", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Solo las cuentas de servicio pueden leerlos", "correct": false, "explanation": "`allUsers` no distingue tipos de cuenta." }
+      ],
+      "solution": {
+        "answer": "Es público",
+        "explanation": "`allUsers` representa a cualquiera, autenticado o no. Solo tiene sentido para contenido público intencionado, como una web estática."
+      }
+    },
+    {
+      "id": "claves-sa",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una aplicación en una VM de Compute Engine necesita leer de Cloud Storage. ¿Cuál es la forma recomendada de autenticarla?",
+      "hints": ["Evita credenciales de larga duración guardadas en archivos."],
+      "options": [
+        { "id": "a", "text": "Descargar la clave JSON de una cuenta de servicio y copiarla a la VM", "correct": false, "explanation": "Las claves son credenciales de larga duración que se pueden filtrar." },
+        { "id": "b", "text": "Adjuntar a la VM una cuenta de servicio propia con el rol mínimo necesario", "correct": true, "explanation": "Correcto: las librerías obtienen credenciales temporales automáticamente." },
+        { "id": "c", "text": "Usar las credenciales personales del desarrollador", "correct": false, "explanation": "Una aplicación no debe usar la identidad de una persona." }
+      ],
+      "solution": {
+        "answer": "Cuenta de servicio adjunta",
+        "explanation": "Con una cuenta de servicio adjunta al recurso no hay claves que gestionar. Fuera de Google Cloud, la alternativa es Workload Identity Federation."
+      }
+    },
+    {
+      "id": "email-sa",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas la cuenta de servicio `api-tienda` en el proyecto `tienda-pro-9x2a`. ¿Cuál es su email?",
+      "hints": ["NOMBRE@PROJECT_ID.iam.gserviceaccount.com"],
+      "options": [
+        { "id": "a", "text": "`api-tienda@tienda-pro-9x2a.iam.gserviceaccount.com`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`api-tienda@gmail.com`", "correct": false, "explanation": "Las cuentas de servicio no son cuentas de Gmail." },
+        { "id": "c", "text": "`tienda-pro-9x2a@api-tienda.iam.gserviceaccount.com`", "correct": false, "explanation": "El orden es nombre@proyecto." }
+      ],
+      "solution": {
+        "answer": "api-tienda@tienda-pro-9x2a.iam.gserviceaccount.com",
+        "explanation": "El email de una cuenta de servicio creada por ti es `NOMBRE@PROJECT_ID.iam.gserviceaccount.com`."
+      }
+    },
+    {
+      "id": "crear-sa",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea una cuenta de servicio llamada `api-tienda`.",
+      "hints": [
+        "Está en el grupo `iam`, subgrupo `service-accounts`.",
+        "La acción es «crear»."
+      ],
+      "accepted": ["gcloud iam service-accounts create api-tienda"],
+      "output": "Created service account [api-tienda].",
+      "solution": {
+        "answer": "gcloud iam service-accounts create api-tienda",
+        "explanation": "Crea la cuenta `api-tienda@PROJECT_ID.iam.gserviceaccount.com` en el proyecto actual. Después se le conceden roles como a cualquier principal."
+      }
+    },
+    {
+      "id": "conceder-rol",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Concede el rol `roles/storage.objectViewer` al grupo `analistas@ejemplo.com` en el proyecto `analitica-pro-4h1c`.",
+      "hints": [
+        "El comando añade un binding a la política del proyecto: `gcloud projects add-iam-policy-binding`.",
+        "Flags: `--member=group:...` y `--role=...`."
+      ],
+      "accepted": ["gcloud projects add-iam-policy-binding analitica-pro-4h1c --member=group:analistas@ejemplo.com --role=roles/storage.objectViewer"],
+      "output": "Updated IAM policy for project [analitica-pro-4h1c].\nbindings:\n- members:\n  - group:analistas@ejemplo.com\n  role: roles/storage.objectViewer\n...",
+      "solution": {
+        "answer": "gcloud projects add-iam-policy-binding analitica-pro-4h1c --member=group:analistas@ejemplo.com --role=roles/storage.objectViewer",
+        "explanation": "`--member` lleva el tipo de principal como prefijo (`user:`, `group:`, `serviceAccount:`, `domain:`) y `--role` el nombre completo del rol."
+      }
+    }
+  ]
+}

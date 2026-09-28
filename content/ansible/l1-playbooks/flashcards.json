@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "estructura", "front": "Estructura de un playbook", "back": "Lista de plays; cada play tiene hosts y una lista de tasks; cada task llama a un módulo con parámetros." },
+    { "id": "orden", "front": "Orden de ejecución de las tareas con varios hosts", "back": "Tarea a tarea: cada tarea se ejecuta en todos los hosts antes de pasar a la siguiente." },
+    { "id": "fallo", "front": "¿Qué pasa si una tarea falla en un host?", "back": "Ese host sale del resto del playbook; los demás continúan." },
+    { "id": "facts", "front": "¿Qué es «Gathering Facts»?", "back": "La tarea implícita inicial que recopila datos de cada host (SO, IPs, memoria…). Se desactiva con `gather_facts: false`." },
+    { "id": "check-diff", "front": "¿Cómo ensayas un playbook sin cambiar nada?", "back": "`ansible-playbook site.yml --check --diff` (`-C -D`)." },
+    { "id": "limit", "front": "¿Cómo ejecutas un playbook solo en un host?", "back": "`-l <host>` / `--limit <host>`." },
+    { "id": "recap", "front": "¿Qué muestra el PLAY RECAP?", "back": "Por host: ok, changed, unreachable, failed, skipped… Relanzar y ver `changed=0` confirma la idempotencia." }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "exercises": [
+    {
+      "id": "quien-borro",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Alguien borró ayer una VM de producción. ¿Dónde encuentras quién fue?",
+      "hints": ["Hay unos logs que registran los cambios de configuración y siempre están activos."],
+      "options": [
+        { "id": "a", "text": "En los Admin Activity audit logs", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "En los Data Access audit logs", "correct": false, "explanation": "Registran accesos a datos, y además están desactivados por defecto." },
+        { "id": "c", "text": "En las métricas de CPU de la VM", "correct": false, "explanation": "No dicen quién hizo nada." }
+      ],
+      "solution": {
+        "answer": "Admin Activity",
+        "explanation": "Los Admin Activity audit logs registran quién, qué, cuándo y desde dónde en cada cambio de configuración, y no se pueden desactivar."
+      }
+    },
+    {
+      "id": "retencion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Por normativa, necesitas conservar los logs de la aplicación 5 años al menor coste posible. ¿Qué haces?",
+      "hints": ["El bucket `_Default` guarda 30 días por defecto; ¿dónde es barato guardar mucho tiempo?"],
+      "options": [
+        { "id": "a", "text": "Un sink que los envíe a un bucket de Cloud Storage con una clase de almacenamiento de archivo", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "No hacer nada: Cloud Logging los guarda para siempre", "correct": false, "explanation": "`_Default` los guarda 30 días por defecto." },
+        { "id": "c", "text": "Copiarlos a mano cada mes", "correct": false, "explanation": "Propenso a errores; los sinks lo automatizan." }
+      ],
+      "solution": {
+        "answer": "Sink a Cloud Storage",
+        "explanation": "Los sinks copian automáticamente los logs que cumplen un filtro. Cloud Storage con clase Archive (y reglas de ciclo de vida o bloqueo de retención) es la opción barata para años."
+      }
+    },
+    {
+      "id": "ops-agent",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Cloud Logging no aparecen los logs que tu aplicación escribe en `/var/log/tienda.log` dentro de una VM. ¿Qué falta?",
+      "hints": ["En Compute Engine, alguien tiene que leer esos archivos y enviarlos."],
+      "options": [
+        { "id": "a", "text": "Instalar y configurar el Ops Agent en la VM", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Activar los Data Access audit logs", "correct": false, "explanation": "No tienen relación con los logs de tu aplicación." },
+        { "id": "c", "text": "Crear un uptime check", "correct": false, "explanation": "Comprueba si una URL responde; no recoge logs." }
+      ],
+      "solution": {
+        "answer": "Ops Agent",
+        "explanation": "El Ops Agent recoge logs y métricas del sistema operativo y de las aplicaciones de la VM. En Cloud Run o GKE, lo que se escribe en la salida estándar se recoge automáticamente."
+      }
+    },
+    {
+      "id": "presupuesto",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu SLO de disponibilidad es del 99,9 % en 30 días. ¿Cuánto tiempo de caída «permite» el presupuesto de error, aproximadamente?",
+      "hints": ["30 días = 43 200 minutos. ¿Cuánto es el 0,1 %?"],
+      "options": [
+        { "id": "a", "text": "Unos 4 minutos", "correct": false, "explanation": "Eso sería con 99,99 %." },
+        { "id": "b", "text": "Unos 43 minutos", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Unas 7 horas", "correct": false, "explanation": "Eso sería con 99 %." }
+      ],
+      "solution": {
+        "answer": "Unos 43 minutos",
+        "explanation": "43 200 minutos × 0,001 = 43,2 minutos. Cada nueve adicional divide el margen entre diez."
+      }
+    },
+    {
+      "id": "slo-sla",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El contrato con el cliente (SLA) garantiza un 99,5 % mensual. ¿Qué SLO interno tiene más sentido?",
+      "hints": ["Quieres enterarte de los problemas antes de incumplir el contrato."],
+      "options": [
+        { "id": "a", "text": "99 %", "correct": false, "explanation": "Menos exigente que el SLA: incumplirías el contrato sin enterarte." },
+        { "id": "b", "text": "99,5 %", "correct": false, "explanation": "Igual que el SLA: no deja margen." },
+        { "id": "c", "text": "99,9 %", "correct": true, "explanation": "Correcto: más exigente que el SLA." }
+      ],
+      "solution": {
+        "answer": "99,9 %",
+        "explanation": "El SLO interno debe ser más exigente que el SLA, para reaccionar antes de tener consecuencias contractuales."
+      }
+    },
+    {
+      "id": "alerta-util",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál de estas alertas es más útil para despertar a alguien de guardia?",
+      "hints": ["¿Cuál refleja algo que sufren los usuarios?"],
+      "options": [
+        { "id": "a", "text": "La CPU de un nodo supera el 80 %", "correct": false, "explanation": "Puede no afectar a nadie." },
+        { "id": "b", "text": "El presupuesto de error del SLO se está consumiendo tan rápido que se agotará en pocas horas", "correct": true, "explanation": "Correcto: síntoma real y accionable." },
+        { "id": "c", "text": "Se ha reiniciado un Pod", "correct": false, "explanation": "Kubernetes lo gestiona; rara vez requiere acción." }
+      ],
+      "solution": {
+        "answer": "Burn rate alto",
+        "explanation": "Las mejores alertas se basan en síntomas que notan los usuarios, como el consumo del presupuesto de error. Las causas (CPU, reinicios) se miran en los dashboards al investigar."
+      }
+    },
+    {
+      "id": "cmd-logging-read",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Lee como máximo 10 entradas de log con severidad `ERROR` o superior.",
+      "hints": [
+        "Es `gcloud logging read` con un filtro entre comillas.",
+        "El filtro es `severity>=ERROR` y el número máximo va con `--limit`."
+      ],
+      "accepted": [
+        "gcloud logging read \"severity>=ERROR\" --limit=10",
+        "gcloud logging read 'severity>=ERROR' --limit=10"
+      ],
+      "output": "---\ninsertId: 1x7k2p9f3a1b\nlogName: projects/tienda-pro/logs/run.googleapis.com%2Fstderr\nresource:\n  type: cloud_run_revision\nseverity: ERROR\ntextPayload: 'connection refused: pedidos-db:5432'\ntimestamp: '2026-09-28T09:41:12.118Z'",
+      "solution": {
+        "answer": "gcloud logging read \"severity>=ERROR\" --limit=10",
+        "explanation": "El filtro usa el lenguaje de consultas de Cloud Logging. Por defecto solo busca en el último día (`--freshness=1d`)."
+      }
+    },
+    {
+      "id": "cmd-sink",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea el sink `archivo-logs` que envíe **todos** los logs al bucket de Cloud Storage `tienda-archivo-logs`.",
+      "hints": [
+        "Es `gcloud logging sinks create NOMBRE DESTINO`.",
+        "El destino de Cloud Storage es `storage.googleapis.com/NOMBRE_DEL_BUCKET`."
+      ],
+      "accepted": ["gcloud logging sinks create archivo-logs storage.googleapis.com/tienda-archivo-logs"],
+      "output": "Created [https://logging.googleapis.com/v2/projects/tienda-pro/sinks/archivo-logs].\nPlease remember to grant `serviceAccount:service-123456789012@gcp-sa-logging.iam.gserviceaccount.com` the Storage Object Creator role on the bucket.",
+      "solution": {
+        "answer": "gcloud logging sinks create archivo-logs storage.googleapis.com/tienda-archivo-logs",
+        "explanation": "Sin `--log-filter` se envían todos los logs. Fíjate en el aviso: hay que dar permiso a la writer identity del sink para escribir en el bucket."
+      }
+    }
+  ]
+}

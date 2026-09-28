@@ -1,0 +1,13 @@
+{
+  "cards": [
+    { "id": "por-que", "front": "¿Por qué un backend remoto en equipo?", "back": "Un único state compartido, bloqueo para que dos apply no se pisen, y protección (acceso, cifrado, versionado)." },
+    { "id": "donde", "front": "¿Dónde va el bloque `backend`?", "back": "Dentro de `terraform { }` en el módulo raíz. Tras cambiarlo: `terraform init`." },
+    { "id": "gcs", "front": "Backend GCS: argumentos", "back": "`bucket` (obligatorio) y `prefix`. Bloqueo incluido. State en `<prefix>/<workspace>.tfstate`." },
+    { "id": "s3", "front": "Backend S3: argumentos y bloqueo", "back": "`bucket`, `key`, `region` + `use_lockfile = true`. DynamoDB para bloquear está obsoleto." },
+    { "id": "versionado", "front": "¿Qué se recomienda activar en el bucket del state?", "back": "El versionado de objetos, para recuperar el state si se borra o se estropea." },
+    { "id": "variables", "front": "¿Admite variables el bloque `backend`?", "back": "No (ni locals ni data sources). Se usa configuración parcial con `-backend-config`." },
+    { "id": "parcial", "front": "Configuración parcial", "back": "`backend \"gcs\" {}` + `terraform init -backend-config=pro.gcs.tfbackend` (o `-backend-config=\"clave=valor\"`)." },
+    { "id": "migrate-reconfigure", "front": "`-migrate-state` frente a `-reconfigure`", "back": "`-migrate-state` copia el state al backend nuevo; `-reconfigure` apunta al nuevo sin copiar nada." },
+    { "id": "force-unlock", "front": "¿Qué hace `terraform force-unlock ID`?", "back": "Quita un bloqueo colgado. No toca la infraestructura. Solo si nadie está aplicando." }
+  ]
+}

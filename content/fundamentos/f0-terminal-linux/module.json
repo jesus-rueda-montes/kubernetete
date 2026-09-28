@@ -1,0 +1,8 @@
+{
+  "title": "La terminal de Linux",
+  "summary": "Rutas, ficheros, permisos, procesos, variables de entorno y tuberías: lo mínimo para moverte por un servidor.",
+  "level": 0,
+  "order": 1,
+  "xp": 50,
+  "prereqs": []
+}

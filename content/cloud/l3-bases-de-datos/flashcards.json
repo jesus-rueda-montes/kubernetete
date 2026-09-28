@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "cloud-sql", "front": "¿Qué es Cloud SQL?", "back": "MySQL, PostgreSQL y SQL Server gestionados: Google se ocupa de parches, copias, replicación y failover." },
+    { "id": "ha", "front": "Cloud SQL con `--availability-type=regional`", "back": "Primaria + standby en otra zona, replicación síncrona, failover automático con la misma IP. Cuesta el doble." },
+    { "id": "standby-replica", "front": "Standby de HA frente a réplica de lectura", "back": "Standby: síncrona, misma región, no sirve consultas. Réplica: asíncrona, sirve lecturas, puede estar en otra región." },
+    { "id": "pitr", "front": "¿La HA protege de un `DROP TABLE` por error?", "back": "No, se replica. Para eso: copias automáticas y point-in-time recovery." },
+    { "id": "conexion", "front": "Forma recomendada de conectarse a Cloud SQL", "back": "IP privada en la VPC; desde GKE o Cloud Run, Cloud SQL Auth Proxy o conectores de lenguaje con IAM." },
+    { "id": "oltp-olap", "front": "OLTP frente a OLAP", "back": "OLTP: muchas operaciones pequeñas (aplicaciones). OLAP: pocas consultas enormes (análisis)." },
+    { "id": "spanner", "front": "¿Cuándo Spanner?", "back": "SQL y transacciones con consistencia fuerte, escala horizontal y varias regiones. SLA de hasta 99,999 %." },
+    { "id": "firestore", "front": "¿Cuándo Firestore?", "back": "NoSQL de documentos para apps web y móviles: sin servidor, tiempo real y offline." },
+    { "id": "bigtable", "front": "¿Cuándo Bigtable?", "back": "NoSQL de columna ancha para volúmenes enormes con baja latencia: series temporales, IoT. API de HBase." },
+    { "id": "bigquery", "front": "¿Cuándo BigQuery?", "back": "Análisis (data warehouse) con SQL sobre terabytes o petabytes. No como base de datos de una app." },
+    { "id": "bq-coste", "front": "¿Cómo cobra BigQuery bajo demanda y cómo ahorrar?", "back": "Por bytes leídos (1 TiB/mes gratis). Solo las columnas necesarias, particionar y agrupar; `LIMIT` no ahorra." }
+  ]
+}

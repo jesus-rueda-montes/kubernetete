@@ -1,0 +1,135 @@
+{
+  "exercises": [
+    {
+      "id": "nombre-tipo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuántas vCPUs tiene una VM de tipo `e2-standard-4`?",
+      "hints": ["El número final del nombre."],
+      "options": [
+        { "id": "a", "text": "2", "correct": false, "explanation": "Sería `e2-standard-2`." },
+        { "id": "b", "text": "4", "correct": true, "explanation": "Correcto: serie E2, perfil standard, 4 vCPUs." },
+        { "id": "c", "text": "16", "correct": false, "explanation": "16 GB es su memoria (4 GB por vCPU en el perfil standard)." }
+      ],
+      "solution": {
+        "answer": "4",
+        "explanation": "El nombre del tipo es serie-perfil-vCPUs. `e2-standard-4` = E2, standard (4 GB por vCPU), 4 vCPUs."
+      }
+    },
+    {
+      "id": "spot-uso",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Para cuáles de estas cargas encajan bien las **Spot VMs**? (Marca todas las correctas.)",
+      "hints": ["Google puede pararlas en cualquier momento. ¿Qué cargas toleran eso?"],
+      "options": [
+        { "id": "a", "text": "Procesamiento por lotes que puede reintentarse", "correct": true, "explanation": "Sí: una interrupción solo retrasa el trabajo." },
+        { "id": "b", "text": "La única base de datos de producción", "correct": false, "explanation": "No: una parada la dejaría sin servicio." },
+        { "id": "c", "text": "Trabajos de CI (compilar y pasar tests)", "correct": true, "explanation": "Sí: si se interrumpe, se relanza." },
+        { "id": "d", "text": "Renderizado de vídeo en muchos trozos", "correct": true, "explanation": "Sí: cada trozo se puede repetir." }
+      ],
+      "solution": {
+        "answer": "Lotes, CI y renderizado",
+        "explanation": "Las Spot VMs son hasta un 91 % más baratas, pero pueden pararse en cualquier momento y no tienen SLA: solo para cargas tolerantes a fallos."
+      }
+    },
+    {
+      "id": "vm-parada",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Paras una VM con un disco de 100 GB. Mientras está parada, ¿qué sigues pagando?",
+      "hints": ["¿Qué recurso sigue existiendo aunque la máquina no funcione?"],
+      "options": [
+        { "id": "a", "text": "Nada", "correct": false, "explanation": "El disco sigue existiendo." },
+        { "id": "b", "text": "El disco (y las IPs estáticas reservadas, si las hay)", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "La CPU y la memoria, pero no el disco", "correct": false, "explanation": "Al revés." }
+      ],
+      "solution": {
+        "answer": "El disco",
+        "explanation": "Parada, la VM no consume vCPU ni memoria, pero su disco persistente y las IPs estáticas reservadas se siguen cobrando."
+      }
+    },
+    {
+      "id": "mig-regional",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que tu web en VMs sobreviva a la caída de una zona y crezca con la demanda. ¿Qué usas?",
+      "hints": ["Necesitas réplicas idénticas en varias zonas y autoescalado."],
+      "options": [
+        { "id": "a", "text": "Una VM grande en una zona", "correct": false, "explanation": "Punto único de fallo y sin autoescalado." },
+        { "id": "b", "text": "Un grupo de instancias gestionado regional con autoescalado detrás de un load balancer", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Un grupo de instancias no gestionado", "correct": false, "explanation": "No tiene autoescalado ni autocuración." }
+      ],
+      "solution": {
+        "answer": "MIG regional",
+        "explanation": "Un MIG regional reparte VMs idénticas entre zonas, se autoescala, recrea las que fallan y se usa como backend de un load balancer."
+      }
+    },
+    {
+      "id": "mig-estado",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Es seguro guardar los archivos que suben los usuarios en el disco local de las VMs de un grupo de instancias gestionado con autoescalado.",
+      "hints": ["¿Qué pasa con una VM cuando el grupo reduce su tamaño o la recrea?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El MIG puede borrar o recrear esas VMs en cualquier momento." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: las VMs de un MIG deben ser stateless; los archivos van a Cloud Storage." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El autoescalado y la autocuración borran y crean VMs. El estado debe vivir fuera: Cloud Storage, una base de datos gestionada…"
+      }
+    },
+    {
+      "id": "crear-vm",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea una VM llamada `web-1` en la zona `europe-west1-b`, de tipo `e2-small`.",
+      "hints": [
+        "`gcloud compute instances create <nombre>`.",
+        "Flags: `--zone` y `--machine-type`."
+      ],
+      "accepted": ["gcloud compute instances create web-1 --zone=europe-west1-b --machine-type=e2-small"],
+      "output": "Created [https://www.googleapis.com/compute/v1/projects/tienda-dev-7f3k/zones/europe-west1-b/instances/web-1].\nNAME   ZONE            MACHINE_TYPE  INTERNAL_IP  EXTERNAL_IP    STATUS\nweb-1  europe-west1-b  e2-small      10.132.0.2   34.76.10.20    RUNNING",
+      "solution": {
+        "answer": "gcloud compute instances create web-1 --zone=europe-west1-b --machine-type=e2-small",
+        "explanation": "`gcloud compute instances create` crea la VM. Una VM es un recurso zonal: siempre hay que saber en qué zona está."
+      }
+    },
+    {
+      "id": "ssh-iap",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Conéctate por SSH a la VM `web-1` (zona `europe-west1-b`), que **no tiene IP pública**, a través de IAP.",
+      "hints": [
+        "El comando es `gcloud compute ssh <nombre>`.",
+        "El flag para pasar por IAP es `--tunnel-through-iap`."
+      ],
+      "accepted": ["gcloud compute ssh web-1 --zone=europe-west1-b --tunnel-through-iap"],
+      "output": "External IP address was not found; defaulting to using IAP tunneling.\nana@web-1:~$",
+      "solution": {
+        "answer": "gcloud compute ssh web-1 --zone=europe-west1-b --tunnel-through-iap",
+        "explanation": "IAP permite SSH a VMs sin IP pública, controlando el acceso con IAM y sin abrir el puerto 22 a internet."
+      }
+    },
+    {
+      "id": "vm-spot",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para crear `lote-1` como **VM Spot**.",
+      "template": "gcloud compute instances create lote-1 --zone=europe-west1-b --{{flag}}={{modelo}}",
+      "blanks": [
+        { "id": "flag", "accepted": ["provisioning-model"] },
+        { "id": "modelo", "accepted": ["SPOT"] }
+      ],
+      "hints": [
+        "El flag habla del «modelo de aprovisionamiento».",
+        "El valor es el nombre del tipo de VM, en mayúsculas."
+      ],
+      "solution": {
+        "answer": "gcloud compute instances create lote-1 --zone=europe-west1-b --provisioning-model=SPOT",
+        "explanation": "`--provisioning-model=SPOT` crea una Spot VM: mucho más barata, pero puede pararse en cualquier momento."
+      }
+    }
+  ]
+}

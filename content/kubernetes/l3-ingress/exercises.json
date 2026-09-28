@@ -1,0 +1,142 @@
+{
+  "exercises": [
+    {
+      "id": "sin-controller",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Aplicas un Ingress correcto en un clúster recién creado sin nada más instalado. `kubectl get ingress` muestra `ADDRESS` vacío y no llega tráfico. ¿Por qué?",
+      "hints": ["El objeto Ingress solo describe reglas. ¿Quién las aplica?"],
+      "options": [
+        { "id": "a", "text": "No hay ningún Ingress controller que lo implemente", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Los Ingress tardan horas en activarse", "correct": false, "explanation": "Con un controller, suele tardar segundos o pocos minutos." },
+        { "id": "c", "text": "Falta el tipo LoadBalancer en el Ingress", "correct": false, "explanation": "Los Ingress no tienen campo type." }
+      ],
+      "solution": {
+        "answer": "Falta el controller",
+        "explanation": "Un Ingress sin controller no tiene efecto. Hay que instalar uno (o usar el del proveedor) y referenciar su IngressClass."
+      }
+    },
+    {
+      "id": "path-type",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una regla tiene `path: /api` con `pathType: Prefix`. ¿Cuál de estas rutas **no** coincide?",
+      "hints": ["Prefix compara por segmentos separados por `/`."],
+      "options": [
+        { "id": "a", "text": "`/api`", "correct": false, "explanation": "Coincide." },
+        { "id": "b", "text": "`/api/pedidos`", "correct": false, "explanation": "Coincide: es un segmento hijo." },
+        { "id": "c", "text": "`/apiv2`", "correct": true, "explanation": "Correcto: `apiv2` es otro segmento, no empieza por el segmento `api`." }
+      ],
+      "solution": {
+        "answer": "/apiv2",
+        "explanation": "Prefix coincide por elementos de ruta completos: `/api` incluye `/api` y `/api/...`, pero no `/apiv2`. `Exact` solo coincidiría con `/api`."
+      }
+    },
+    {
+      "id": "ingress-vs-lb",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes 6 aplicaciones web en el clúster. ¿Qué ventaja principal tiene un Ingress frente a 6 Services de tipo LoadBalancer?",
+      "hints": ["¿Cuántos puntos de entrada (y facturas) hay en cada caso?"],
+      "options": [
+        { "id": "a", "text": "Un único punto de entrada con enrutado por host/ruta y TLS centralizado, en vez de 6 load balancers", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El Ingress funciona con cualquier protocolo, no solo HTTP", "correct": false, "explanation": "Al revés: Ingress solo cubre HTTP y HTTPS." },
+        { "id": "c", "text": "El Ingress no necesita Services", "correct": false, "explanation": "Sí los necesita: son sus backends." }
+      ],
+      "solution": {
+        "answer": "Un único punto de entrada",
+        "explanation": "El Ingress concentra el tráfico HTTP(S) de muchas aplicaciones en un load balancer, enruta por host y ruta a sus Services y centraliza los certificados."
+      }
+    },
+    {
+      "id": "gke-clase",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En GKE, con el Ingress controller de Google, ¿cómo indicas que quieres un load balancer **interno**?",
+      "hints": ["GKE es una excepción: no usa el campo `ingressClassName`."],
+      "options": [
+        { "id": "a", "text": "Con la annotation `kubernetes.io/ingress.class: \"gce-internal\"`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Con `spec.ingressClassName: gce-internal`", "correct": false, "explanation": "El Ingress de GKE no admite `ingressClassName`." },
+        { "id": "c", "text": "Con `type: Internal` en el Ingress", "correct": false, "explanation": "Ese campo no existe." }
+      ],
+      "solution": {
+        "answer": "Annotation gce-internal",
+        "explanation": "El Ingress de GKE se elige con la annotation `kubernetes.io/ingress.class` (`gce` o `gce-internal`); si falta, crea un load balancer externo."
+      }
+    },
+    {
+      "id": "gateway-roles",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Gateway API, ¿qué recurso crea normalmente el **equipo de la aplicación** para decir qué rutas van a sus Services?",
+      "hints": ["GatewayClass y Gateway son de infraestructura y plataforma."],
+      "options": [
+        { "id": "a", "text": "GatewayClass", "correct": false, "explanation": "La define el proveedor de infraestructura." },
+        { "id": "b", "text": "Gateway", "correct": false, "explanation": "Lo gestiona el equipo de plataforma: listeners, puertos, TLS." },
+        { "id": "c", "text": "HTTPRoute", "correct": true, "explanation": "Correcto: reglas de la aplicación, enganchadas al Gateway con parentRefs." }
+      ],
+      "solution": {
+        "answer": "HTTPRoute",
+        "explanation": "Gateway API separa roles: GatewayClass (proveedor), Gateway (plataforma) y HTTPRoute (aplicación)."
+      }
+    },
+    {
+      "id": "ingress-congelado",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "La API de Ingress se ha eliminado de Kubernetes y los Ingress existentes dejarán de funcionar.",
+      "hints": ["¿Está eliminada o congelada?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Sigue siendo estable y GA; solo está congelada." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: está congelada (no evoluciona) y se recomienda Gateway API para lo nuevo." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "La API de Ingress sigue disponible y estable, pero ya no se desarrolla. Lo que se retiró en marzo de 2026 fue un controller concreto, ingress-nginx."
+      }
+    },
+    {
+      "id": "crear-ingress",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un Ingress llamado `tienda` con la clase `traefik` que envíe `tienda.example.com/` (y todo lo que cuelga, pathType Prefix) al Service `web`, puerto `80`.",
+      "hints": [
+        "`kubectl create ingress <nombre>` con los flags `--class` y `--rule`.",
+        "Formato de la regla: `host/ruta=servicio:puerto`; una ruta terminada en `*` usa Prefix."
+      ],
+      "accepted": ["kubectl create ingress tienda --class=traefik --rule=tienda.example.com/*=web:80"],
+      "output": "ingress.networking.k8s.io/tienda created",
+      "solution": {
+        "answer": "kubectl create ingress tienda --class=traefik --rule=tienda.example.com/*=web:80",
+        "explanation": "Cada `--rule` es `host/ruta=servicio:puerto`. Sin `*` la ruta sería Exact; con `*`, Prefix. Añadiendo `,tls=secreto` activa HTTPS."
+      }
+    },
+    {
+      "id": "manifest-ingress",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el Ingress `tienda` (clase `traefik`): para el host `tienda.example.com`, la ruta `/api` (Prefix) va al Service `api` puerto 80 y la ruta `/` (Prefix) al Service `web` puerto 80. Activa TLS para ese host con el Secret `tienda-tls`.",
+      "starter": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: tienda\nspec:\n  ingressClassName: traefik\n",
+      "assertions": [
+        { "path": "apiVersion", "op": "equals", "value": "networking.k8s.io/v1", "message": "apiVersion es networking.k8s.io/v1" },
+        { "path": "spec.ingressClassName", "op": "equals", "value": "traefik", "message": "ingressClassName: traefik" },
+        { "path": "spec.tls[0].secretName", "op": "equals", "value": "tienda-tls", "message": "spec.tls usa secretName: tienda-tls" },
+        { "path": "spec.tls[0].hosts", "op": "equals", "value": ["tienda.example.com"], "message": "spec.tls.hosts contiene tienda.example.com" },
+        { "path": "spec.rules[0].host", "op": "equals", "value": "tienda.example.com", "message": "La regla es para el host tienda.example.com" },
+        { "path": "spec.rules[0].http.paths[path=/api].backend.service.name", "op": "equals", "value": "api", "message": "La ruta /api va al Service api" },
+        { "path": "spec.rules[0].http.paths[path=/api].backend.service.port.number", "op": "equals", "value": 80, "message": "La ruta /api usa el puerto 80 (backend.service.port.number)" },
+        { "path": "spec.rules[0].http.paths[path=/].backend.service.name", "op": "equals", "value": "web", "message": "La ruta / va al Service web" },
+        { "path": "spec.rules[0].http.paths[*].pathType", "op": "equals", "value": "Prefix", "message": "Todas las rutas usan pathType: Prefix" }
+      ],
+      "hints": [
+        "`tls` es una lista con `hosts` (otra lista) y `secretName`.",
+        "`rules` → `- host:` → `http:` → `paths:` (lista de `path`, `pathType` y `backend`).",
+        "El backend: `backend:` → `service:` → `name` y `port:` → `number`."
+      ],
+      "solution": {
+        "answer": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: tienda\nspec:\n  ingressClassName: traefik\n  tls:\n    - hosts: [tienda.example.com]\n      secretName: tienda-tls\n  rules:\n    - host: tienda.example.com\n      http:\n        paths:\n          - path: /api\n            pathType: Prefix\n            backend:\n              service:\n                name: api\n                port:\n                  number: 80\n          - path: /\n            pathType: Prefix\n            backend:\n              service:\n                name: web\n                port:\n                  number: 80\n",
+        "explanation": "`tls` asocia el certificado al host; cada elemento de `paths` une una ruta y su `pathType` con un Service y su puerto. La ruta más específica (`/api`) gana a `/`."
+      }
+    }
+  ]
+}

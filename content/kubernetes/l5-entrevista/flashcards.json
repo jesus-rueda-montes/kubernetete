@@ -1,0 +1,13 @@
+{
+  "cards": [
+    { "id": "estructura", "front": "Estructura de una buena respuesta técnica", "back": "Definición → para qué sirve → cómo funciona → matiz práctico (error típico, límite o cuándo no usarlo)." },
+    { "id": "flujo-apply", "front": "¿Qué pasa al hacer `kubectl apply` de un Deployment?", "back": "API server (authn, RBAC, admission) → etcd → controlador de Deployment crea ReplicaSet → Pods → scheduler asigna nodo → kubelet arranca contenedores." },
+    { "id": "control-plane", "front": "¿Y si se cae el control plane?", "back": "Los Pods siguen funcionando, pero no hay cambios ni reprogramación. Control plane en HA y copias de etcd." },
+    { "id": "sin-caida", "front": "Actualizar sin caída", "back": "Rolling update con maxUnavailable: 0 y maxSurge ≥ 1, readiness probe, tag inmutable y `kubectl rollout undo` si falla." },
+    { "id": "pdb", "front": "PodDisruptionBudget", "back": "Limita cuántos Pods se desalojan a la vez en interrupciones voluntarias (drain, actualización de nodos). `minAvailable` o `maxUnavailable`." },
+    { "id": "spread", "front": "Repartir réplicas entre zonas", "back": "`topologySpreadConstraints` con `topologyKey: topology.kubernetes.io/zone` (o pod anti-affinity)." },
+    { "id": "securitycontext", "front": "securityContext de producción", "back": "runAsNonRoot: true, allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities.drop: [ALL]." },
+    { "id": "diseno", "front": "Checklist de diseño en Kubernetes", "back": "Preguntar requisitos → disponibilidad (réplicas, zonas, PDB) → despliegues → recursos y escalado → seguridad → exposición (Ingress + TLS) → observabilidad." },
+    { "id": "no-se", "front": "¿Qué hacer si no sabes la respuesta?", "back": "No inventar: explica cómo lo averiguarías (documentación, `kubectl explain`, una prueba en un clúster de laboratorio)." }
+  ]
+}

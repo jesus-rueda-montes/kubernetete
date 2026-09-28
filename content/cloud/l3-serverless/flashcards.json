@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "que-es", "front": "¿Qué es Cloud Run?", "back": "Contenedores sin estado sin gestionar servidores: URL HTTPS, escalado automático hasta cero y pago por uso." },
+    { "id": "contrato", "front": "Contrato del contenedor en Cloud Run", "back": "Escuchar en `$PORT` (por defecto 8080), sin estado; el disco es en memoria." },
+    { "id": "revision", "front": "¿Qué es una revisión de Cloud Run?", "back": "Una versión inmutable (imagen + configuración) creada en cada despliegue. El tráfico se reparte entre revisiones." },
+    { "id": "concurrencia", "front": "Concurrencia en Cloud Run", "back": "Peticiones simultáneas por instancia. Por defecto (con gcloud o Terraform), 80 por vCPU." },
+    { "id": "cold-start", "front": "¿Cómo reducir los arranques en frío?", "back": "`--min-instances` (pagando por ellas), imágenes pequeñas y arranque rápido." },
+    { "id": "max", "front": "¿Para qué `--max-instances`?", "back": "Limitar el coste y proteger a los sistemas de detrás (p. ej. la base de datos) ante picos." },
+    { "id": "timeout", "front": "Timeout de una petición en Cloud Run", "back": "5 minutos por defecto, hasta 60 minutos. Para tareas que terminan: Cloud Run jobs." },
+    { "id": "auth", "front": "Servicio público frente a privado", "back": "`--allow-unauthenticated` = público. Privado: quien llama necesita `roles/run.invoker`." },
+    { "id": "functions", "front": "Cloud Run functions: disparadores", "back": "HTTP o eventos vía Eventarc (Cloud Storage, Pub/Sub, Firestore…)." },
+    { "id": "idempotencia", "front": "¿Por qué las funciones de eventos deben ser idempotentes?", "back": "La entrega es al menos una vez: un evento puede llegar repetido." },
+    { "id": "elegir", "front": "Orden habitual para elegir dónde ejecutar", "back": "Cloud Run (lo más simple) → GKE (necesito Kubernetes) → VMs (necesito controlar el SO)." }
+  ]
+}

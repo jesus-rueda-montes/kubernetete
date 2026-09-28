@@ -1,0 +1,147 @@
+{
+  "exercises": [
+    {
+      "id": "crd-sola",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Instalas la CRD `backups.tienda.example.com` y creas un objeto `Backup`, pero no hay ningún controlador instalado. ¿Qué pasa?",
+      "hints": ["¿Quién pone la lógica: la CRD o un controlador?"],
+      "options": [
+        { "id": "a", "text": "Se hace la copia de seguridad", "correct": false, "explanation": "Nadie la hace: la CRD no tiene lógica." },
+        { "id": "b", "text": "El objeto se valida y se guarda, pero no ocurre nada más", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "La API rechaza el objeto", "correct": false, "explanation": "Si cumple el esquema, se acepta." }
+      ],
+      "solution": {
+        "answer": "Se guarda, nada más",
+        "explanation": "Una CRD amplía la API: valida y almacena. La acción la pone un controlador que vigila esos objetos."
+      }
+    },
+    {
+      "id": "borrar-crd",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Para «reinstalar limpio» cert-manager, alguien borra la CRD `certificates.cert-manager.io`. ¿Qué consecuencia tiene?",
+      "hints": ["¿Qué pasa con los objetos de un tipo cuando desaparece el tipo?"],
+      "options": [
+        { "id": "a", "text": "Nada: los certificados siguen ahí", "correct": false, "explanation": "Desaparecen con la CRD." },
+        { "id": "b", "text": "Se borran todos los objetos `Certificate` del clúster", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Kubernetes impide borrar CRDs con objetos", "correct": false, "explanation": "No lo impide." }
+      ],
+      "solution": {
+        "answer": "Se borran todos",
+        "explanation": "Al borrar una CRD, el servidor elimina su endpoint y todos los objetos guardados de ese tipo. Los Secrets ya creados siguen, pero nadie renovará los certificados."
+      }
+    },
+    {
+      "id": "orden",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Al aplicar un `ServiceMonitor` recibes «no matches for kind \"ServiceMonitor\"». ¿Qué falta?",
+      "hints": ["¿Conoce la API ese tipo?"],
+      "options": [
+        { "id": "a", "text": "La CRD de ServiceMonitor (el Prometheus Operator)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Un Service con el mismo nombre", "correct": false, "explanation": "El error dice que el tipo no existe." },
+        { "id": "c", "text": "Permisos de RBAC", "correct": false, "explanation": "Sería un error `Forbidden`." }
+      ],
+      "solution": {
+        "answer": "Falta la CRD",
+        "explanation": "Hay que instalar primero las CRDs (normalmente con el operator) y después los custom resources."
+      }
+    },
+    {
+      "id": "reconciliacion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Deployment pide 3 réplicas y alguien borra uno de sus Pods. ¿Qué mecanismo lo repone?",
+      "hints": ["Kubernetes compara continuamente lo pedido con lo que hay."],
+      "options": [
+        { "id": "a", "text": "El bucle de reconciliación de un controlador", "correct": true, "explanation": "Correcto: ve 2 donde pide 3 y crea uno." },
+        { "id": "b", "text": "Un CronJob interno que revisa cada hora", "correct": false, "explanation": "No hay revisiones periódicas así." },
+        { "id": "c", "text": "El kubelet del nodo donde estaba el Pod", "correct": false, "explanation": "El kubelet ejecuta Pods; decidir cuántos hay es cosa del controlador." }
+      ],
+      "solution": {
+        "answer": "Bucle de reconciliación",
+        "explanation": "El controlador de ReplicaSets observa, compara con el spec y actúa. Los operators aplican el mismo patrón a sus propios tipos."
+      }
+    },
+    {
+      "id": "spec-status",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En un custom resource, ¿quién escribe normalmente el `status`?",
+      "hints": ["`spec` lo escribes tú."],
+      "options": [
+        { "id": "a", "text": "El usuario, en el YAML", "correct": false, "explanation": "El usuario escribe el `spec`." },
+        { "id": "b", "text": "El controlador que lo gestiona", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "etcd", "correct": false, "explanation": "etcd solo almacena." }
+      ],
+      "solution": {
+        "answer": "El controlador",
+        "explanation": "`spec` es el estado deseado (lo pides tú); `status` es el estado observado (lo informa el controlador). `kubectl describe` suele mostrar ambos y los eventos."
+      }
+    },
+    {
+      "id": "operator-que",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué forma parte de un operator?",
+      "hints": ["Tipos propios y lógica que los gestiona."],
+      "options": [
+        { "id": "a", "text": "Una o varias CRDs", "correct": true, "explanation": "Describen la aplicación." },
+        { "id": "b", "text": "Un controlador que reconcilia esos objetos", "correct": true, "explanation": "Aporta la lógica." },
+        { "id": "c", "text": "Un plugin de red", "correct": false, "explanation": "No tiene relación." },
+        { "id": "d", "text": "Conocimiento operativo automatizado (backups, failover…)", "correct": true, "explanation": "Es su razón de ser." }
+      ],
+      "solution": {
+        "answer": "a, b y d",
+        "explanation": "Un operator = CRDs + controlador que codifica lo que haría un operador humano."
+      }
+    },
+    {
+      "id": "cmd-crds",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista todas las CustomResourceDefinitions del clúster.",
+      "hints": [
+        "Es un `kubectl get`.",
+        "El recurso es `customresourcedefinitions` (o `crds`)."
+      ],
+      "accepted": [
+        "kubectl get crds",
+        "kubectl get crd",
+        "kubectl get customresourcedefinitions",
+        "kubectl get customresourcedefinition"
+      ],
+      "output": "NAME                                    CREATED AT\ncertificates.cert-manager.io            2026-06-02T09:14:11Z\nclusterissuers.cert-manager.io          2026-06-02T09:14:11Z\nservicemonitors.monitoring.coreos.com   2026-06-10T16:40:03Z",
+      "solution": {
+        "answer": "kubectl get crds",
+        "explanation": "Cada CRD se llama `<plural>.<grupo>`. Con `kubectl api-resources --api-group=cert-manager.io` ves los tipos de un grupo."
+      }
+    },
+    {
+      "id": "editor-crd",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la CRD: grupo `tienda.example.com`, alcance `Namespaced`, `kind: Backup`, plural `backups`, singular `backup`, y una versión `v1` servida y de almacenamiento.",
+      "starter": "apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: backups.tienda.example.com\nspec:\n  versions:\n    - name: v1\n      schema:\n        openAPIV3Schema:\n          type: object\n",
+      "assertions": [
+        { "path": "spec.group", "op": "equals", "value": "tienda.example.com", "message": "spec.group: tienda.example.com" },
+        { "path": "spec.scope", "op": "equals", "value": "Namespaced", "message": "spec.scope: Namespaced" },
+        { "path": "spec.names.kind", "op": "equals", "value": "Backup", "message": "names.kind: Backup" },
+        { "path": "spec.names.plural", "op": "equals", "value": "backups", "message": "names.plural: backups" },
+        { "path": "spec.names.singular", "op": "equals", "value": "backup", "message": "names.singular: backup" },
+        { "path": "spec.versions[0].served", "op": "equals", "value": true, "message": "versions[0].served: true" },
+        { "path": "spec.versions[0].storage", "op": "equals", "value": true, "message": "versions[0].storage: true" }
+      ],
+      "hints": [
+        "`group`, `scope` y `names` van en `spec`, al nivel de `versions`.",
+        "`names` es un objeto con `plural`, `singular` y `kind`.",
+        "En la versión: `served: true` y `storage: true`, al nivel de `name`."
+      ],
+      "solution": {
+        "answer": "apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: backups.tienda.example.com\nspec:\n  group: tienda.example.com\n  scope: Namespaced\n  names:\n    plural: backups\n    singular: backup\n    kind: Backup\n  versions:\n    - name: v1\n      served: true\n      storage: true\n      schema:\n        openAPIV3Schema:\n          type: object\n",
+        "explanation": "El nombre de la CRD debe ser `<plural>.<grupo>`. Solo una versión puede tener `storage: true`."
+      }
+    }
+  ]
+}

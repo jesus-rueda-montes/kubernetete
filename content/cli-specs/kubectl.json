@@ -1,0 +1,2600 @@
+{
+  "cli": "kubectl",
+  "description": "CLI de Kubernetes",
+  "source": "https://kubernetes.io/docs/reference/kubectl/",
+  "valueSets": {
+    "resources": [
+      {
+        "value": "pods",
+        "aliases": [
+          "pod",
+          "po"
+        ],
+        "description": "Pods"
+      },
+      {
+        "value": "services",
+        "aliases": [
+          "service",
+          "svc"
+        ],
+        "description": "Services"
+      },
+      {
+        "value": "deployments",
+        "aliases": [
+          "deployment",
+          "deploy"
+        ],
+        "description": "Deployments"
+      },
+      {
+        "value": "replicasets",
+        "aliases": [
+          "replicaset",
+          "rs"
+        ],
+        "description": "ReplicaSets"
+      },
+      {
+        "value": "statefulsets",
+        "aliases": [
+          "statefulset",
+          "sts"
+        ],
+        "description": "StatefulSets"
+      },
+      {
+        "value": "daemonsets",
+        "aliases": [
+          "daemonset",
+          "ds"
+        ],
+        "description": "DaemonSets"
+      },
+      {
+        "value": "jobs",
+        "aliases": [
+          "job"
+        ],
+        "description": "Jobs"
+      },
+      {
+        "value": "cronjobs",
+        "aliases": [
+          "cronjob",
+          "cj"
+        ],
+        "description": "CronJobs"
+      },
+      {
+        "value": "namespaces",
+        "aliases": [
+          "namespace",
+          "ns"
+        ],
+        "description": "Namespaces"
+      },
+      {
+        "value": "nodes",
+        "aliases": [
+          "node",
+          "no"
+        ],
+        "description": "Nodes"
+      },
+      {
+        "value": "configmaps",
+        "aliases": [
+          "configmap",
+          "cm"
+        ],
+        "description": "ConfigMaps"
+      },
+      {
+        "value": "secrets",
+        "aliases": [
+          "secret"
+        ],
+        "description": "Secrets"
+      },
+      {
+        "value": "persistentvolumeclaims",
+        "aliases": [
+          "persistentvolumeclaim",
+          "pvc"
+        ],
+        "description": "PersistentVolumeClaims"
+      },
+      {
+        "value": "persistentvolumes",
+        "aliases": [
+          "persistentvolume",
+          "pv"
+        ],
+        "description": "PersistentVolumes"
+      },
+      {
+        "value": "serviceaccounts",
+        "aliases": [
+          "serviceaccount",
+          "sa"
+        ],
+        "description": "ServiceAccounts"
+      },
+      {
+        "value": "ingresses",
+        "aliases": [
+          "ingress"
+        ],
+        "description": "Ingresses"
+      },
+      {
+        "value": "events",
+        "aliases": [
+          "event",
+          "ev"
+        ],
+        "description": "Events"
+      },
+      {
+        "value": "endpointslices",
+        "aliases": [
+          "endpointslice"
+        ],
+        "description": "EndpointSlices (IPs detrás de cada Service)"
+      },
+      {
+        "value": "ingressclasses",
+        "aliases": [
+          "ingressclass"
+        ],
+        "description": "IngressClasses"
+      },
+      {
+        "value": "storageclasses",
+        "aliases": [
+          "storageclass",
+          "sc"
+        ],
+        "description": "StorageClasses"
+      },
+      {
+        "value": "networkpolicies",
+        "aliases": [
+          "networkpolicy",
+          "netpol"
+        ],
+        "description": "NetworkPolicies"
+      },
+      {
+        "value": "roles",
+        "aliases": [
+          "role"
+        ],
+        "description": "Roles"
+      },
+      {
+        "value": "rolebindings",
+        "aliases": [
+          "rolebinding"
+        ],
+        "description": "RoleBindings"
+      },
+      {
+        "value": "clusterroles",
+        "aliases": [
+          "clusterrole"
+        ],
+        "description": "ClusterRoles"
+      },
+      {
+        "value": "clusterrolebindings",
+        "aliases": [
+          "clusterrolebinding"
+        ],
+        "description": "ClusterRoleBindings"
+      },
+      {
+        "value": "horizontalpodautoscalers",
+        "aliases": [
+          "horizontalpodautoscaler",
+          "hpa"
+        ],
+        "description": "HorizontalPodAutoscalers"
+      },
+      {
+        "value": "poddisruptionbudgets",
+        "aliases": [
+          "poddisruptionbudget",
+          "pdb"
+        ],
+        "description": "PodDisruptionBudgets"
+      },
+      {
+        "value": "customresourcedefinitions",
+        "aliases": [
+          "customresourcedefinition",
+          "crd",
+          "crds"
+        ],
+        "description": "CustomResourceDefinitions"
+      }
+    ],
+    "scalable": [
+      {
+        "value": "deployments",
+        "aliases": [
+          "deployment",
+          "deploy"
+        ],
+        "description": "Deployments"
+      },
+      {
+        "value": "replicasets",
+        "aliases": [
+          "replicaset",
+          "rs"
+        ],
+        "description": "ReplicaSets"
+      },
+      {
+        "value": "statefulsets",
+        "aliases": [
+          "statefulset",
+          "sts"
+        ],
+        "description": "StatefulSets"
+      }
+    ],
+    "rollable": [
+      {
+        "value": "deployments",
+        "aliases": [
+          "deployment",
+          "deploy"
+        ],
+        "description": "Deployments"
+      },
+      {
+        "value": "statefulsets",
+        "aliases": [
+          "statefulset",
+          "sts"
+        ],
+        "description": "StatefulSets"
+      },
+      {
+        "value": "daemonsets",
+        "aliases": [
+          "daemonset",
+          "ds"
+        ],
+        "description": "DaemonSets"
+      }
+    ],
+    "exposable": [
+      {
+        "value": "pods",
+        "aliases": [
+          "pod",
+          "po"
+        ],
+        "description": "Pods"
+      },
+      {
+        "value": "services",
+        "aliases": [
+          "service",
+          "svc"
+        ],
+        "description": "Services"
+      },
+      {
+        "value": "deployments",
+        "aliases": [
+          "deployment",
+          "deploy"
+        ],
+        "description": "Deployments"
+      },
+      {
+        "value": "replicasets",
+        "aliases": [
+          "replicaset",
+          "rs"
+        ],
+        "description": "ReplicaSets"
+      }
+    ],
+    "settable": [
+      {
+        "value": "pods",
+        "aliases": [
+          "pod",
+          "po"
+        ],
+        "description": "Pods"
+      },
+      {
+        "value": "deployments",
+        "aliases": [
+          "deployment",
+          "deploy"
+        ],
+        "description": "Deployments"
+      },
+      {
+        "value": "replicasets",
+        "aliases": [
+          "replicaset",
+          "rs"
+        ],
+        "description": "ReplicaSets"
+      },
+      {
+        "value": "statefulsets",
+        "aliases": [
+          "statefulset",
+          "sts"
+        ],
+        "description": "StatefulSets"
+      },
+      {
+        "value": "daemonsets",
+        "aliases": [
+          "daemonset",
+          "ds"
+        ],
+        "description": "DaemonSets"
+      },
+      {
+        "value": "cronjobs",
+        "aliases": [
+          "cronjob",
+          "cj"
+        ],
+        "description": "CronJobs"
+      }
+    ],
+    "nodesonly": [
+      {
+        "value": "nodes",
+        "aliases": [
+          "node",
+          "no"
+        ],
+        "description": "Nodes"
+      }
+    ]
+  },
+  "globalFlags": [
+    {
+      "name": "namespace",
+      "short": "n",
+      "takesValue": true,
+      "description": "Namespace en el que actúa el comando"
+    },
+    {
+      "name": "context",
+      "takesValue": true,
+      "description": "Contexto del kubeconfig que se usa"
+    },
+    {
+      "name": "kubeconfig",
+      "takesValue": true,
+      "description": "Ruta al archivo kubeconfig"
+    },
+    {
+      "name": "cluster",
+      "takesValue": true,
+      "description": "Clúster del kubeconfig que se usa"
+    },
+    {
+      "name": "user",
+      "takesValue": true,
+      "description": "Usuario del kubeconfig que se usa"
+    },
+    {
+      "name": "as",
+      "takesValue": true,
+      "description": "Actúa como otro usuario o ServiceAccount (system:serviceaccount:NS:NOMBRE)"
+    }
+  ],
+  "commands": [
+    {
+      "name": "get",
+      "description": "Lista uno o varios recursos",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "resources"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "all-namespaces",
+          "short": "A",
+          "takesValue": false,
+          "description": "Lista en todos los namespaces"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "wide",
+            "name",
+            "jsonpath",
+            "custom-columns"
+          ],
+          "description": "Formato de salida"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas (p. ej. app=web)"
+        },
+        {
+          "name": "watch",
+          "short": "w",
+          "takesValue": false,
+          "description": "Sigue mostrando los cambios tras listar"
+        },
+        {
+          "name": "show-labels",
+          "takesValue": false,
+          "description": "Muestra las etiquetas como última columna"
+        },
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo o directorio que identifica el recurso"
+        },
+        {
+          "name": "sort-by",
+          "takesValue": true,
+          "description": "Ordena la lista por un campo (JSONPath, p. ej. .metadata.creationTimestamp)"
+        },
+        {
+          "name": "field-selector",
+          "takesValue": true,
+          "description": "Filtra por campos (p. ej. status.phase=Pending)"
+        }
+      ]
+    },
+    {
+      "name": "describe",
+      "description": "Muestra el detalle de un recurso, incluidos sus eventos",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_describe/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "resources"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo o directorio con el recurso a describir"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas"
+        },
+        {
+          "name": "all-namespaces",
+          "short": "A",
+          "takesValue": false,
+          "description": "Busca en todos los namespaces"
+        },
+        {
+          "name": "show-events",
+          "takesValue": false,
+          "description": "Muestra los eventos relacionados"
+        }
+      ]
+    },
+    {
+      "name": "logs",
+      "description": "Muestra los logs de un contenedor de un Pod",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_logs/",
+      "args": [
+        {
+          "name": "POD"
+        }
+      ],
+      "flags": [
+        {
+          "name": "follow",
+          "short": "f",
+          "takesValue": false,
+          "description": "Sigue mostrando los logs en directo"
+        },
+        {
+          "name": "previous",
+          "short": "p",
+          "takesValue": false,
+          "description": "Logs de la instancia anterior del contenedor (tras un reinicio)"
+        },
+        {
+          "name": "container",
+          "short": "c",
+          "takesValue": true,
+          "description": "Contenedor del que leer los logs"
+        },
+        {
+          "name": "tail",
+          "takesValue": true,
+          "description": "Número de líneas recientes a mostrar"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra Pods por etiquetas"
+        },
+        {
+          "name": "all-containers",
+          "takesValue": false,
+          "description": "Logs de todos los contenedores del Pod"
+        },
+        {
+          "name": "since",
+          "takesValue": true,
+          "description": "Solo logs más recientes que una duración (5s, 2m, 3h)"
+        },
+        {
+          "name": "timestamps",
+          "takesValue": false,
+          "description": "Añade la marca de tiempo a cada línea"
+        }
+      ]
+    },
+    {
+      "name": "delete",
+      "description": "Borra recursos por archivo, por nombre o por etiquetas",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_delete/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "resources"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo con el recurso a borrar"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas"
+        },
+        {
+          "name": "all",
+          "takesValue": false,
+          "description": "Borra todos los recursos del tipo indicado en el namespace"
+        },
+        {
+          "name": "all-namespaces",
+          "short": "A",
+          "takesValue": false,
+          "description": "Actúa en todos los namespaces"
+        },
+        {
+          "name": "force",
+          "takesValue": false,
+          "description": "Borra inmediatamente, sin esperar al apagado ordenado"
+        },
+        {
+          "name": "grace-period",
+          "takesValue": true,
+          "description": "Segundos de margen para terminar de forma ordenada"
+        },
+        {
+          "name": "now",
+          "takesValue": false,
+          "description": "Apagado inmediato (igual que --grace-period=1)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        }
+      ]
+    },
+    {
+      "name": "apply",
+      "description": "Crea o actualiza recursos a partir de archivos",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_apply/",
+      "flags": [
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivos, directorios o URLs con la configuración"
+        },
+        {
+          "name": "recursive",
+          "short": "R",
+          "takesValue": false,
+          "description": "Procesa recursivamente el directorio de -f"
+        },
+        {
+          "name": "kustomize",
+          "short": "k",
+          "takesValue": true,
+          "description": "Procesa un directorio de kustomization"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas"
+        },
+        {
+          "name": "prune",
+          "takesValue": false,
+          "description": "Borra objetos que ya no aparecen en la configuración"
+        }
+      ]
+    },
+    {
+      "name": "run",
+      "description": "Crea y ejecuta un Pod con una imagen",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_run/",
+      "args": [
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "image",
+          "takesValue": true,
+          "description": "Imagen del contenedor (obligatorio)"
+        },
+        {
+          "name": "port",
+          "takesValue": true,
+          "description": "Puerto que expone el contenedor"
+        },
+        {
+          "name": "labels",
+          "short": "l",
+          "takesValue": true,
+          "description": "Etiquetas separadas por comas"
+        },
+        {
+          "name": "restart",
+          "takesValue": true,
+          "values": [
+            "Always",
+            "OnFailure",
+            "Never"
+          ],
+          "strict": true,
+          "description": "Política de reinicio del Pod"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        },
+        {
+          "name": "env",
+          "takesValue": true,
+          "description": "Variable de entorno (clave=valor)"
+        },
+        {
+          "name": "command",
+          "takesValue": false,
+          "description": "Usa los argumentos extra como 'command' en lugar de 'args'"
+        },
+        {
+          "name": "rm",
+          "takesValue": false,
+          "description": "Borra el Pod al salir (solo con sesión adjunta)"
+        },
+        {
+          "name": "stdin",
+          "short": "i",
+          "takesValue": false,
+          "description": "Mantiene stdin abierto en el contenedor"
+        },
+        {
+          "name": "tty",
+          "short": "t",
+          "takesValue": false,
+          "description": "Asigna una TTY al contenedor"
+        }
+      ]
+    },
+    {
+      "name": "exec",
+      "description": "Ejecuta un comando dentro de un contenedor",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_exec/",
+      "args": [
+        {
+          "name": "POD"
+        }
+      ],
+      "flags": [
+        {
+          "name": "container",
+          "short": "c",
+          "takesValue": true,
+          "description": "Contenedor en el que ejecutar"
+        },
+        {
+          "name": "stdin",
+          "short": "i",
+          "takesValue": false,
+          "description": "Pasa stdin al contenedor"
+        },
+        {
+          "name": "tty",
+          "short": "t",
+          "takesValue": false,
+          "description": "Stdin es una TTY"
+        },
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo que identifica el recurso"
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "description": "Cambia el número de réplicas de un recurso",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_scale/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "scalable"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "replicas",
+          "takesValue": true,
+          "description": "Nuevo número de réplicas (obligatorio)"
+        },
+        {
+          "name": "current-replicas",
+          "takesValue": true,
+          "description": "Solo escala si el número actual coincide"
+        },
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo que identifica el recurso"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas"
+        },
+        {
+          "name": "all",
+          "takesValue": false,
+          "description": "Todos los recursos del tipo indicado"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "description": "Añade, cambia o quita (clave-) etiquetas de un recurso",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_label/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "resources"
+        },
+        {
+          "name": "NOMBRE"
+        },
+        {
+          "name": "CLAVE=VALOR"
+        }
+      ],
+      "flags": [
+        {
+          "name": "overwrite",
+          "takesValue": false,
+          "description": "Permite sobrescribir una etiqueta que ya existe"
+        },
+        {
+          "name": "all",
+          "takesValue": false,
+          "description": "Todos los recursos del tipo en el namespace"
+        },
+        {
+          "name": "all-namespaces",
+          "short": "A",
+          "takesValue": false,
+          "description": "Actúa en todos los namespaces"
+        },
+        {
+          "name": "list",
+          "takesValue": false,
+          "description": "Muestra las etiquetas del recurso"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra por etiquetas"
+        },
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo que identifica el recurso"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        }
+      ]
+    },
+    {
+      "name": "create",
+      "description": "Crea un recurso desde un archivo o con un subcomando",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/",
+      "flags": [
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo, directorio o URL con los recursos"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        }
+      ],
+      "subcommands": [
+        {
+          "name": "namespace",
+          "aliases": [
+            "ns"
+          ],
+          "description": "Crea un namespace con el nombre indicado",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_namespace/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "deployment",
+          "aliases": [
+            "deploy"
+          ],
+          "description": "Crea un Deployment con el nombre indicado",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_deployment/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "image",
+              "takesValue": true,
+              "description": "Imagen del contenedor (obligatorio)"
+            },
+            {
+              "name": "replicas",
+              "short": "r",
+              "takesValue": true,
+              "description": "Número de réplicas (1 por defecto)"
+            },
+            {
+              "name": "port",
+              "takesValue": true,
+              "description": "Puerto que expone el contenedor"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "configmap",
+          "aliases": [
+            "cm"
+          ],
+          "description": "Crea un ConfigMap desde literales o archivos",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_configmap/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "from-literal",
+              "takesValue": true,
+              "description": "Clave y valor directos (clave=valor)"
+            },
+            {
+              "name": "from-file",
+              "takesValue": true,
+              "description": "Archivo o carpeta ([clave=]ruta); la clave es el nombre del archivo"
+            },
+            {
+              "name": "from-env-file",
+              "takesValue": true,
+              "description": "Archivo con líneas clave=valor"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "secret",
+          "description": "Crea un Secret (generic, tls o docker-registry)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret/",
+          "subcommands": [
+            {
+              "name": "generic",
+              "description": "Secret genérico (Opaque) desde literales o archivos",
+              "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret_generic/",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "from-literal",
+                  "takesValue": true,
+                  "description": "Clave y valor directos (clave=valor)"
+                },
+                {
+                  "name": "from-file",
+                  "takesValue": true,
+                  "description": "Archivo o carpeta ([clave=]ruta); la clave es el nombre del archivo"
+                },
+                {
+                  "name": "from-env-file",
+                  "takesValue": true,
+                  "description": "Archivo con líneas clave=valor"
+                },
+                {
+                  "name": "type",
+                  "takesValue": true,
+                  "description": "Tipo de Secret"
+                },
+                {
+                  "name": "dry-run",
+                  "takesValue": true,
+                  "values": [
+                    "none",
+                    "server",
+                    "client"
+                  ],
+                  "strict": true,
+                  "description": "Simula la operación sin aplicarla"
+                },
+                {
+                  "name": "output",
+                  "short": "o",
+                  "takesValue": true,
+                  "values": [
+                    "json",
+                    "yaml",
+                    "name"
+                  ],
+                  "description": "Formato de salida"
+                }
+              ]
+            },
+            {
+              "name": "tls",
+              "description": "Secret TLS desde un certificado y su clave",
+              "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret_tls/",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "cert",
+                  "takesValue": true,
+                  "description": "Ruta del certificado (PEM)"
+                },
+                {
+                  "name": "key",
+                  "takesValue": true,
+                  "description": "Ruta de la clave privada"
+                },
+                {
+                  "name": "dry-run",
+                  "takesValue": true,
+                  "values": [
+                    "none",
+                    "server",
+                    "client"
+                  ],
+                  "strict": true,
+                  "description": "Simula la operación sin aplicarla"
+                },
+                {
+                  "name": "output",
+                  "short": "o",
+                  "takesValue": true,
+                  "values": [
+                    "json",
+                    "yaml",
+                    "name"
+                  ],
+                  "description": "Formato de salida"
+                }
+              ]
+            },
+            {
+              "name": "docker-registry",
+              "description": "Credenciales para descargar imágenes de un registro privado",
+              "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_secret_docker-registry/",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "docker-server",
+                  "takesValue": true,
+                  "description": "Dirección del registro"
+                },
+                {
+                  "name": "docker-username",
+                  "takesValue": true,
+                  "description": "Usuario"
+                },
+                {
+                  "name": "docker-password",
+                  "takesValue": true,
+                  "description": "Contraseña"
+                },
+                {
+                  "name": "docker-email",
+                  "takesValue": true,
+                  "description": "Email"
+                },
+                {
+                  "name": "dry-run",
+                  "takesValue": true,
+                  "values": [
+                    "none",
+                    "server",
+                    "client"
+                  ],
+                  "strict": true,
+                  "description": "Simula la operación sin aplicarla"
+                },
+                {
+                  "name": "output",
+                  "short": "o",
+                  "takesValue": true,
+                  "values": [
+                    "json",
+                    "yaml",
+                    "name"
+                  ],
+                  "description": "Formato de salida"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ingress",
+          "description": "Crea un Ingress con reglas host/ruta=servicio:puerto",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_ingress/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "rule",
+              "takesValue": true,
+              "description": "host/ruta=servicio:puerto[,tls=secret]; ruta terminada en * = Prefix"
+            },
+            {
+              "name": "class",
+              "takesValue": true,
+              "description": "IngressClass a usar"
+            },
+            {
+              "name": "default-backend",
+              "takesValue": true,
+              "description": "Backend por defecto (servicio:puerto)"
+            },
+            {
+              "name": "annotation",
+              "takesValue": true,
+              "description": "Annotation a añadir"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "job",
+          "description": "Crea un Job (o uno puntual a partir de un CronJob)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_job/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "image",
+              "takesValue": true,
+              "description": "Imagen del contenedor"
+            },
+            {
+              "name": "from",
+              "takesValue": true,
+              "description": "Crear a partir de un CronJob: cronjob/NOMBRE"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "cronjob",
+          "description": "Crea un CronJob con una programación cron",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_cronjob/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "image",
+              "takesValue": true,
+              "description": "Imagen del contenedor"
+            },
+            {
+              "name": "schedule",
+              "takesValue": true,
+              "description": "Programación en formato cron (5 campos)"
+            },
+            {
+              "name": "restart",
+              "takesValue": true,
+              "values": [
+                "OnFailure",
+                "Never"
+              ],
+              "strict": true,
+              "description": "Política de reinicio de los Pods"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "role",
+          "description": "Crea un Role (permisos dentro de un namespace)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_role/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "verb",
+              "takesValue": true,
+              "description": "Verbos permitidos (get,list,watch,create,update,patch,delete…)"
+            },
+            {
+              "name": "resource",
+              "takesValue": true,
+              "description": "Recursos a los que se aplica (pods, deployments.apps…)"
+            },
+            {
+              "name": "resource-name",
+              "takesValue": true,
+              "description": "Limita la regla a objetos con ese nombre"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "clusterrole",
+          "description": "Crea un ClusterRole (permisos en todo el clúster)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrole/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "verb",
+              "takesValue": true,
+              "description": "Verbos permitidos (get,list,watch,create,update,patch,delete…)"
+            },
+            {
+              "name": "resource",
+              "takesValue": true,
+              "description": "Recursos a los que se aplica (pods, deployments.apps…)"
+            },
+            {
+              "name": "resource-name",
+              "takesValue": true,
+              "description": "Limita la regla a objetos con ese nombre"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "rolebinding",
+          "description": "Asigna un Role o ClusterRole dentro de un namespace",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_rolebinding/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "role",
+              "takesValue": true,
+              "description": "Role que se asigna"
+            },
+            {
+              "name": "clusterrole",
+              "takesValue": true,
+              "description": "ClusterRole que se asigna"
+            },
+            {
+              "name": "user",
+              "takesValue": true,
+              "description": "Usuario al que se asigna"
+            },
+            {
+              "name": "group",
+              "takesValue": true,
+              "description": "Grupo al que se asigna"
+            },
+            {
+              "name": "serviceaccount",
+              "takesValue": true,
+              "description": "ServiceAccount (NAMESPACE:NOMBRE)"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "clusterrolebinding",
+          "description": "Asigna un ClusterRole en todo el clúster",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_clusterrolebinding/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "clusterrole",
+              "takesValue": true,
+              "description": "ClusterRole que se asigna"
+            },
+            {
+              "name": "user",
+              "takesValue": true,
+              "description": "Usuario al que se asigna"
+            },
+            {
+              "name": "group",
+              "takesValue": true,
+              "description": "Grupo al que se asigna"
+            },
+            {
+              "name": "serviceaccount",
+              "takesValue": true,
+              "description": "ServiceAccount (NAMESPACE:NOMBRE)"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        },
+        {
+          "name": "serviceaccount",
+          "aliases": [
+            "sa"
+          ],
+          "description": "Crea una ServiceAccount",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_create/kubectl_create_serviceaccount/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "config",
+      "description": "Consulta y modifica el kubeconfig (clústeres, usuarios y contextos)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/",
+      "subcommands": [
+        {
+          "name": "current-context",
+          "description": "Muestra el contexto actual",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_current-context/"
+        },
+        {
+          "name": "get-contexts",
+          "description": "Lista los contextos del kubeconfig",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts/",
+          "args": [
+            {
+              "name": "CONTEXTO"
+            }
+          ]
+        },
+        {
+          "name": "use-context",
+          "description": "Cambia el contexto actual",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_use-context/",
+          "args": [
+            {
+              "name": "CONTEXTO"
+            }
+          ]
+        },
+        {
+          "name": "set-context",
+          "description": "Crea o modifica un contexto (p. ej. su namespace por defecto)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_set-context/",
+          "args": [
+            {
+              "name": "CONTEXTO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "current",
+              "takesValue": false,
+              "description": "Modifica el contexto actual"
+            },
+            {
+              "name": "namespace",
+              "short": "n",
+              "takesValue": true,
+              "description": "Namespace por defecto del contexto"
+            },
+            {
+              "name": "cluster",
+              "takesValue": true,
+              "description": "Clúster del contexto"
+            },
+            {
+              "name": "user",
+              "takesValue": true,
+              "description": "Usuario del contexto"
+            }
+          ]
+        },
+        {
+          "name": "view",
+          "description": "Muestra la configuración del kubeconfig",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_view/",
+          "flags": [
+            {
+              "name": "minify",
+              "takesValue": false,
+              "description": "Solo la información del contexto actual"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cluster-info",
+      "description": "Muestra la dirección del control plane y de los servicios del clúster",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_cluster-info/"
+    },
+    {
+      "name": "api-resources",
+      "description": "Lista los tipos de recurso que admite el servidor",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_api-resources/",
+      "flags": [
+        {
+          "name": "namespaced",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Solo recursos con namespace (true) o de todo el clúster (false)"
+        },
+        {
+          "name": "api-group",
+          "takesValue": true,
+          "description": "Solo recursos de un grupo de la API"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "wide",
+            "name"
+          ],
+          "description": "Formato de salida"
+        },
+        {
+          "name": "sort-by",
+          "takesValue": true,
+          "values": [
+            "name",
+            "kind"
+          ],
+          "strict": true,
+          "description": "Ordena por nombre o por kind"
+        }
+      ]
+    },
+    {
+      "name": "rollout",
+      "description": "Gestiona el despliegue progresivo de Deployments, DaemonSets y StatefulSets",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/",
+      "subcommands": [
+        {
+          "name": "status",
+          "description": "Muestra (y sigue) el progreso del rollout",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_status/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "watch",
+              "short": "w",
+              "takesValue": true,
+              "values": [
+                "true",
+                "false"
+              ],
+              "strict": true,
+              "description": "Sigue esperando hasta que termine (true por defecto)"
+            },
+            {
+              "name": "timeout",
+              "takesValue": true,
+              "description": "Tiempo máximo de espera (p. ej. 5m)"
+            },
+            {
+              "name": "revision",
+              "takesValue": true,
+              "description": "Fija la revisión a observar"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            },
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            }
+          ]
+        },
+        {
+          "name": "history",
+          "description": "Lista las revisiones anteriores",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_history/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "revision",
+              "takesValue": true,
+              "description": "Detalle de una revisión concreta"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            },
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            }
+          ]
+        },
+        {
+          "name": "undo",
+          "description": "Vuelve a una revisión anterior (rollback)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_undo/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "to-revision",
+              "takesValue": true,
+              "description": "Revisión a la que volver (por defecto, la anterior)"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            },
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            }
+          ]
+        },
+        {
+          "name": "restart",
+          "description": "Reinicia los Pods de forma progresiva",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_restart/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            }
+          ]
+        },
+        {
+          "name": "pause",
+          "description": "Pausa el rollout (los cambios se acumulan)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_pause/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            }
+          ]
+        },
+        {
+          "name": "resume",
+          "description": "Reanuda un rollout pausado",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_rollout/kubectl_rollout_resume/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "rollable"
+            },
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "set",
+      "description": "Cambia un aspecto concreto de un recurso",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_set/",
+      "subcommands": [
+        {
+          "name": "image",
+          "description": "Cambia la imagen de uno o varios contenedores (CONTENEDOR=IMAGEN)",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_set/kubectl_set_image/",
+          "args": [
+            {
+              "name": "TIPO",
+              "valueSet": "settable"
+            },
+            {
+              "name": "NOMBRE"
+            },
+            {
+              "name": "CONTENEDOR=IMAGEN"
+            }
+          ],
+          "flags": [
+            {
+              "name": "all",
+              "takesValue": false,
+              "description": "Todos los recursos del tipo indicado"
+            },
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por etiquetas"
+            },
+            {
+              "name": "filename",
+              "short": "f",
+              "takesValue": true,
+              "description": "Archivo que identifica el recurso"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": true,
+              "values": [
+                "none",
+                "server",
+                "client"
+              ],
+              "strict": true,
+              "description": "Simula la operación sin aplicarla"
+            },
+            {
+              "name": "output",
+              "short": "o",
+              "takesValue": true,
+              "values": [
+                "json",
+                "yaml",
+                "name"
+              ],
+              "description": "Formato de salida"
+            },
+            {
+              "name": "local",
+              "takesValue": false,
+              "description": "No contacta con el servidor (con -f)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "expose",
+      "description": "Crea un Service para un Pod, Deployment, ReplicaSet o Service",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_expose/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "exposable"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "port",
+          "takesValue": true,
+          "description": "Puerto en el que escucha el Service"
+        },
+        {
+          "name": "target-port",
+          "takesValue": true,
+          "description": "Puerto del contenedor al que se envía el tráfico"
+        },
+        {
+          "name": "type",
+          "takesValue": true,
+          "values": [
+            "ClusterIP",
+            "NodePort",
+            "LoadBalancer",
+            "ExternalName"
+          ],
+          "strict": true,
+          "description": "Tipo de Service (ClusterIP por defecto)"
+        },
+        {
+          "name": "name",
+          "takesValue": true,
+          "description": "Nombre del Service"
+        },
+        {
+          "name": "protocol",
+          "takesValue": true,
+          "values": [
+            "TCP",
+            "UDP",
+            "SCTP"
+          ],
+          "strict": true,
+          "description": "Protocolo (TCP por defecto)"
+        },
+        {
+          "name": "selector",
+          "takesValue": true,
+          "description": "Selector del Service (por defecto, el del recurso)"
+        },
+        {
+          "name": "filename",
+          "short": "f",
+          "takesValue": true,
+          "description": "Archivo que identifica el recurso"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        }
+      ]
+    },
+    {
+      "name": "port-forward",
+      "description": "Reenvía puertos locales a un Pod (o a un Pod de un Deployment o Service)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_port-forward/",
+      "args": [
+        {
+          "name": "TIPO/NOMBRE"
+        },
+        {
+          "name": "[LOCAL:]REMOTO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "address",
+          "takesValue": true,
+          "description": "Direcciones locales en las que escuchar (localhost por defecto)"
+        }
+      ]
+    },
+    {
+      "name": "taint",
+      "description": "Añade (o quita, con - al final) taints a un Node",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_taint/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "nodesonly"
+        },
+        {
+          "name": "NODE"
+        },
+        {
+          "name": "CLAVE=VALOR:EFECTO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "overwrite",
+          "takesValue": false,
+          "description": "Sobrescribe un taint existente"
+        },
+        {
+          "name": "all",
+          "takesValue": false,
+          "description": "Todos los Nodes"
+        },
+        {
+          "name": "selector",
+          "short": "l",
+          "takesValue": true,
+          "description": "Filtra Nodes por labels"
+        }
+      ]
+    },
+    {
+      "name": "cordon",
+      "description": "Marca un Node como no programable (no recibe Pods nuevos)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_cordon/",
+      "args": [
+        {
+          "name": "NODE"
+        }
+      ]
+    },
+    {
+      "name": "uncordon",
+      "description": "Vuelve a permitir Pods nuevos en un Node",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_uncordon/",
+      "args": [
+        {
+          "name": "NODE"
+        }
+      ]
+    },
+    {
+      "name": "drain",
+      "description": "Vacía un Node para mantenimiento (cordon + desalojo de Pods)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_drain/",
+      "args": [
+        {
+          "name": "NODE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ignore-daemonsets",
+          "takesValue": false,
+          "description": "Continúa aunque haya Pods de DaemonSets (no se desalojan)"
+        },
+        {
+          "name": "delete-emptydir-data",
+          "takesValue": false,
+          "description": "Permite desalojar Pods con emptyDir (se pierden sus datos)"
+        },
+        {
+          "name": "force",
+          "takesValue": false,
+          "description": "Borra también Pods sin controlador"
+        },
+        {
+          "name": "grace-period",
+          "takesValue": true,
+          "description": "Segundos de margen para terminar"
+        },
+        {
+          "name": "timeout",
+          "takesValue": true,
+          "description": "Tiempo máximo de espera"
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "description": "Comprueba autorizaciones",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_auth/",
+      "subcommands": [
+        {
+          "name": "can-i",
+          "description": "¿Puedo (o puede otro, con --as) hacer esta acción?",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_auth/kubectl_auth_can-i/",
+          "args": [
+            {
+              "name": "VERBO"
+            },
+            {
+              "name": "RECURSO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "all-namespaces",
+              "short": "A",
+              "takesValue": false,
+              "description": "Comprueba en todos los namespaces"
+            },
+            {
+              "name": "list",
+              "takesValue": false,
+              "description": "Lista todas las acciones permitidas"
+            }
+          ]
+        },
+        {
+          "name": "whoami",
+          "description": "Muestra con qué identidad hablas con el clúster",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_auth/kubectl_auth_whoami/"
+        }
+      ]
+    },
+    {
+      "name": "autoscale",
+      "description": "Crea un HorizontalPodAutoscaler para un recurso",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_autoscale/",
+      "args": [
+        {
+          "name": "TIPO",
+          "valueSet": "scalable"
+        },
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "min",
+          "takesValue": true,
+          "description": "Mínimo de réplicas"
+        },
+        {
+          "name": "max",
+          "takesValue": true,
+          "description": "Máximo de réplicas (obligatorio)"
+        },
+        {
+          "name": "cpu",
+          "takesValue": true,
+          "description": "Objetivo de CPU: porcentaje de los requests (70%) o cantidad (500m)"
+        },
+        {
+          "name": "memory",
+          "takesValue": true,
+          "description": "Objetivo de memoria: porcentaje de los requests (60%) o cantidad (200Mi)"
+        },
+        {
+          "name": "name",
+          "takesValue": true,
+          "description": "Nombre del HPA (por defecto, el del recurso)"
+        },
+        {
+          "name": "dry-run",
+          "takesValue": true,
+          "values": [
+            "none",
+            "server",
+            "client"
+          ],
+          "strict": true,
+          "description": "Simula la operación sin aplicarla"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "description": "Formato de salida"
+        }
+      ]
+    },
+    {
+      "name": "top",
+      "description": "Consumo de CPU y memoria (necesita metrics-server)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_top/",
+      "subcommands": [
+        {
+          "name": "pod",
+          "aliases": [
+            "pods",
+            "po"
+          ],
+          "description": "Consumo de los Pods",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_top/kubectl_top_pod/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "all-namespaces",
+              "short": "A",
+              "takesValue": false,
+              "description": "Todos los namespaces"
+            },
+            {
+              "name": "containers",
+              "takesValue": false,
+              "description": "Detalle por contenedor"
+            },
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por labels"
+            },
+            {
+              "name": "sort-by",
+              "takesValue": true,
+              "values": [
+                "cpu",
+                "memory"
+              ],
+              "strict": true,
+              "description": "Ordena por cpu o memory"
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "aliases": [
+            "nodes",
+            "no"
+          ],
+          "description": "Consumo de los Nodes",
+          "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_top/kubectl_top_node/",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "selector",
+              "short": "l",
+              "takesValue": true,
+              "description": "Filtra por labels"
+            },
+            {
+              "name": "sort-by",
+              "takesValue": true,
+              "values": [
+                "cpu",
+                "memory"
+              ],
+              "strict": true,
+              "description": "Ordena por cpu o memory"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kustomize",
+      "description": "Genera los manifiestos de un directorio de Kustomize (sin aplicarlos)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_kustomize/",
+      "args": [
+        {
+          "name": "DIRECTORIO"
+        }
+      ]
+    },
+    {
+      "name": "events",
+      "description": "Lista los eventos (del namespace o de un recurso)",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_events/",
+      "flags": [
+        {
+          "name": "for",
+          "takesValue": true,
+          "description": "Solo los eventos de un recurso: TIPO/NOMBRE (p. ej. pod/web-1)"
+        },
+        {
+          "name": "types",
+          "takesValue": true,
+          "values": [
+            "Normal",
+            "Warning"
+          ],
+          "strict": false,
+          "description": "Tipos de evento"
+        },
+        {
+          "name": "watch",
+          "short": "w",
+          "takesValue": false,
+          "description": "Sigue mostrando los eventos nuevos"
+        },
+        {
+          "name": "all-namespaces",
+          "short": "A",
+          "takesValue": false,
+          "description": "En todos los namespaces"
+        },
+        {
+          "name": "output",
+          "short": "o",
+          "takesValue": true,
+          "values": [
+            "json",
+            "yaml",
+            "name"
+          ],
+          "strict": false,
+          "description": "Formato de salida"
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "description": "Sesión de depuración: contenedor efímero, copia del Pod o Pod en un nodo",
+      "source": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_debug/",
+      "args": [
+        {
+          "name": "POD"
+        }
+      ],
+      "flags": [
+        {
+          "name": "image",
+          "takesValue": true,
+          "description": "Imagen del contenedor de depuración (p. ej. busybox)"
+        },
+        {
+          "name": "stdin",
+          "short": "i",
+          "takesValue": false,
+          "description": "Mantiene stdin abierto"
+        },
+        {
+          "name": "tty",
+          "short": "t",
+          "takesValue": false,
+          "description": "Asigna una TTY"
+        },
+        {
+          "name": "target",
+          "takesValue": true,
+          "description": "Contenedor cuyos procesos quieres ver (con contenedor efímero)"
+        },
+        {
+          "name": "container",
+          "short": "c",
+          "takesValue": true,
+          "description": "Nombre del contenedor de depuración"
+        },
+        {
+          "name": "copy-to",
+          "takesValue": true,
+          "description": "Crea una copia del Pod con este nombre en vez de modificarlo"
+        },
+        {
+          "name": "set-image",
+          "takesValue": true,
+          "description": "Con --copy-to: cambia imágenes NOMBRE=IMAGEN"
+        },
+        {
+          "name": "share-processes",
+          "takesValue": false,
+          "description": "Con --copy-to: comparte el espacio de procesos (por defecto true)"
+        },
+        {
+          "name": "profile",
+          "takesValue": true,
+          "values": [
+            "general",
+            "baseline",
+            "restricted",
+            "netadmin",
+            "sysadmin"
+          ],
+          "strict": true,
+          "description": "Perfil de permisos del contenedor de depuración"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "¿Qué es la nube?",
+  "summary": "Qué define a la nube, IaaS, PaaS y SaaS, el modelo de responsabilidad compartida y los modelos de despliegue.",
+  "level": 1,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

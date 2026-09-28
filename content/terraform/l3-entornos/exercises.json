@@ -1,0 +1,151 @@
+{
+  "exercises": [
+    {
+      "id": "que-es-workspace",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué cambia al pasar del workspace `dev` al workspace `pro`?",
+      "hints": ["El código es el mismo. ¿Qué es distinto?"],
+      "options": [
+        { "id": "a", "text": "El state que usa Terraform", "correct": true, "explanation": "Correcto: cada workspace tiene su propio state en el mismo backend." },
+        { "id": "b", "text": "Las credenciales del provider", "correct": false, "explanation": "Las credenciales son las mismas; ese es precisamente su punto débil." },
+        { "id": "c", "text": "Los archivos `.tf` que se leen", "correct": false, "explanation": "Se lee la misma configuración." }
+      ],
+      "solution": {
+        "answer": "El state",
+        "explanation": "Un workspace es otro state para la misma configuración y el mismo backend. Todo lo demás (código, credenciales, backend) se comparte."
+      }
+    },
+    {
+      "id": "workspaces-pro",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu empresa exige que solo el pipeline de producción pueda leer y modificar la infraestructura de `pro`. ¿Qué enfoque encaja mejor?",
+      "hints": ["¿Qué comparten todos los workspaces de una configuración?"],
+      "options": [
+        { "id": "a", "text": "Workspaces `dev` y `pro` con el mismo backend", "correct": false, "explanation": "Comparten backend y credenciales: quien accede a uno accede a los dos." },
+        { "id": "b", "text": "Un directorio por entorno, cada uno con su bucket de state y su cuenta de servicio", "correct": true, "explanation": "Correcto: el acceso se separa de verdad." },
+        { "id": "c", "text": "Una única configuración con `count` según el entorno", "correct": false, "explanation": "Todo quedaría en un solo state." }
+      ],
+      "solution": {
+        "answer": "Directorio por entorno",
+        "explanation": "La documentación de Terraform indica que los workspaces no son adecuados cuando hacen falta credenciales o controles de acceso distintos. Con directorios separados, cada entorno tiene su backend y sus permisos."
+      }
+    },
+    {
+      "id": "default-workspace",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Puedes borrar el workspace `default` si ya no lo usas.",
+      "hints": ["Es el workspace con el que empieza toda configuración."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "`default` siempre existe." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El workspace `default` existe siempre y no se puede borrar, aunque crees otros."
+      }
+    },
+    {
+      "id": "blast-radius",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué ventajas tiene dividir `pro` en configuraciones separadas `red/`, `gke/` y `apps/`, cada una con su state?",
+      "hints": ["Piensa en errores, velocidad y permisos."],
+      "options": [
+        { "id": "a", "text": "Un error al cambiar `apps` no puede afectar a la red", "correct": true, "explanation": "Menor radio de impacto." },
+        { "id": "b", "text": "Cada plan refresca menos recursos y es más rápido", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Cada equipo puede tener permisos solo sobre su parte", "correct": true, "explanation": "Correcto." },
+        { "id": "d", "text": "Ya no hace falta un backend remoto", "correct": false, "explanation": "Cada capa sigue necesitando su state remoto y bloqueado." }
+      ],
+      "solution": {
+        "answer": "a, b y c",
+        "explanation": "Separar por capas reduce el radio de impacto (blast radius), acelera los planes y permite dar permisos por equipo. Cada capa sigue con su backend remoto."
+      }
+    },
+    {
+      "id": "remote-state-riesgo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que la configuración `gke/` lea el ID de una subred creada en `red/`. ¿Qué opción es preferible si el provider lo permite?",
+      "hints": ["Una de las opciones da acceso a mucho más de lo que necesitas."],
+      "options": [
+        { "id": "a", "text": "Un data source del provider que busca la subred por nombre", "correct": true, "explanation": "Correcto: lee solo lo que necesita, directamente de la nube." },
+        { "id": "b", "text": "`terraform_remote_state` sobre el state de `red/`", "correct": false, "explanation": "Funciona, pero exige poder leer todo el state de `red/`, secretos incluidos." },
+        { "id": "c", "text": "Copiar el ID a mano en `gke/`", "correct": false, "explanation": "Se desincroniza en cuanto la subred cambie." }
+      ],
+      "solution": {
+        "answer": "Data source del provider",
+        "explanation": "`terraform_remote_state` solo expone los outputs raíz, pero quien puede leerlos puede leer el state completo. Un data source del provider evita ese acceso."
+      }
+    },
+    {
+      "id": "cmd-new",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Crea un workspace llamado `pruebas` (Terraform cambiará a él automáticamente).",
+      "hints": [
+        "Es un subcomando de `terraform workspace`.",
+        "El subcomando para crear es `new`."
+      ],
+      "accepted": ["terraform workspace new pruebas"],
+      "output": "Created and switched to workspace \"pruebas\"!\n\nYou're now on a new, empty workspace. Workspaces isolate their state,\nso if you run \"terraform plan\" Terraform will not see any existing state\nfor this configuration.",
+      "solution": {
+        "answer": "terraform workspace new pruebas",
+        "explanation": "`workspace new` crea el workspace y lo selecciona. Su state empieza vacío."
+      }
+    },
+    {
+      "id": "cmd-show",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Antes de aplicar, comprueba en qué workspace estás.",
+      "hints": [
+        "Es un subcomando de `terraform workspace`.",
+        "Significa «mostrar»."
+      ],
+      "accepted": ["terraform workspace show"],
+      "output": "pruebas",
+      "solution": {
+        "answer": "terraform workspace show",
+        "explanation": "`workspace show` imprime el workspace actual. `workspace list` los muestra todos, con un `*` en el actual."
+      }
+    },
+    {
+      "id": "fill-workspace",
+      "type": "fill",
+      "language": "hcl",
+      "prompt": "Completa el nombre de la VM para que incluya el nombre del workspace actual (`web-dev`, `web-pruebas`…).",
+      "template": "name = \"web-${ {{expr}} }\"",
+      "blanks": [{ "id": "expr", "accepted": ["terraform.workspace"] }],
+      "hints": ["Es una expresión que empieza por `terraform.`."],
+      "solution": {
+        "answer": "name = \"web-${terraform.workspace}\"",
+        "explanation": "`terraform.workspace` devuelve el nombre del workspace seleccionado."
+      }
+    },
+    {
+      "id": "editor-remote-state",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Declara un data source `terraform_remote_state` llamado `red` que lea el state del backend `gcs`, bucket `tienda-tfstate-pro` y prefix `red`. Después, en la subred del clúster, usa su output `subred_id` como valor de `subnetwork`.",
+      "starter": "resource \"google_container_cluster\" \"pro\" {\n  name       = \"gke-pro\"\n  location   = \"europe-west1\"\n  subnetwork = \"\"\n}\n",
+      "assertions": [
+        { "path": "data.terraform_remote_state.red[0].backend", "op": "equals", "value": "gcs", "message": "data \"terraform_remote_state\" \"red\" con backend = \"gcs\"" },
+        { "path": "data.terraform_remote_state.red[0].config.bucket", "op": "equals", "value": "tienda-tfstate-pro", "message": "config.bucket = \"tienda-tfstate-pro\"" },
+        { "path": "data.terraform_remote_state.red[0].config.prefix", "op": "equals", "value": "red", "message": "config.prefix = \"red\"" },
+        { "path": "resource.google_container_cluster.pro[0].subnetwork", "op": "equals", "value": "data.terraform_remote_state.red.outputs.subred_id", "message": "subnetwork = data.terraform_remote_state.red.outputs.subred_id (sin comillas)" }
+      ],
+      "hints": [
+        "El bloque es `data \"terraform_remote_state\" \"red\" { ... }` con `backend` y `config`.",
+        "`config` es un objeto: `config = { bucket = \"...\", prefix = \"...\" }` (o una clave por línea).",
+        "Los outputs se leen con `data.terraform_remote_state.red.outputs.NOMBRE`."
+      ],
+      "solution": {
+        "answer": "data \"terraform_remote_state\" \"red\" {\n  backend = \"gcs\"\n  config = {\n    bucket = \"tienda-tfstate-pro\"\n    prefix = \"red\"\n  }\n}\n\nresource \"google_container_cluster\" \"pro\" {\n  name       = \"gke-pro\"\n  location   = \"europe-west1\"\n  subnetwork = data.terraform_remote_state.red.outputs.subred_id\n}\n",
+        "explanation": "`config` lleva los mismos datos que el bloque backend de la otra configuración. Solo están disponibles los outputs de su módulo raíz, bajo `.outputs`."
+      }
+    }
+  ]
+}

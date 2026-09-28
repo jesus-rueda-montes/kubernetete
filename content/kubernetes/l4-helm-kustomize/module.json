@@ -1,0 +1,8 @@
+{
+  "title": "Helm y Kustomize",
+  "summary": "Empaquetar y personalizar manifiestos: charts, releases y values de Helm (install, upgrade, rollback), y bases y overlays de Kustomize.",
+  "level": 4,
+  "order": 4,
+  "xp": 100,
+  "prereqs": []
+}

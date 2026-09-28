@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "ingress-egress", "front": "¿Qué transferencia de red es gratis y cuál se cobra?", "back": "Ingress (entrada) gratis. Egress (salida a Internet o entre regiones) se cobra por GB." },
+    { "id": "sud", "front": "SUD (sustained use discounts)", "back": "Automáticos, sin contrato: para VMs elegibles usadas más del 25 % del mes; hasta un 20-30 %." },
+    { "id": "cud", "front": "CUD (committed use discounts)", "back": "Compromiso de 1 o 3 años (recursos en una región o gasto mínimo). Hasta un 55 % (70 % memoria optimizada). No se cancelan." },
+    { "id": "spot", "front": "Spot VMs", "back": "Capacidad sobrante, hasta un 91 % más barata, pero Google puede expropiarlas en cualquier momento. Solo para trabajos tolerantes a fallos." },
+    { "id": "elegir", "front": "¿Qué modelo de precio para cada carga?", "back": "Base estable → CUD. Variable → bajo demanda + autoescalado. Interrumpible → Spot. Picos con ratos sin uso → escalar a cero." },
+    { "id": "presupuesto", "front": "Presupuestos de Cloud Billing", "back": "Umbrales por defecto 50/90/100 % (gasto real o previsto); avisos por correo, Monitoring o Pub/Sub. No limitan el gasto." },
+    { "id": "labels", "front": "Labels para costes", "back": "Pares clave=valor (`equipo=pagos`) que aparecen en la facturación para repartir el gasto. No son network tags." },
+    { "id": "export-bq", "front": "Exportación de facturación a BigQuery", "back": "Coste estándar, detallado (por recurso) y precios. Actívala el primer día: solo incluye desde el mes anterior a activarla." },
+    { "id": "recommender", "front": "Recommender (Active Assist)", "back": "Sugiere redimensionar VMs (métricas de 8 días), borrar VMs inactivas y recursos sin usar, y comprar CUD." },
+    { "id": "finops", "front": "FinOps", "back": "Gestionar el coste de la nube entre ingeniería y finanzas: ver, repartir y optimizar el gasto de forma continua." }
+  ]
+}

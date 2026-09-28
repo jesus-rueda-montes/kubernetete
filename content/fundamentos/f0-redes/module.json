@@ -1,0 +1,8 @@
+{
+  "title": "Redes para la nube",
+  "summary": "IP, CIDR y subredes, puertos, TCP y UDP, DNS, HTTP/HTTPS y load balancers.",
+  "level": 0,
+  "order": 2,
+  "xp": 50,
+  "prereqs": []
+}

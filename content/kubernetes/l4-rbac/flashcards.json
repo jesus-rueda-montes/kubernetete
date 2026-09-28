@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "piezas", "front": "Las 4 piezas de RBAC", "back": "Role y ClusterRole (permisos); RoleBinding y ClusterRoleBinding (a quién se dan)." },
+    { "id": "alcance", "front": "Alcance de Role/RoleBinding frente a ClusterRole/ClusterRoleBinding", "back": "Role y RoleBinding: un namespace. ClusterRole y ClusterRoleBinding: todo el clúster." },
+    { "id": "rb-cr", "front": "RoleBinding que apunta a un ClusterRole", "back": "Da los permisos del ClusterRole solo en el namespace del RoleBinding." },
+    { "id": "aditivo", "front": "¿Tiene RBAC reglas de denegar?", "back": "No. Es solo aditivo: sin bindings no se puede hacer nada, y los permisos se suman." },
+    { "id": "regla", "front": "Partes de una regla de RBAC", "back": "`apiGroups` (\"\" = core, \"apps\"…), `resources` (pods, pods/log…) y `verbs` (get, list, watch, create…)." },
+    { "id": "predefinidos", "front": "ClusterRoles predefinidos", "back": "`view` (leer, sin Secrets), `edit` (modificar, sin RBAC), `admin` (todo en un namespace), `cluster-admin` (todo)." },
+    { "id": "roleref", "front": "¿Se puede cambiar el `roleRef` de un binding?", "back": "No. Hay que borrar el binding y crearlo de nuevo." },
+    { "id": "sa", "front": "¿Qué es una ServiceAccount?", "back": "La identidad de una aplicación o un proceso, con namespace. Cada namespace tiene `default`. El Pod la elige con `serviceAccountName`." },
+    { "id": "sa-nombre", "front": "Nombre de una ServiceAccount para `--as`", "back": "`system:serviceaccount:NAMESPACE:NOMBRE`." },
+    { "id": "can-i", "front": "Comprobar permisos", "back": "`kubectl auth can-i VERBO RECURSO [-n NS] [--as=...]`; `--list` para ver todos." },
+    { "id": "automount", "front": "Pod que no habla con la API de Kubernetes", "back": "`automountServiceAccountToken: false`: sin token montado, no hay token que robar." }
+  ]
+}

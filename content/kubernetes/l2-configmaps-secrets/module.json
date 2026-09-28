@@ -1,0 +1,8 @@
+{
+  "title": "ConfigMaps y Secrets",
+  "summary": "Sacar la configuración y las credenciales de la imagen: variables de entorno, archivos montados y por qué base64 no es cifrado.",
+  "level": 2,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

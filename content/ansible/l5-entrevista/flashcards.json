@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "que-es", "front": "¿Cómo funciona Ansible?", "back": "Sin agente: el nodo de control se conecta por SSH a los hosts del inventario, copia y ejecuta módulos (Python) y los borra. Modelo push, playbooks en YAML." },
+    { "id": "idempotencia", "front": "Idempotencia en Ansible", "back": "Ejecutarlo varias veces deja el mismo resultado; la segunda vez, changed=0. `shell`/`command` no lo son: `creates`, `removes` o `changed_when`." },
+    { "id": "vs-terraform", "front": "Ansible frente a Terraform", "back": "Terraform crea infraestructura con state; Ansible configura sistemas, en orden y sin state. Quitar una tarea de Ansible no deshace su efecto." },
+    { "id": "rol-collection", "front": "Rol frente a collection", "back": "Rol: estructura reutilizable (tasks, handlers, templates, defaults). Collection: paquete de distribución con roles, módulos y plugins." },
+    { "id": "linear-forks", "front": "Ejecución por defecto de un playbook", "back": "Estrategia linear (cada tarea en todos los hosts antes de la siguiente) con 5 forks. `strategy: free` deja a cada host ir a su ritmo." },
+    { "id": "serial", "front": "`serial` y `max_fail_percentage`", "back": "serial ejecuta el play por lotes (número, % o lista, p. ej. [1, \"25%\"]). max_fail_percentage para el play si falla ese % de un lote." },
+    { "id": "delegate", "front": "`delegate_to` y `run_once`", "back": "delegate_to ejecuta la tarea en otro host (balanceador, localhost) con las variables del host actual. run_once: una vez (por lote si hay serial)." },
+    { "id": "inventario", "front": "Inventario dinámico en GCP", "back": "Plugin `google.cloud.gcp_compute` en un archivo *gcp.yml / *gcp_compute.yml; filtros y keyed_groups para agrupar por etiquetas." },
+    { "id": "rendimiento", "front": "Acelerar un playbook", "back": "Más forks, pipelining (desactivado por defecto), gather_facts: false o caché de facts, strategy: free, async." },
+    { "id": "probar", "front": "Probar un playbook antes de aplicarlo", "back": "--syntax-check, ansible-lint, --check --diff, --limit a pocos hosts, Molecule para roles." }
+  ]
+}

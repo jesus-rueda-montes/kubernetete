@@ -1,0 +1,8 @@
+{
+  "title": "Contenedores y Docker",
+  "summary": "Contenedor frente a máquina virtual, imágenes, registros, Dockerfile y los comandos básicos de Docker.",
+  "level": 0,
+  "order": 4,
+  "xp": 50,
+  "prereqs": []
+}

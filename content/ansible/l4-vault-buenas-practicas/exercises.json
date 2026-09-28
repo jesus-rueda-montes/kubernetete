@@ -1,0 +1,175 @@
+{
+  "exercises": [
+    {
+      "id": "vault-git",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué puedes subir a git con seguridad en un proyecto que usa Ansible Vault?",
+      "hints": ["Uno de los archivos es la «combinación» de la caja fuerte."],
+      "options": [
+        { "id": "a", "text": "El `vault.yml` cifrado, pero no el archivo con la contraseña del vault", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Los dos, si el repositorio es privado", "correct": false, "explanation": "Con la contraseña al lado, el cifrado no protege nada." },
+        { "id": "c", "text": "Ninguno de los dos", "correct": false, "explanation": "El archivo cifrado sí se puede versionar: es para eso." }
+      ],
+      "solution": {
+        "answer": "Solo el cifrado",
+        "explanation": "El contenido cifrado es ilegible sin la contraseña. El archivo de contraseña va en `.gitignore` o, mejor, lo sustituye un script que la lee de un gestor de secretos."
+      }
+    },
+    {
+      "id": "edit-no-decrypt",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Necesitas cambiar un valor en `group_vars/pro/vault.yml`. ¿Qué comando es el adecuado?",
+      "hints": ["Busca el que descifra, abre el editor y vuelve a cifrar solo."],
+      "options": [
+        { "id": "a", "text": "`ansible-vault edit`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`ansible-vault decrypt`, editar y `ansible-vault encrypt`", "correct": false, "explanation": "Funciona, pero es fácil olvidar el último paso y subir el archivo en claro." },
+        { "id": "c", "text": "`ansible-vault view`", "correct": false, "explanation": "Solo muestra el contenido." }
+      ],
+      "solution": {
+        "answer": "ansible-vault edit",
+        "explanation": "`edit` descifra en un temporal, abre el editor y vuelve a cifrar al cerrar. El archivo nunca queda en claro en el disco del proyecto."
+      }
+    },
+    {
+      "id": "patron-vault",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En el patrón `vars` + `vault`, ¿qué contiene `group_vars/pro/vars.yml`?",
+      "hints": ["Uno de los dos archivos se queda en claro."],
+      "options": [
+        { "id": "a", "text": "`db_password: \"{{ vault_db_password }}\"`, en claro", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "La contraseña del vault", "correct": false, "explanation": "Nunca va en el repositorio." },
+        { "id": "c", "text": "Todas las variables cifradas", "correct": false, "explanation": "Eso es `vault.yml`." }
+      ],
+      "solution": {
+        "answer": "Referencias a vault_*",
+        "explanation": "`vars.yml` (en claro) dice qué variables existen y las enlaza con las `vault_*` de `vault.yml` (cifrado). Se puede buscar dónde se usa cada variable sin descifrar."
+      }
+    },
+    {
+      "id": "no-log",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu contraseña está cifrada con Vault, pero aparece en claro en los logs del pipeline. ¿Qué falta?",
+      "hints": ["Al ejecutar, el valor ya está descifrado."],
+      "options": [
+        { "id": "a", "text": "`no_log: true` en la tarea que la usa", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Cifrarla dos veces", "correct": false, "explanation": "No cambia nada en la salida." },
+        { "id": "c", "text": "Usar `--check`", "correct": false, "explanation": "No oculta datos." }
+      ],
+      "solution": {
+        "answer": "no_log: true",
+        "explanation": "Vault protege el secreto en reposo. Al ejecutar se descifra; `no_log` evita que la tarea lo muestre en la salida."
+      }
+    },
+    {
+      "id": "become-user",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea tiene `become_user: postgres` pero no `become: true`. ¿Con qué usuario se ejecuta?",
+      "hints": ["`become_user` dice a quién, pero ¿activa el cambio?"],
+      "options": [
+        { "id": "a", "text": "Con `postgres`", "correct": false, "explanation": "`become_user` solo no activa el cambio." },
+        { "id": "b", "text": "Con el usuario de la conexión SSH", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Con root", "correct": false, "explanation": "Sin `become: true` no se escalan privilegios." }
+      ],
+      "solution": {
+        "answer": "El usuario de la conexión",
+        "explanation": "Hace falta `become: true` para que Ansible cambie de usuario; `become_user` solo indica a cuál."
+      }
+    },
+    {
+      "id": "lint",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué avisos es probable que dé ansible-lint?",
+      "hints": ["Piensa en FQCN, nombres de tareas e idempotencia."],
+      "options": [
+        { "id": "a", "text": "Una tarea sin `name`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Usar `copy` en vez de `ansible.builtin.copy`", "correct": true, "explanation": "Correcto: pide FQCN." },
+        { "id": "c", "text": "Un `command` sin `changed_when` ni `creates`", "correct": true, "explanation": "Correcto: no es idempotente." },
+        { "id": "d", "text": "Usar roles", "correct": false, "explanation": "Los roles son una buena práctica." }
+      ],
+      "solution": {
+        "answer": "a, b y c",
+        "explanation": "ansible-lint revisa buenas prácticas como FQCN, nombres de tareas, idempotencia de command/shell o permisos explícitos. Se ejecuta en el pipeline."
+      }
+    },
+    {
+      "id": "cmd-encrypt-string",
+      "type": "command",
+      "cli": "ansible-vault",
+      "prompt": "Cifra el texto `S3cr3t0!` para usarlo como valor de la variable `db_password`.",
+      "hints": [
+        "Es `ansible-vault encrypt_string`.",
+        "El nombre de la variable se indica con `--name` (o `-n`)."
+      ],
+      "accepted": [
+        "ansible-vault encrypt_string S3cr3t0! --name db_password",
+        "ansible-vault encrypt_string 'S3cr3t0!' --name db_password",
+        "ansible-vault encrypt_string S3cr3t0! -n db_password",
+        "ansible-vault encrypt_string 'S3cr3t0!' -n db_password"
+      ],
+      "output": "New Vault password: \nConfirm New Vault password: \nEncryption successful\ndb_password: !vault |\n          $ANSIBLE_VAULT;1.1;AES256\n          62313530633837663461366532643063383466633265306537393531393463643635633362663139\n          6239...",
+      "solution": {
+        "answer": "ansible-vault encrypt_string 'S3cr3t0!' --name db_password",
+        "explanation": "Pega el bloque en un archivo de variables. Ojo: el texto queda en el historial de la shell; con `--prompt` lo pide sin escribirlo en la línea de comandos."
+      }
+    },
+    {
+      "id": "cmd-vault-create",
+      "type": "command",
+      "cli": "ansible-vault",
+      "prompt": "Crea el archivo cifrado `group_vars/pro/vault.yml`.",
+      "hints": ["El subcomando crea el archivo y abre el editor: `create`."],
+      "accepted": ["ansible-vault create group_vars/pro/vault.yml"],
+      "output": "New Vault password: \nConfirm New Vault password: ",
+      "solution": {
+        "answer": "ansible-vault create group_vars/pro/vault.yml",
+        "explanation": "Pide la contraseña, abre el editor y cifra el archivo al guardar. Para modificarlo después: `ansible-vault edit`."
+      }
+    },
+    {
+      "id": "cmd-playbook-vault",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Ejecuta `site.yml` con el inventario `inventories/pro`, leyendo la contraseña del vault del archivo `~/.vault_pro`.",
+      "hints": [
+        "El inventario va con `-i`.",
+        "El flag es `--vault-password-file`."
+      ],
+      "accepted": [
+        "ansible-playbook -i inventories/pro site.yml --vault-password-file ~/.vault_pro",
+        "ansible-playbook -i inventories/pro --vault-password-file ~/.vault_pro site.yml"
+      ],
+      "output": "PLAY [Servidores web] **************************************\n\nTASK [Gathering Facts] *************************************\nok: [web1]\n\nPLAY RECAP *************************************************\nweb1                       : ok=12   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0",
+      "solution": {
+        "answer": "ansible-playbook -i inventories/pro site.yml --vault-password-file ~/.vault_pro",
+        "explanation": "Ansible descifra en memoria los archivos del vault que necesite. El archivo de contraseña debe tener permisos restrictivos y no estar en el repositorio."
+      }
+    },
+    {
+      "id": "editor-no-log",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la tarea: debe ejecutarse como el usuario `postgres` (con `become`) y no mostrar sus datos en la salida.",
+      "starter": "---\n- name: Base de datos\n  hosts: db\n  tasks:\n    - name: Usuario de la aplicación\n      community.postgresql.postgresql_user:\n        name: app\n        password: \"{{ db_password }}\"\n",
+      "assertions": [
+        { "path": "[0].tasks[0].become", "op": "equals", "value": true, "message": "become: true en la tarea" },
+        { "path": "[0].tasks[0].become_user", "op": "equals", "value": "postgres", "message": "become_user: postgres" },
+        { "path": "[0].tasks[0].no_log", "op": "equals", "value": true, "message": "no_log: true" },
+        { "path": "[0].tasks[0]['community.postgresql.postgresql_user'].name", "op": "equals", "value": "app", "message": "El módulo sigue igual" }
+      ],
+      "hints": [
+        "`become`, `become_user` y `no_log` son propiedades de la tarea: al nivel de `name`.",
+        "Hacen falta las dos: `become: true` y `become_user: postgres`."
+      ],
+      "solution": {
+        "answer": "---\n- name: Base de datos\n  hosts: db\n  tasks:\n    - name: Usuario de la aplicación\n      community.postgresql.postgresql_user:\n        name: app\n        password: \"{{ db_password }}\"\n      become: true\n      become_user: postgres\n      no_log: true\n",
+        "explanation": "`become` solo en esta tarea (mínimo privilegio) y `no_log` para que la contraseña no aparezca en la salida ni en los logs."
+      }
+    }
+  ]
+}

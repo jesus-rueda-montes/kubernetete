@@ -1,0 +1,230 @@
+{
+  "exercises": [
+    {
+      "id": "eq-gke",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuáles son los equivalentes de GKE en AWS y en Azure?",
+      "hints": ["Las tres siglas terminan en KS (Kubernetes Service)."],
+      "options": [
+        { "id": "a", "text": "EKS y AKS", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "ECS y Container Apps", "correct": false, "explanation": "Son plataformas de contenedores, pero no Kubernetes." },
+        { "id": "c", "text": "Lambda y Azure Functions", "correct": false, "explanation": "Son funciones serverless." }
+      ],
+      "solution": {
+        "answer": "EKS y AKS",
+        "explanation": "Elastic Kubernetes Service y Azure Kubernetes Service: el control plane lo gestiona el proveedor, como en GKE."
+      }
+    },
+    {
+      "id": "eq-cloud-run",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Migras una aplicación de Cloud Run a AWS y quieres seguir ejecutando **contenedores sin gestionar servidores**. ¿Qué es lo más parecido?",
+      "hints": ["Lambda ejecuta funciones, no tu contenedor tal cual como servicio web."],
+      "options": [
+        { "id": "a", "text": "ECS con Fargate", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "EC2", "correct": false, "explanation": "Son máquinas virtuales que gestionas tú." },
+        { "id": "c", "text": "S3", "correct": false, "explanation": "Es almacenamiento de objetos." }
+      ],
+      "solution": {
+        "answer": "ECS con Fargate",
+        "explanation": "Fargate ejecuta los contenedores sin que gestiones los servidores. En Azure, lo equivalente es Container Apps."
+      }
+    },
+    {
+      "id": "eq-almacenamiento",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué parejas son equivalentes?",
+      "hints": ["Piensa en qué tipo de almacenamiento o servicio es cada uno."],
+      "options": [
+        { "id": "a", "text": "Cloud Storage ↔ S3 ↔ Blob Storage", "correct": true, "explanation": "Correcto: almacenamiento de objetos." },
+        { "id": "b", "text": "Secret Manager ↔ Secrets Manager ↔ Key Vault", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Cloud SQL ↔ DynamoDB", "correct": false, "explanation": "DynamoDB es NoSQL; el equivalente de Cloud SQL es RDS." },
+        { "id": "d", "text": "Cloud Logging/Monitoring ↔ CloudWatch ↔ Azure Monitor", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "a, b y d",
+        "explanation": "Cloud SQL ↔ RDS ↔ Azure Database (PostgreSQL/MySQL) o Azure SQL. DynamoDB se compara con Firestore/Bigtable o Cosmos DB."
+      }
+    },
+    {
+      "id": "aislamiento",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En GCP separas dev y prod en proyectos distintos. ¿Qué usarías en AWS para el mismo nivel de aislamiento?",
+      "hints": ["¿Cuál es el límite de permisos y facturación en AWS?"],
+      "options": [
+        { "id": "a", "text": "Cuentas de AWS distintas, agrupadas con AWS Organizations", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Dos VPC en la misma cuenta", "correct": false, "explanation": "Separa la red, pero no los permisos ni la facturación." },
+        { "id": "c", "text": "Dos grupos de recursos", "correct": false, "explanation": "Los grupos de recursos son de Azure." }
+      ],
+      "solution": {
+        "answer": "Cuentas distintas",
+        "explanation": "Proyecto (GCP) ≈ cuenta (AWS) ≈ suscripción (Azure)."
+      }
+    },
+    {
+      "id": "deny",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En AWS, un usuario tiene una política con `Allow s3:*` y otra con `Deny s3:DeleteObject`. ¿Puede borrar objetos?",
+      "hints": ["En AWS hay una regla que gana siempre."],
+      "options": [
+        { "id": "a", "text": "No: un Deny explícito siempre gana", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Sí: gana la política más amplia", "correct": false, "explanation": "La amplitud no importa." },
+        { "id": "c", "text": "Depende del orden en que se adjuntaron", "correct": false, "explanation": "El orden no influye." }
+      ],
+      "solution": {
+        "answer": "No",
+        "explanation": "Evaluación de AWS: denegado por defecto; un Allow lo permite, pero cualquier Deny explícito aplicable lo bloquea."
+      }
+    },
+    {
+      "id": "scp",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Una SCP de AWS Organizations que permite `ec2:*` da a todos los usuarios de la cuenta permiso para usar EC2.",
+      "hints": ["Las SCP son guardarraíles, como las políticas de organización de GCP."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Las SCP no conceden permisos." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Una SCP define el máximo permitido. Además, cada usuario o rol necesita una política de IAM que le conceda la acción."
+      }
+    },
+    {
+      "id": "grupo-recursos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Azure ejecutas `az group delete --name tienda-rg`. ¿Qué pasa?",
+      "hints": ["El grupo de recursos es un contenedor de ciclo de vida."],
+      "options": [
+        { "id": "a", "text": "Se borran el grupo y todos los recursos que contiene", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Solo se borra el grupo; los recursos pasan a la suscripción", "correct": false, "explanation": "Todo recurso tiene que estar en un grupo: se borran con él." },
+        { "id": "c", "text": "Falla si el grupo tiene recursos", "correct": false, "explanation": "Pide confirmación y lo borra todo." }
+      ],
+      "solution": {
+        "answer": "Se borra todo",
+        "explanation": "Útil para limpiar un entorno entero de una vez, y peligroso por el mismo motivo."
+      }
+    },
+    {
+      "id": "zonas-aws",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Dos cuentas de AWS quieren desplegar en el **mismo centro de datos físico** de `us-east-1`. ¿Qué deben usar para coordinarse?",
+      "hints": ["El nombre `us-east-1a` no significa lo mismo en todas las cuentas."],
+      "options": [
+        { "id": "a", "text": "El AZ ID (por ejemplo, `use1-az1`)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El nombre de la zona (por ejemplo, `us-east-1a`)", "correct": false, "explanation": "Se asigna por cuenta: puede ser otra ubicación física." },
+        { "id": "c", "text": "El nombre de la región basta", "correct": false, "explanation": "Una región tiene varias zonas." }
+      ],
+      "solution": {
+        "answer": "AZ ID",
+        "explanation": "Los AZ IDs son iguales en todas las cuentas; los nombres de zona se asignan de forma distinta en cada una."
+      }
+    },
+    {
+      "id": "cmd-aws-whoami",
+      "type": "command",
+      "cli": "aws",
+      "prompt": "Comprueba con qué cuenta y con qué identidad estás autenticado en la AWS CLI.",
+      "hints": [
+        "Es un comando del servicio STS.",
+        "`aws sts get-caller-identity`."
+      ],
+      "accepted": ["aws sts get-caller-identity"],
+      "output": "{\n    \"UserId\": \"AROAEXAMPLEID:jesus\",\n    \"Account\": \"123456789012\",\n    \"Arn\": \"arn:aws:sts::123456789012:assumed-role/Administradores/jesus\"\n}",
+      "solution": {
+        "answer": "aws sts get-caller-identity",
+        "explanation": "El equivalente a `gcloud auth list` o `az account show`. Aquí se ve que la sesión usa un rol asumido, con credenciales temporales."
+      }
+    },
+    {
+      "id": "cmd-eks",
+      "type": "command",
+      "cli": "aws",
+      "prompt": "Añade a tu kubeconfig el clúster de EKS `tienda` de la región `eu-west-1`.",
+      "hints": [
+        "Es `aws eks update-kubeconfig`.",
+        "`--name tienda` y `--region eu-west-1`."
+      ],
+      "accepted": [
+        "aws eks update-kubeconfig --name tienda --region eu-west-1",
+        "aws eks update-kubeconfig --region eu-west-1 --name tienda",
+        "aws eks update-kubeconfig --name=tienda --region=eu-west-1"
+      ],
+      "output": "Added new context arn:aws:eks:eu-west-1:123456789012:cluster/tienda to /home/jesus/.kube/config",
+      "solution": {
+        "answer": "aws eks update-kubeconfig --name tienda --region eu-west-1",
+        "explanation": "Equivale a `gcloud container clusters get-credentials`. Después, `kubectl` funciona igual que con GKE."
+      }
+    },
+    {
+      "id": "cmd-s3",
+      "type": "command",
+      "cli": "aws",
+      "prompt": "Crea el bucket de S3 `tienda-backups-2026` en la región `eu-west-1`.",
+      "hints": [
+        "Es `aws s3 mb` (make bucket).",
+        "La dirección del bucket empieza por `s3://`."
+      ],
+      "accepted": [
+        "aws s3 mb s3://tienda-backups-2026 --region eu-west-1",
+        "aws s3 mb s3://tienda-backups-2026 --region=eu-west-1",
+        "aws s3 mb --region eu-west-1 s3://tienda-backups-2026"
+      ],
+      "output": "make_bucket: tienda-backups-2026",
+      "solution": {
+        "answer": "aws s3 mb s3://tienda-backups-2026 --region eu-west-1",
+        "explanation": "Como en Cloud Storage, el nombre del bucket es único en todo el mundo."
+      }
+    },
+    {
+      "id": "cmd-az-group",
+      "type": "command",
+      "cli": "az",
+      "prompt": "Crea en Azure el grupo de recursos `tienda-rg` en la región `westeurope`.",
+      "hints": [
+        "Es `az group create`.",
+        "`--name` (o `-n`) y `--location` (o `-l`)."
+      ],
+      "accepted": [
+        "az group create --name tienda-rg --location westeurope",
+        "az group create -n tienda-rg -l westeurope",
+        "az group create --location westeurope --name tienda-rg",
+        "az group create -l westeurope -n tienda-rg"
+      ],
+      "output": "{\n  \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/tienda-rg\",\n  \"location\": \"westeurope\",\n  \"name\": \"tienda-rg\",\n  \"properties\": {\n    \"provisioningState\": \"Succeeded\"\n  },\n  \"type\": \"Microsoft.Resources/resourceGroups\"\n}",
+      "solution": {
+        "answer": "az group create --name tienda-rg --location westeurope",
+        "explanation": "En Azure, todo recurso se crea dentro de un grupo de recursos."
+      }
+    },
+    {
+      "id": "cmd-aks",
+      "type": "command",
+      "cli": "az",
+      "prompt": "Añade a tu kubeconfig el clúster de AKS `tienda` del grupo de recursos `tienda-rg`.",
+      "hints": [
+        "Es `az aks get-credentials`.",
+        "`--resource-group` (o `-g`) y `--name` (o `-n`)."
+      ],
+      "accepted": [
+        "az aks get-credentials --resource-group tienda-rg --name tienda",
+        "az aks get-credentials -g tienda-rg -n tienda",
+        "az aks get-credentials --name tienda --resource-group tienda-rg",
+        "az aks get-credentials -n tienda -g tienda-rg"
+      ],
+      "output": "Merged \"tienda\" as current context in /home/jesus/.kube/config",
+      "solution": {
+        "answer": "az aks get-credentials --resource-group tienda-rg --name tienda",
+        "explanation": "El tercer equivalente de `gcloud container clusters get-credentials`."
+      }
+    }
+  ]
+}

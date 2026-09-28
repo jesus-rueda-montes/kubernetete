@@ -1,0 +1,181 @@
+{
+  "exercises": [
+    {
+      "id": "mismo-nombre",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Pueden existir a la vez un Pod llamado `web` en el namespace `tienda` y otro Pod llamado `web` en el namespace `pagos`.",
+      "hints": ["¿Dentro de qué ámbito tiene que ser único el nombre de un objeto?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": true, "explanation": "Correcto: el nombre solo tiene que ser único dentro de su namespace (para ese tipo de recurso)." },
+        { "id": "f", "text": "Falso", "correct": false, "explanation": "Sí pueden: evitar choques de nombres entre equipos es justo para lo que sirven los namespaces." }
+      ],
+      "solution": {
+        "answer": "Verdadero",
+        "explanation": "Los nombres son únicos por namespace y tipo de recurso. `tienda/web` y `pagos/web` son objetos distintos."
+      }
+    },
+    {
+      "id": "sin-namespace",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles de estos recursos **no** pertenecen a ningún namespace (son de todo el clúster)?",
+      "hints": [
+        "Piensa en qué cosas no tendría sentido que fueran «de un equipo»: por ejemplo, una máquina física.",
+        "Se comprueba con `kubectl api-resources --namespaced=false`."
+      ],
+      "options": [
+        { "id": "a", "text": "Node", "correct": true, "explanation": "Sí: una máquina pertenece al clúster entero." },
+        { "id": "b", "text": "Pod", "correct": false, "explanation": "No: los Pods siempre viven en un namespace." },
+        { "id": "c", "text": "Namespace", "correct": true, "explanation": "Sí: un namespace no puede estar dentro de otro." },
+        { "id": "d", "text": "PersistentVolume", "correct": true, "explanation": "Sí: es almacenamiento del clúster (lo verás en el nivel 3)." },
+        { "id": "e", "text": "Deployment", "correct": false, "explanation": "No: los Deployments viven en un namespace." }
+      ],
+      "solution": {
+        "answer": "Node, Namespace y PersistentVolume",
+        "explanation": "La mayoría de objetos tienen namespace, pero los Nodes, los Namespaces, los PersistentVolumes y las StorageClasses son de ámbito de clúster."
+      }
+    },
+    {
+      "id": "aislamiento-red",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Por defecto, ¿puede un Pod del namespace `tienda` conectarse a un Pod del namespace `pagos`?",
+      "hints": ["Recuerda la analogía: las carpetas ordenan, pero ¿aíslan?"],
+      "options": [
+        { "id": "a", "text": "Sí; los namespaces no aíslan la red por sí solos", "correct": true, "explanation": "Correcto: para restringirlo hacen falta NetworkPolicies." },
+        { "id": "b", "text": "No; cada namespace tiene su propia red aislada", "correct": false, "explanation": "Es un error muy común. Los namespaces separan nombres, no la red." },
+        { "id": "c", "text": "Solo si están en el mismo Node", "correct": false, "explanation": "El Node no importa: la red de Pods es plana en todo el clúster." }
+      ],
+      "solution": {
+        "answer": "Sí",
+        "explanation": "En Kubernetes todos los Pods pueden comunicarse entre sí por defecto, estén en el namespace que estén. El aislamiento se consigue con NetworkPolicies."
+      }
+    },
+    {
+      "id": "label-vs-annotation",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que un Service encuentre los Pods de tu aplicación. ¿Dónde pones `app: web`?",
+      "hints": ["Solo uno de los dos tipos de metadatos se puede usar en un selector."],
+      "options": [
+        { "id": "a", "text": "En `metadata.labels`", "correct": true, "explanation": "Correcto: los selectors solo funcionan con labels." },
+        { "id": "b", "text": "En `metadata.annotations`", "correct": false, "explanation": "Las annotations no se pueden usar para seleccionar." },
+        { "id": "c", "text": "En `metadata.name`", "correct": false, "explanation": "Los Services no seleccionan por nombre: los Pods de un Deployment tienen nombres aleatorios." }
+      ],
+      "solution": {
+        "answer": "metadata.labels",
+        "explanation": "Los Services y Deployments eligen sus Pods mediante selectors, que solo miran las labels."
+      }
+    },
+    {
+      "id": "pods-todos-ns",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "No encuentras un Pod. Lista los Pods de **todos** los namespaces.",
+      "hints": [
+        "Es `kubectl get pods` con un flag extra.",
+        "El flag largo es `--all-namespaces`; su forma corta es una letra mayúscula."
+      ],
+      "accepted": ["kubectl get pods -A"],
+      "output": "NAMESPACE     NAME                       READY   STATUS    RESTARTS   AGE\ndefault       web                        1/1     Running   0          2h\ntienda        carrito-7d9c6b5f4-x2k8p    1/1     Running   0          5d\nkube-system   coredns-6f6b679f8f-8xk2p   1/1     Running   0          12d",
+      "solution": {
+        "answer": "kubectl get pods -A",
+        "explanation": "`-A` (o `--all-namespaces`) lista en todos los namespaces y añade la columna NAMESPACE."
+      }
+    },
+    {
+      "id": "crear-namespace",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un namespace llamado `tienda`.",
+      "hints": [
+        "El verbo es «crear» en inglés, seguido del tipo de objeto.",
+        "`kubectl create <tipo> <nombre>`."
+      ],
+      "accepted": ["kubectl create namespace tienda"],
+      "output": "namespace/tienda created",
+      "solution": {
+        "answer": "kubectl create namespace tienda",
+        "explanation": "`kubectl create namespace tienda` (o su alias `kubectl create ns tienda`) crea el namespace."
+      }
+    },
+    {
+      "id": "filtrar-por-label",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista solo los Pods que tengan la label `app=web`.",
+      "hints": [
+        "Es un `kubectl get pods` con un selector.",
+        "El flag del selector es `-l` (o `--selector`)."
+      ],
+      "accepted": ["kubectl get pods -l app=web"],
+      "output": "NAME                   READY   STATUS    RESTARTS   AGE\nweb-7d9c6b5f4-2xk8p    1/1     Running   0          1h\nweb-7d9c6b5f4-q9w3z    1/1     Running   0          1h",
+      "solution": {
+        "answer": "kubectl get pods -l app=web",
+        "explanation": "`-l app=web` aplica un selector de igualdad: solo aparecen los Pods cuya label `app` vale `web`."
+      }
+    },
+    {
+      "id": "cambiar-label",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "El Pod `web` ya tiene `env=dev`. Completa el comando para cambiar su valor a `prod`.",
+      "template": "kubectl {{verbo}} pods web env=prod --{{flag}}",
+      "blanks": [
+        { "id": "verbo", "accepted": ["label"] },
+        { "id": "flag", "accepted": ["overwrite"] }
+      ],
+      "hints": [
+        "El verbo es la palabra inglesa para «etiqueta».",
+        "Sin un flag concreto, kubectl se niega a cambiar una label que ya existe."
+      ],
+      "solution": {
+        "answer": "kubectl label pods web env=prod --overwrite",
+        "explanation": "`kubectl label` añade labels; para cambiar el valor de una que ya existe hace falta `--overwrite`. Para quitarla: `kubectl label pods web env-`."
+      }
+    },
+    {
+      "id": "cambiar-namespace-defecto",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para que tu contexto actual use `tienda` como namespace por defecto.",
+      "template": "kubectl config {{sub}} --{{actual}} --namespace=tienda",
+      "blanks": [
+        { "id": "sub", "accepted": ["set-context"] },
+        { "id": "actual", "accepted": ["current"] }
+      ],
+      "hints": [
+        "Vas a **modificar** (set) un **contexto** (context).",
+        "El flag indica que modificas el contexto **actual**, en inglés."
+      ],
+      "solution": {
+        "answer": "kubectl config set-context --current --namespace=tienda",
+        "explanation": "`kubectl config set-context --current --namespace=tienda` guarda el namespace en tu kubeconfig; a partir de ahí no necesitas `-n tienda`."
+      }
+    },
+    {
+      "id": "pod-con-labels",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el manifest: el Pod `api` debe crearse en el namespace `tienda`, con las labels `app: api` y `tier: backend`, y una annotation `equipo.example.com/contacto` con valor `tienda@example.com`.",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\nspec:\n  containers:\n    - name: api\n      image: nginx:1.27\n",
+      "assertions": [
+        { "path": "metadata.namespace", "op": "equals", "value": "tienda", "message": "El Pod está en el namespace tienda (metadata.namespace)" },
+        { "path": "metadata.labels.app", "op": "equals", "value": "api", "message": "Tiene la label app: api (en metadata.labels)" },
+        { "path": "metadata.labels.tier", "op": "equals", "value": "backend", "message": "Tiene la label tier: backend (en metadata.labels)" },
+        { "path": "metadata.annotations['equipo.example.com/contacto']", "op": "equals", "value": "tienda@example.com", "message": "Tiene la annotation equipo.example.com/contacto (en metadata.annotations)" },
+        { "path": "metadata.name", "op": "equals", "value": "api", "message": "El Pod se sigue llamando api" }
+      ],
+      "hints": [
+        "`namespace`, `labels` y `annotations` van todos dentro de `metadata`, al mismo nivel que `name`.",
+        "`labels` y `annotations` son mapas: una clave por línea, indentada debajo.",
+        "Las claves con `/` o `.` funcionan sin comillas, pero el valor con `@` es más seguro entre comillas."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\n  namespace: tienda\n  labels:\n    app: api\n    tier: backend\n  annotations:\n    equipo.example.com/contacto: \"tienda@example.com\"\nspec:\n  containers:\n    - name: api\n      image: nginx:1.27\n",
+        "explanation": "Todo lo que identifica y describe el objeto va en `metadata`: `namespace` dice dónde vive, `labels` sirve para seleccionarlo y `annotations` guarda información que no se usa para seleccionar."
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "cards": [
+    { "id": "global", "front": "Alcance de una VPC y de una subred en GCP", "back": "La VPC es global; las subredes son regionales. (En AWS la VPC es regional.)" },
+    { "id": "modos", "front": "Modo auto frente a modo custom", "back": "Auto: una subred por región con rangos fijos (10.128.0.0/9). Custom: tú creas las subredes; recomendado en producción." },
+    { "id": "implicitas", "front": "Reglas de firewall implícitas", "back": "Denegar toda la entrada y permitir toda la salida, con prioridad 65535. No se ven ni se borran." },
+    { "id": "prioridad", "front": "Prioridad de las reglas de firewall", "back": "0–65535, por defecto 1000. Número más bajo = más prioridad. Con empate, gana DENY." },
+    { "id": "target", "front": "¿Cómo eliges a qué VMs se aplica una regla?", "back": "Con etiquetas de red (`--target-tags`) o cuentas de servicio. Sin objetivo, a todas las VMs de la red." },
+    { "id": "sin-origen", "front": "Regla de entrada sin `--source-ranges` ni `--source-tags`", "back": "El origen es 0.0.0.0/0: todo internet." },
+    { "id": "nat", "front": "¿Qué es Cloud NAT?", "back": "Salida a internet para VMs sin IP pública; no permite conexiones entrantes. Regional, sobre un Cloud Router." },
+    { "id": "pga", "front": "Private Google Access", "back": "Por subred: las VMs sin IP pública llegan a las APIs de Google sin salir a internet." },
+    { "id": "peering", "front": "¿VPC Peering es transitivo?", "back": "No: A–B y B–C no conecta A con C." },
+    { "id": "shared-vpc", "front": "Shared VPC", "back": "Un proyecto host comparte su VPC con proyectos de servicio; redes centralizadas, recursos en cada proyecto." },
+    { "id": "lbs", "front": "Application frente a Network Load Balancer", "back": "Application: capa 7 (HTTP/S, rutas por URL, TLS). Network: capa 4 (TCP/UDP), proxy o passthrough." },
+    { "id": "health-checks", "front": "¿Qué rangos hay que permitir para los health checks de los balanceadores?", "back": "35.191.0.0/16 y 130.211.0.0/22." }
+  ]
+}

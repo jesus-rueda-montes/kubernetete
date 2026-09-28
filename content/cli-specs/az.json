@@ -1,0 +1,204 @@
+{
+  "cli": "az",
+  "description": "Azure CLI",
+  "source": "https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest",
+  "globalFlags": [
+    {
+      "name": "output",
+      "short": "o",
+      "takesValue": true,
+      "values": [
+        "json",
+        "jsonc",
+        "none",
+        "table",
+        "tsv",
+        "yaml",
+        "yamlc"
+      ],
+      "strict": true,
+      "description": "Formato de salida"
+    },
+    {
+      "name": "query",
+      "takesValue": true,
+      "description": "Consulta JMESPath para filtrar la salida"
+    },
+    {
+      "name": "debug",
+      "takesValue": false,
+      "description": "Muestra el log de depuración"
+    },
+    {
+      "name": "only-show-errors",
+      "takesValue": false,
+      "description": "Solo muestra errores"
+    }
+  ],
+  "commands": [
+    {
+      "name": "login",
+      "description": "Inicia sesión en Azure",
+      "source": "https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest#az-login",
+      "flags": [
+        {
+          "name": "tenant",
+          "takesValue": true,
+          "description": "Tenant de Microsoft Entra ID"
+        },
+        {
+          "name": "use-device-code",
+          "takesValue": false,
+          "description": "Inicia sesión con un código en otro dispositivo"
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "description": "Suscripciones",
+      "source": "https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest",
+      "subcommands": [
+        {
+          "name": "list",
+          "description": "Lista las suscripciones",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list",
+          "flags": [
+            {
+              "name": "all",
+              "takesValue": false,
+              "description": "Incluye todas las suscripciones"
+            }
+          ]
+        },
+        {
+          "name": "show",
+          "description": "Muestra la suscripción activa",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-show"
+        },
+        {
+          "name": "set",
+          "description": "Cambia la suscripción activa",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-set",
+          "flags": [
+            {
+              "name": "subscription",
+              "short": "s",
+              "takesValue": true,
+              "description": "Nombre o ID de la suscripción (también --name / -n)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "group",
+      "description": "Grupos de recursos",
+      "source": "https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest",
+      "subcommands": [
+        {
+          "name": "create",
+          "description": "Crea un grupo de recursos",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-create",
+          "flags": [
+            {
+              "name": "name",
+              "short": "n",
+              "takesValue": true,
+              "description": "Nombre del grupo (también --resource-group / -g)"
+            },
+            {
+              "name": "location",
+              "short": "l",
+              "takesValue": true,
+              "description": "Región (p. ej. westeurope)"
+            },
+            {
+              "name": "tags",
+              "takesValue": true,
+              "description": "Etiquetas clave=valor separadas por espacios"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista los grupos de recursos",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-list"
+        },
+        {
+          "name": "delete",
+          "description": "Borra un grupo de recursos y todo lo que contiene",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az-group-delete",
+          "flags": [
+            {
+              "name": "name",
+              "short": "n",
+              "takesValue": true,
+              "description": "Nombre del grupo"
+            },
+            {
+              "name": "yes",
+              "short": "y",
+              "takesValue": false,
+              "description": "No pide confirmación"
+            },
+            {
+              "name": "no-wait",
+              "takesValue": false,
+              "description": "No espera a que termine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "aks",
+      "description": "Azure Kubernetes Service",
+      "source": "https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest",
+      "subcommands": [
+        {
+          "name": "get-credentials",
+          "description": "Añade el clúster de AKS al kubeconfig para usar kubectl",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-get-credentials",
+          "flags": [
+            {
+              "name": "name",
+              "short": "n",
+              "takesValue": true,
+              "description": "Nombre del clúster"
+            },
+            {
+              "name": "resource-group",
+              "short": "g",
+              "takesValue": true,
+              "description": "Grupo de recursos"
+            },
+            {
+              "name": "admin",
+              "short": "a",
+              "takesValue": false,
+              "description": "Credenciales de administrador del clúster"
+            },
+            {
+              "name": "overwrite-existing",
+              "takesValue": false,
+              "description": "Sobrescribe un contexto con el mismo nombre"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista los clústeres de AKS",
+          "source": "https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-list",
+          "flags": [
+            {
+              "name": "resource-group",
+              "short": "g",
+              "takesValue": true,
+              "description": "Grupo de recursos"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

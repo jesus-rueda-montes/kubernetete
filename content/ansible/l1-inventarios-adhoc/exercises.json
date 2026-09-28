@@ -1,0 +1,262 @@
+{
+  "exercises": [
+    {
+      "id": "agentless",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué necesita tener, como norma general, un servidor Linux para que Ansible pueda gestionarlo?",
+      "hints": [
+        "Ansible es «agentless». ¿Cómo se conecta, y con qué ejecuta sus módulos allí?"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "Un agente de Ansible instalado y en ejecución",
+          "correct": false,
+          "explanation": "Ansible no usa agentes en los nodos gestionados."
+        },
+        {
+          "id": "b",
+          "text": "Acceso por SSH y Python",
+          "correct": true,
+          "explanation": "Correcto: se conecta por SSH y la mayoría de módulos se ejecutan con Python."
+        },
+        {
+          "id": "c",
+          "text": "Ansible instalado igual que en el nodo de control",
+          "correct": false,
+          "explanation": "Ansible solo se instala en el nodo de control."
+        },
+        {
+          "id": "d",
+          "text": "Docker",
+          "correct": false,
+          "explanation": "Ansible no necesita contenedores."
+        }
+      ],
+      "solution": {
+        "answer": "SSH y Python",
+        "explanation": "Ansible es agentless: el nodo de control se conecta por SSH, copia el código del módulo, lo ejecuta con Python y lo borra."
+      }
+    },
+    {
+      "id": "idempotencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Ejecutas dos veces seguidas una tarea que asegura que `nginx` está instalado. En la segunda ejecución, ¿qué debería responder?",
+      "hints": [
+        "El módulo compara el estado actual con el deseado antes de actuar."
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "`changed`: lo instala de nuevo",
+          "correct": false,
+          "explanation": "Un módulo idempotente no repite el trabajo si ya está hecho."
+        },
+        {
+          "id": "b",
+          "text": "`ok`: ya estaba instalado, no hace nada",
+          "correct": true,
+          "explanation": "Correcto: eso es la idempotencia."
+        },
+        {
+          "id": "c",
+          "text": "`failed`: ya existe",
+          "correct": false,
+          "explanation": "Que ya esté instalado no es un error: es justo el estado deseado."
+        }
+      ],
+      "solution": {
+        "answer": "ok",
+        "explanation": "Los módulos describen un estado final. Si ya se cumple, responden `ok` y no cambian nada; si no, actúan y responden `changed`."
+      }
+    },
+    {
+      "id": "modulo-ping",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "El módulo `ping` de Ansible envía un ping de red (ICMP) a cada host.",
+      "hints": [
+        "¿Qué necesita Ansible para trabajar con un host? Eso es lo que comprueba."
+      ],
+      "options": [
+        {
+          "id": "v",
+          "text": "Verdadero",
+          "correct": false,
+          "explanation": "No usa ICMP: comprueba que puede conectarse por SSH y ejecutar Python."
+        },
+        {
+          "id": "f",
+          "text": "Falso",
+          "correct": true,
+          "explanation": "Correcto: prueba la conexión SSH y que hay un Python utilizable, y responde `pong`."
+        }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El módulo `ping` verifica que Ansible puede conectarse al host y ejecutar un módulo. Un host puede responder al ping de red y fallar aquí (por ejemplo, por SSH)."
+      }
+    },
+    {
+      "id": "patron-interseccion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres actuar solo sobre los hosts que están **a la vez** en el grupo `web` y en el grupo `produccion`. ¿Qué patrón usas?",
+      "hints": [
+        "Unión, intersección y exclusión usan `:`, `:&` y `:!`."
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "`web:produccion`",
+          "correct": false,
+          "explanation": "Eso es la unión: hosts de web o de produccion."
+        },
+        {
+          "id": "b",
+          "text": "`web:&produccion`",
+          "correct": true,
+          "explanation": "Correcto: `:&` es la intersección."
+        },
+        {
+          "id": "c",
+          "text": "`web:!produccion`",
+          "correct": false,
+          "explanation": "Eso son los de web que NO están en produccion."
+        }
+      ],
+      "solution": {
+        "answer": "web:&produccion",
+        "explanation": "`:&` intersecta grupos. En la shell, pon el patrón entre comillas simples: `'web:&produccion'`."
+      }
+    },
+    {
+      "id": "command-vs-shell",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Lanzas `ansible web -a \"ps aux | grep nginx\"` y no funciona como esperabas. ¿Por qué?",
+      "hints": [
+        "Sin `-m`, ¿qué módulo se usa? ¿Pasa por una shell?"
+      ],
+      "options": [
+        {
+          "id": "a",
+          "text": "El módulo por defecto es `command`, que no admite tuberías",
+          "correct": true,
+          "explanation": "Correcto: para `|` o `>` hace falta el módulo `shell`."
+        },
+        {
+          "id": "b",
+          "text": "Ansible no permite ejecutar comandos",
+          "correct": false,
+          "explanation": "Sí permite: con `command` o `shell`."
+        },
+        {
+          "id": "c",
+          "text": "Falta `-b`",
+          "correct": false,
+          "explanation": "`ps` no necesita privilegios; el problema es la tubería."
+        }
+      ],
+      "solution": {
+        "answer": "command no admite tuberías",
+        "explanation": "El módulo por defecto es `command`, que ejecuta el programa sin shell. Para tuberías y redirecciones usa `-m shell`."
+      }
+    },
+    {
+      "id": "ping-todos",
+      "type": "command",
+      "cli": "ansible",
+      "prompt": "Comprueba que Ansible llega a **todos** los hosts del inventario `inventario.ini` usando el módulo `ping`.",
+      "hints": [
+        "Estructura: `ansible <patrón> -i <inventario> -m <módulo>`.",
+        "El patrón que incluye todos los hosts es `all`."
+      ],
+      "accepted": [
+        "ansible all -i inventario.ini -m ping",
+        "ansible all -i inventario.ini -m ansible.builtin.ping"
+      ],
+      "output": "web1 | SUCCESS => {\n    \"changed\": false,\n    \"ping\": \"pong\"\n}\ndb1 | SUCCESS => {\n    \"changed\": false,\n    \"ping\": \"pong\"\n}",
+      "solution": {
+        "answer": "ansible all -i inventario.ini -m ping",
+        "explanation": "`all` selecciona todos los hosts, `-i` indica el inventario y `-m ping` comprueba la conexión SSH y Python en cada uno."
+      }
+    },
+    {
+      "id": "instalar-adhoc",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando ad-hoc que asegura que `nginx` está instalado en el grupo `web`, con privilegios de root.",
+      "template": "ansible web -i inventario.ini -m ansible.builtin.apt -a \"name=nginx state={{estado}}\" --{{priv}}",
+      "blanks": [
+        {
+          "id": "estado",
+          "accepted": [
+            "present"
+          ]
+        },
+        {
+          "id": "priv",
+          "accepted": [
+            "become"
+          ]
+        }
+      ],
+      "hints": [
+        "El estado se describe como «presente», en inglés.",
+        "El flag para escalar privilegios (sudo) es la palabra inglesa para «convertirse en»."
+      ],
+      "solution": {
+        "answer": "ansible web -i inventario.ini -m ansible.builtin.apt -a \"name=nginx state=present\" --become",
+        "explanation": "`state=present` describe el estado deseado (idempotente) y `--become` (`-b`) ejecuta con sudo, necesario para instalar paquetes."
+      }
+    },
+    {
+      "id": "inventario-yaml",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el inventario en YAML: un grupo `web` con los hosts `web1` (`ansible_host: 10.0.0.11`) y `web2` (`ansible_host: 10.0.0.12`), un grupo `db` con `db1` (`ansible_host: 10.0.0.21`) y un grupo `produccion` cuyos hijos sean `web` y `db`.",
+      "starter": "all:\n  children:\n    web:\n      hosts:\n",
+      "assertions": [
+        {
+          "path": "all.children.web.hosts.web1.ansible_host",
+          "op": "equals",
+          "value": "10.0.0.11",
+          "message": "web1 está en el grupo web con ansible_host 10.0.0.11"
+        },
+        {
+          "path": "all.children.web.hosts.web2.ansible_host",
+          "op": "equals",
+          "value": "10.0.0.12",
+          "message": "web2 está en el grupo web con ansible_host 10.0.0.12"
+        },
+        {
+          "path": "all.children.db.hosts.db1.ansible_host",
+          "op": "equals",
+          "value": "10.0.0.21",
+          "message": "db1 está en el grupo db con ansible_host 10.0.0.21"
+        },
+        {
+          "path": "all.children.produccion.children",
+          "op": "hasKeys",
+          "value": [
+            "web",
+            "db"
+          ],
+          "message": "El grupo produccion tiene como hijos (children) a web y db"
+        }
+      ],
+      "hints": [
+        "Los grupos cuelgan de `all.children`; los hosts de cada grupo, de `hosts`.",
+        "Las variables de un host van indentadas debajo de su nombre: `web1:` y en la línea siguiente `ansible_host: 10.0.0.11`.",
+        "Un grupo de grupos usa `children:` y debajo el nombre de cada grupo hijo, terminado en `:`."
+      ],
+      "solution": {
+        "answer": "all:\n  children:\n    web:\n      hosts:\n        web1:\n          ansible_host: 10.0.0.11\n        web2:\n          ansible_host: 10.0.0.12\n    db:\n      hosts:\n        db1:\n          ansible_host: 10.0.0.21\n    produccion:\n      children:\n        web:\n        db:\n",
+        "explanation": "En YAML, cada grupo tiene `hosts` (con sus variables) y/o `children` (otros grupos). Los hijos se nombran con `web:` sin nada más: su contenido ya está definido arriba."
+      }
+    }
+  ]
+}

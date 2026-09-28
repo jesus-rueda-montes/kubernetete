@@ -1,0 +1,8 @@
+{
+  "title": "Costes y FinOps",
+  "summary": "Cómo se cobra en la nube, descuentos por uso sostenido y compromiso, Spot VMs, presupuestos con alertas, etiquetas para repartir costes, exportación a BigQuery y recomendaciones de ahorro.",
+  "level": 4,
+  "order": 4,
+  "xp": 100,
+  "prereqs": []
+}

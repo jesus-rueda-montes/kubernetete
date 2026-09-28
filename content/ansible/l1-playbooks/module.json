@@ -1,0 +1,8 @@
+{
+  "title": "Tu primer playbook",
+  "summary": "Plays, tasks y módulos en YAML; ejecutar con ansible-playbook y probar sin riesgo con --check y --diff.",
+  "level": 1,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

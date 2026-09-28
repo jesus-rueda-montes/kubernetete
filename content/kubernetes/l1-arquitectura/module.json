@@ -1,0 +1,8 @@
+{
+  "title": "Arquitectura de un clúster",
+  "summary": "Para qué sirve un orquestador, el modelo declarativo y las piezas del control plane y de los nodes.",
+  "level": 1,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

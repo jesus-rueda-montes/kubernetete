@@ -1,0 +1,8 @@
+{
+  "title": "Observabilidad",
+  "summary": "Cloud Logging (buckets, sinks, audit logs), Cloud Monitoring (métricas, dashboards, alertas, uptime checks) y cómo definir SLIs, SLOs y presupuestos de error.",
+  "level": 4,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

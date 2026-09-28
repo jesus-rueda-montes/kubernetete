@@ -1,0 +1,134 @@
+{
+  "exercises": [
+    {
+      "id": "jerarquia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es el orden correcto de la jerarquía de recursos de Google Cloud, de arriba abajo?",
+      "hints": ["La raíz representa a la empresa; los recursos siempre viven en un proyecto."],
+      "options": [
+        { "id": "a", "text": "Organización → Carpetas → Proyectos → Recursos", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Proyectos → Organización → Carpetas → Recursos", "correct": false, "explanation": "La organización es la raíz." },
+        { "id": "c", "text": "Organización → Proyectos → Carpetas → Recursos", "correct": false, "explanation": "Las carpetas agrupan proyectos, no al revés." }
+      ],
+      "solution": {
+        "answer": "Organización → Carpetas → Proyectos → Recursos",
+        "explanation": "La organización es la raíz; las carpetas (opcionales) agrupan proyectos; todo recurso pertenece a un proyecto."
+      }
+    },
+    {
+      "id": "project-id",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué identificador de un proyecto **no se puede cambiar** después de crearlo y es **único en todo Google Cloud**?",
+      "hints": ["Es el que usas en los comandos de gcloud y en Terraform."],
+      "options": [
+        { "id": "a", "text": "El nombre del proyecto", "correct": false, "explanation": "El nombre se puede cambiar y no tiene que ser único." },
+        { "id": "b", "text": "El ID del proyecto", "correct": true, "explanation": "Correcto: permanente y globalmente único (ni siquiera se reutiliza el de un proyecto borrado)." },
+        { "id": "c", "text": "La etiqueta env", "correct": false, "explanation": "Las etiquetas se pueden cambiar." }
+      ],
+      "solution": {
+        "answer": "El ID del proyecto",
+        "explanation": "El project ID lo eliges al crear el proyecto, es único en todo GCP y permanente. El número lo asigna Google; el nombre es editable."
+      }
+    },
+    {
+      "id": "herencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Concedes a Ana el rol de lector en la carpeta «Tienda». En el proyecto `tienda-pro`, dentro de esa carpeta, su política no menciona a Ana. ¿Puede Ana leer recursos de `tienda-pro`?",
+      "hints": ["Los permisos fluyen hacia abajo en la jerarquía."],
+      "options": [
+        { "id": "a", "text": "Sí: los permisos concedidos en la carpeta se heredan en sus proyectos", "correct": true, "explanation": "Correcto: la herencia es aditiva." },
+        { "id": "b", "text": "No: hay que concedérselo también en el proyecto", "correct": false, "explanation": "No hace falta: se hereda." },
+        { "id": "c", "text": "Solo si el proyecto se creó después de conceder el rol", "correct": false, "explanation": "La herencia no depende del orden de creación." }
+      ],
+      "solution": {
+        "answer": "Sí, por herencia",
+        "explanation": "Las políticas IAM se heredan hacia abajo y la herencia es aditiva: un proyecto no puede quitar un permiso heredado con su política. Para prohibir algo existen las deny policies."
+      }
+    },
+    {
+      "id": "presupuesto",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Un presupuesto (*budget*) normal de Cloud Billing detiene automáticamente los servicios al alcanzar la cantidad fijada.",
+      "hints": ["¿Un budget es una alarma o un freno?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Un presupuesto normal solo envía alertas." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: avisa, pero no corta el gasto por sí mismo." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Los presupuestos sirven para seguir el gasto y avisar. Para cortar el consumo hay que actuar o automatizar la respuesta a las alertas."
+      }
+    },
+    {
+      "id": "adc",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "`gcloud` funciona con tu cuenta, pero Terraform, ejecutado en tu portátil, dice que no encuentra credenciales. ¿Qué te falta?",
+      "hints": ["Hay dos credenciales distintas: una para la CLI y otra para las aplicaciones y librerías."],
+      "options": [
+        { "id": "a", "text": "`gcloud auth application-default login`", "correct": true, "explanation": "Correcto: crea las Application Default Credentials que usa Terraform." },
+        { "id": "b", "text": "`gcloud auth login` otra vez", "correct": false, "explanation": "Eso solo autentica la CLI gcloud, que ya funciona." },
+        { "id": "c", "text": "Descargar una clave JSON de una cuenta de servicio", "correct": false, "explanation": "Funcionaría, pero las claves son un riesgo y no son necesarias aquí." }
+      ],
+      "solution": {
+        "answer": "gcloud auth application-default login",
+        "explanation": "`gcloud auth login` autentica la CLI; `gcloud auth application-default login` crea las ADC que usan las librerías de Google y Terraform."
+      }
+    },
+    {
+      "id": "proyecto-defecto",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Haz que `tienda-dev-7f3k` sea el proyecto por defecto de gcloud.",
+      "hints": [
+        "Se cambia una propiedad de la configuración.",
+        "`gcloud config set <propiedad> <valor>`; la propiedad del proyecto se llama igual en inglés."
+      ],
+      "accepted": ["gcloud config set project tienda-dev-7f3k"],
+      "output": "Updated property [core/project].",
+      "solution": {
+        "answer": "gcloud config set project tienda-dev-7f3k",
+        "explanation": "`project` es la propiedad `core/project`. A partir de ahí los comandos actúan sobre ese proyecto salvo que pases `--project`."
+      }
+    },
+    {
+      "id": "activar-api",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Un comando falla con *«Compute Engine API has not been used in project … or it is disabled»*. Activa la API `compute.googleapis.com`.",
+      "hints": [
+        "Las APIs se gestionan con el grupo `services`.",
+        "La acción es «activar» en inglés."
+      ],
+      "accepted": ["gcloud services enable compute.googleapis.com"],
+      "output": "Operation \"operations/acf.p2-123456789012-…\" finished successfully.",
+      "solution": {
+        "answer": "gcloud services enable compute.googleapis.com",
+        "explanation": "Cada servicio de Google Cloud es una API que hay que activar en el proyecto antes de usarlo."
+      }
+    },
+    {
+      "id": "crear-proyecto",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para crear el proyecto con ID `tienda-dev-7f3k` y nombre visible «Tienda Dev».",
+      "template": "gcloud {{grupo}} {{accion}} tienda-dev-7f3k --name=\"Tienda Dev\"",
+      "blanks": [
+        { "id": "grupo", "accepted": ["projects"] },
+        { "id": "accion", "accepted": ["create"] }
+      ],
+      "hints": [
+        "El grupo es «proyectos» en inglés (en plural).",
+        "La acción es «crear»."
+      ],
+      "solution": {
+        "answer": "gcloud projects create tienda-dev-7f3k --name=\"Tienda Dev\"",
+        "explanation": "El argumento es el project ID (permanente y único); `--name` es el nombre visible, que se puede cambiar después."
+      }
+    }
+  ]
+}

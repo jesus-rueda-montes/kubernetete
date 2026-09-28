@@ -1,0 +1,8 @@
+{
+  "title": "CI y buenas prácticas",
+  "summary": "Formato y validación automáticos, el plan en cada pull request, versiones fijadas y el lock file, credenciales del pipeline sin claves y cómo tratar los secretos.",
+  "level": 4,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

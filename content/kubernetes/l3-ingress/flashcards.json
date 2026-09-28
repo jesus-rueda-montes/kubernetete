@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "ingress", "front": "¿Qué es un Ingress?", "back": "Reglas de enrutado HTTP(S) por host y ruta hacia Services, detrás de un único punto de entrada, con TLS centralizado." },
+    { "id": "controller", "front": "¿Qué necesita un Ingress para funcionar?", "back": "Un Ingress controller (elegido con `ingressClassName` / IngressClass). Sin él, no hace nada." },
+    { "id": "pathtype", "front": "Valores de `pathType`", "back": "Exact (ruta exacta), Prefix (por segmentos: /api incluye /api/x pero no /apiv2), ImplementationSpecific." },
+    { "id": "tls", "front": "TLS en un Ingress", "back": "`spec.tls` con hosts y `secretName`: un Secret `kubernetes.io/tls` (tls.crt, tls.key) en el mismo namespace." },
+    { "id": "gke", "front": "¿Cómo se elige el Ingress de GKE?", "back": "Con la annotation `kubernetes.io/ingress.class: \"gce\"` (externo) o `\"gce-internal\"`; no admite `ingressClassName`." },
+    { "id": "gateway", "front": "Recursos de Gateway API", "back": "GatewayClass (proveedor), Gateway (plataforma: listeners) y HTTPRoute (aplicación: rutas, con parentRefs)." },
+    { "id": "estado", "front": "Estado de Ingress en 2026", "back": "API estable pero congelada; se recomienda Gateway API. El controller ingress-nginx dejó de mantenerse en marzo de 2026." }
+  ]
+}

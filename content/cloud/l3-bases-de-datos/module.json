@@ -1,0 +1,8 @@
+{
+  "title": "Bases de datos gestionadas",
+  "summary": "Cloud SQL a fondo (alta disponibilidad, réplicas, copias y conexión privada) y cómo elegir entre Cloud SQL, AlloyDB, Spanner, Firestore, Bigtable, Memorystore y BigQuery.",
+  "level": 3,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

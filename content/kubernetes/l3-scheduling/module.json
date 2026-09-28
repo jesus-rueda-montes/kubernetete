@@ -1,0 +1,8 @@
+{
+  "title": "Scheduling: dónde se ejecuta cada Pod",
+  "summary": "nodeSelector, afinidad y antiafinidad, taints y tolerations, reparto por zonas y cómo vaciar un Node para mantenimiento.",
+  "level": 3,
+  "order": 4,
+  "xp": 100,
+  "prereqs": []
+}

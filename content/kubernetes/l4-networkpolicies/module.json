@@ -1,0 +1,8 @@
+{
+  "title": "NetworkPolicies",
+  "summary": "Controlar qué Pods pueden hablar con cuáles: aislamiento por defecto, reglas de entrada y salida, selectores de Pods y namespaces, y el caso del DNS.",
+  "level": 4,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

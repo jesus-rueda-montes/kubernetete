@@ -1,0 +1,8 @@
+{
+  "title": "El state a fondo",
+  "summary": "Qué guarda el state, cómo detecta Terraform el drift, cómo inspeccionarlo y modificarlo con seguridad, y por qué contiene secretos.",
+  "level": 2,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

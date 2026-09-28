@@ -1,0 +1,138 @@
+{
+  "exercises": [
+    {
+      "id": "ha-sincrona",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes una instancia de Cloud SQL con `--availability-type=regional` y cae la zona de la primaria. ¿Qué pasa?",
+      "hints": ["La standby está en otra zona y recibe cada escritura antes de confirmarla."],
+      "options": [
+        { "id": "a", "text": "La standby pasa a ser la primaria y la aplicación se reconecta a la misma IP", "correct": true, "explanation": "Correcto: failover automático." },
+        { "id": "b", "text": "Hay que restaurar la última copia de seguridad a mano", "correct": false, "explanation": "Eso pasaría con una instancia zonal." },
+        { "id": "c", "text": "Se pierden las escrituras de la última hora", "correct": false, "explanation": "La replicación es síncrona: no se pierden escrituras confirmadas." }
+      ],
+      "solution": {
+        "answer": "Failover automático",
+        "explanation": "La standby tiene todos los datos confirmados gracias a la replicación síncrona. Las conexiones abiertas se cortan, pero la aplicación vuelve a conectarse a la misma IP."
+      }
+    },
+    {
+      "id": "standby-lecturas",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La primaria de Cloud SQL va saturada por consultas de informes. Un compañero propone mandarlas a la standby de HA. ¿Qué respondes?",
+      "hints": ["¿Puede la standby atender consultas?"],
+      "options": [
+        { "id": "a", "text": "Buena idea: la standby está parada y tiene los mismos datos", "correct": false, "explanation": "La standby no admite consultas." },
+        { "id": "b", "text": "No se puede: hay que crear una réplica de lectura", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Hay que pasar a Spanner", "correct": false, "explanation": "Una réplica de lectura resuelve este problema sin migrar." }
+      ],
+      "solution": {
+        "answer": "Réplica de lectura",
+        "explanation": "La standby solo espera para el failover. Las réplicas de lectura reciben los cambios de forma asíncrona y sirven consultas de solo lectura."
+      }
+    },
+    {
+      "id": "ha-drop-table",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Con alta disponibilidad (instancia regional) ya no necesitas copias de seguridad, porque tienes una copia en la standby.",
+      "hints": ["¿Qué pasa en la standby si alguien borra una tabla?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El borrado se replica a la standby al instante." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "La HA protege de caídas de zona o de hardware, no de errores humanos. Para eso están las copias automáticas y la recuperación a un momento concreto."
+      }
+    },
+    {
+      "id": "elegir-global",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un banco necesita una base de datos relacional con transacciones, escrituras desde Europa y América y consistencia fuerte en todo momento. ¿Cuál eliges?",
+      "hints": ["Relacional + escala horizontal + varias regiones con consistencia fuerte."],
+      "options": [
+        { "id": "a", "text": "Cloud SQL con réplicas en otra región", "correct": false, "explanation": "Las réplicas entre regiones son asíncronas y de solo lectura: solo se escribe en la primaria." },
+        { "id": "b", "text": "Spanner multirregional", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "BigQuery", "correct": false, "explanation": "Es para análisis, no para transacciones." },
+        { "id": "d", "text": "Firestore", "correct": false, "explanation": "Es NoSQL de documentos, no relacional." }
+      ],
+      "solution": {
+        "answer": "Spanner",
+        "explanation": "Spanner es relacional, escala en horizontal y ofrece transacciones con consistencia fuerte entre regiones, con un SLA de hasta 99,999 % en configuración multirregional."
+      }
+    },
+    {
+      "id": "elegir-varios",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Millones de sensores envían una lectura cada segundo y necesitas consultar la serie de un sensor con latencia de milisegundos. ¿Qué servicio encaja mejor?",
+      "hints": ["Volumen enorme, acceso por clave y latencia baja."],
+      "options": [
+        { "id": "a", "text": "Bigtable", "correct": true, "explanation": "Correcto: pensado para series temporales e IoT a gran escala." },
+        { "id": "b", "text": "Cloud SQL", "correct": false, "explanation": "No está pensado para millones de escrituras por segundo." },
+        { "id": "c", "text": "Memorystore", "correct": false, "explanation": "Es una caché en memoria, no el almacén principal de datos masivos." }
+      ],
+      "solution": {
+        "answer": "Bigtable",
+        "explanation": "Bigtable es un NoSQL de columna ancha con latencia muy baja y un rendimiento enorme. Después, los datos se pueden analizar en BigQuery."
+      }
+    },
+    {
+      "id": "bq-limit",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En BigQuery con precio bajo demanda, ejecutas `SELECT * FROM ventas LIMIT 10` sobre una tabla de 2 TB sin particionar. ¿Cuánto se lee?",
+      "hints": ["BigQuery guarda por columnas, y `LIMIT` se aplica al resultado."],
+      "options": [
+        { "id": "a", "text": "Solo las 10 filas", "correct": false, "explanation": "`LIMIT` no reduce los datos leídos en una tabla sin particionar ni agrupar." },
+        { "id": "b", "text": "Toda la tabla: todas las columnas", "correct": true, "explanation": "Correcto: 2 TB leídos y facturados." },
+        { "id": "c", "text": "Nada: las consultas con LIMIT son gratis", "correct": false, "explanation": "No existe esa exención." }
+      ],
+      "solution": {
+        "answer": "Toda la tabla",
+        "explanation": "Se paga por los bytes de las columnas leídas. Para ver unas filas, usa la vista previa. Para ahorrar: elige columnas, particiona y agrupa las tablas."
+      }
+    },
+    {
+      "id": "cmd-sql-ha",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea la instancia de Cloud SQL `pedidos-pro` con `POSTGRES_16` en `europe-west1`, con alta disponibilidad (failover a otra zona).",
+      "hints": [
+        "Es `gcloud sql instances create NOMBRE`.",
+        "Flags: `--database-version`, `--region` y `--availability-type`.",
+        "El tipo de disponibilidad con failover es `regional`."
+      ],
+      "accepted": [
+        "gcloud sql instances create pedidos-pro --database-version=POSTGRES_16 --region=europe-west1 --availability-type=regional"
+      ],
+      "output": "Creating Cloud SQL instance for POSTGRES_16...done.\nCreated [https://sqladmin.googleapis.com/sql/v1beta4/projects/tienda-pro/instances/pedidos-pro].",
+      "solution": {
+        "answer": "gcloud sql instances create pedidos-pro --database-version=POSTGRES_16 --region=europe-west1 --availability-type=regional",
+        "explanation": "`--availability-type=regional` crea primaria y standby en dos zonas. Por defecto es `zonal`, sin failover. En producción añadirías también `--deletion-protection` y una IP privada."
+      }
+    },
+    {
+      "id": "cmd-replica",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea una réplica de lectura llamada `pedidos-informes` de la instancia `pedidos-pro`.",
+      "hints": [
+        "Una réplica se crea con `gcloud sql instances create`.",
+        "El flag que indica la instancia primaria es `--master-instance-name`."
+      ],
+      "accepted": [
+        "gcloud sql instances create pedidos-informes --master-instance-name=pedidos-pro",
+        "gcloud sql instances create pedidos-informes --master-instance-name=pedidos-pro --region=europe-west1"
+      ],
+      "output": "Creating Cloud SQL instance for POSTGRES_16...done.\nCreated [https://sqladmin.googleapis.com/sql/v1beta4/projects/tienda-pro/instances/pedidos-informes].",
+      "solution": {
+        "answer": "gcloud sql instances create pedidos-informes --master-instance-name=pedidos-pro",
+        "explanation": "La réplica recibe los cambios de forma asíncrona y acepta consultas de solo lectura. Con `--region` puedes ponerla en otra región."
+      }
+    }
+  ]
+}

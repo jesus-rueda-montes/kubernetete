@@ -1,0 +1,3040 @@
+{
+  "cli": "gcloud",
+  "description": "CLI de Google Cloud",
+  "source": "https://docs.cloud.google.com/sdk/gcloud/reference",
+  "valueSets": {
+    "properties": [
+      {
+        "value": "project",
+        "aliases": [
+          "core/project"
+        ],
+        "description": "Proyecto por defecto"
+      },
+      {
+        "value": "account",
+        "aliases": [
+          "core/account"
+        ],
+        "description": "Cuenta con la que se autentica"
+      },
+      {
+        "value": "compute/region",
+        "description": "Región por defecto para recursos regionales"
+      },
+      {
+        "value": "compute/zone",
+        "description": "Zona por defecto para recursos zonales"
+      }
+    ]
+  },
+  "globalFlags": [
+    {
+      "name": "project",
+      "takesValue": true,
+      "description": "Proyecto en el que actúa el comando"
+    },
+    {
+      "name": "format",
+      "takesValue": true,
+      "values": [
+        "json",
+        "yaml",
+        "table",
+        "value",
+        "csv",
+        "list",
+        "text"
+      ],
+      "description": "Formato de salida"
+    },
+    {
+      "name": "quiet",
+      "short": "q",
+      "takesValue": false,
+      "description": "Desactiva las preguntas interactivas (acepta los valores por defecto)"
+    },
+    {
+      "name": "account",
+      "takesValue": true,
+      "description": "Cuenta con la que se ejecuta el comando"
+    },
+    {
+      "name": "configuration",
+      "takesValue": true,
+      "description": "Configuración de gcloud que se usa"
+    },
+    {
+      "name": "verbosity",
+      "takesValue": true,
+      "values": [
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "critical",
+        "none"
+      ],
+      "strict": true,
+      "description": "Nivel de detalle de los logs"
+    }
+  ],
+  "commands": [
+    {
+      "name": "config",
+      "description": "Consulta y cambia las propiedades de la configuración de gcloud",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config",
+      "subcommands": [
+        {
+          "name": "set",
+          "description": "Da valor a una propiedad",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/set",
+          "args": [
+            {
+              "name": "PROPIEDAD",
+              "valueSet": "properties"
+            },
+            {
+              "name": "VALOR"
+            }
+          ],
+          "flags": [
+            {
+              "name": "installation",
+              "takesValue": false,
+              "description": "La fija para todas las configuraciones de esta instalación"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Muestra las propiedades de la configuración activa",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/list"
+        },
+        {
+          "name": "unset",
+          "description": "Quita el valor de una propiedad",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/unset",
+          "args": [
+            {
+              "name": "PROPIEDAD",
+              "valueSet": "properties"
+            }
+          ]
+        },
+        {
+          "name": "configurations",
+          "description": "Gestiona varias configuraciones con nombre (p. ej. una por proyecto)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/configurations",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una configuración (y la activa)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/configurations/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "activate",
+                  "takesValue": false,
+                  "description": "La activa al crearla (por defecto)"
+                },
+                {
+                  "name": "no-activate",
+                  "takesValue": false,
+                  "description": "No la activa"
+                }
+              ]
+            },
+            {
+              "name": "activate",
+              "description": "Cambia a otra configuración",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/configurations/activate",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las configuraciones",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/config/configurations/list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "compute",
+      "description": "Compute Engine: máquinas virtuales, discos, redes…",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute",
+      "subcommands": [
+        {
+          "name": "regions",
+          "description": "Regiones de Compute Engine",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/regions",
+          "subcommands": [
+            {
+              "name": "list",
+              "description": "Lista las regiones",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/regions/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados (p. ej. name~europe)"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                },
+                {
+                  "name": "sort-by",
+                  "takesValue": true,
+                  "description": "Campo por el que ordenar"
+                },
+                {
+                  "name": "uri",
+                  "takesValue": false,
+                  "description": "Muestra solo la URI de cada recurso"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "zones",
+          "description": "Zonas de Compute Engine",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/zones",
+          "subcommands": [
+            {
+              "name": "list",
+              "description": "Lista las zonas",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/zones/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados (p. ej. region:europe-west1)"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                },
+                {
+                  "name": "sort-by",
+                  "takesValue": true,
+                  "description": "Campo por el que ordenar"
+                },
+                {
+                  "name": "uri",
+                  "takesValue": false,
+                  "description": "Muestra solo la URI de cada recurso"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "instances",
+          "description": "Máquinas virtuales de Compute Engine",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una o varias VMs",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona de la instancia"
+                },
+                {
+                  "name": "machine-type",
+                  "takesValue": true,
+                  "values": [
+                    "e2-micro",
+                    "e2-small",
+                    "e2-medium",
+                    "e2-standard-2",
+                    "e2-standard-4",
+                    "n2-standard-2",
+                    "n4-standard-2"
+                  ],
+                  "description": "Tipo de máquina (vCPU y memoria)"
+                },
+                {
+                  "name": "image-family",
+                  "takesValue": true,
+                  "description": "Familia de imagen (se usa la más reciente)"
+                },
+                {
+                  "name": "image-project",
+                  "takesValue": true,
+                  "description": "Proyecto que publica la imagen (p. ej. debian-cloud)"
+                },
+                {
+                  "name": "image",
+                  "takesValue": true,
+                  "description": "Imagen concreta"
+                },
+                {
+                  "name": "boot-disk-size",
+                  "takesValue": true,
+                  "description": "Tamaño del disco de arranque (p. ej. 20GB)"
+                },
+                {
+                  "name": "boot-disk-type",
+                  "takesValue": true,
+                  "description": "Tipo de disco de arranque"
+                },
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red VPC"
+                },
+                {
+                  "name": "subnet",
+                  "takesValue": true,
+                  "description": "Subred"
+                },
+                {
+                  "name": "no-address",
+                  "takesValue": false,
+                  "description": "Sin IP pública"
+                },
+                {
+                  "name": "tags",
+                  "takesValue": true,
+                  "description": "Etiquetas de red (para reglas de firewall)"
+                },
+                {
+                  "name": "labels",
+                  "takesValue": true,
+                  "description": "Labels clave=valor"
+                },
+                {
+                  "name": "metadata",
+                  "takesValue": true,
+                  "description": "Metadatos clave=valor"
+                },
+                {
+                  "name": "metadata-from-file",
+                  "takesValue": true,
+                  "description": "Metadatos desde archivo (p. ej. startup-script=arranque.sh)"
+                },
+                {
+                  "name": "service-account",
+                  "takesValue": true,
+                  "description": "Cuenta de servicio adjunta"
+                },
+                {
+                  "name": "provisioning-model",
+                  "takesValue": true,
+                  "values": [
+                    "STANDARD",
+                    "SPOT"
+                  ],
+                  "description": "Modelo: estándar o Spot"
+                },
+                {
+                  "name": "instance-termination-action",
+                  "takesValue": true,
+                  "description": "Qué hacer al expropiar una Spot VM (STOP por defecto)",
+                  "values": [
+                    "DELETE",
+                    "STOP"
+                  ],
+                  "strict": true
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las VMs",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "zones",
+                  "takesValue": true,
+                  "description": "Solo estas zonas"
+                }
+              ]
+            },
+            {
+              "name": "describe",
+              "description": "Detalle de una VM",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/describe",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona de la instancia"
+                }
+              ]
+            },
+            {
+              "name": "stop",
+              "description": "Para una VM (deja de cobrarse la CPU/memoria; el disco sí se cobra)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/stop",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona de la instancia"
+                }
+              ]
+            },
+            {
+              "name": "start",
+              "description": "Arranca una VM parada",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/start",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona de la instancia"
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra una VM",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/delete",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona de la instancia"
+                }
+              ]
+            },
+            {
+              "name": "add-labels",
+              "description": "Añade etiquetas a una VM",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/instances/add-labels",
+              "args": [
+                {
+                  "name": "INSTANCIA"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "labels",
+                  "takesValue": true,
+                  "description": "Etiquetas CLAVE=VALOR"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ssh",
+          "description": "Abre una sesión SSH en una VM (gestiona las claves por ti)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/ssh",
+          "args": [
+            {
+              "name": "INSTANCIA"
+            }
+          ],
+          "flags": [
+            {
+              "name": "zone",
+              "takesValue": true,
+              "description": "Zona de la instancia"
+            },
+            {
+              "name": "tunnel-through-iap",
+              "takesValue": false,
+              "description": "Conecta a través de IAP (VMs sin IP pública)"
+            },
+            {
+              "name": "command",
+              "takesValue": true,
+              "description": "Ejecuta un comando en vez de abrir una shell"
+            }
+          ]
+        },
+        {
+          "name": "networks",
+          "description": "Redes VPC",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una red VPC",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "subnet-mode",
+                  "takesValue": true,
+                  "description": "auto (subredes automáticas, por defecto) o custom (las creas tú)",
+                  "values": [
+                    "auto",
+                    "custom"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "bgp-routing-mode",
+                  "takesValue": true,
+                  "description": "Modo de enrutado dinámico (por defecto regional)",
+                  "values": [
+                    "regional",
+                    "global"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "mtu",
+                  "takesValue": true,
+                  "description": "MTU de la red en bytes (por defecto 1460)"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las redes VPC",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                },
+                {
+                  "name": "sort-by",
+                  "takesValue": true,
+                  "description": "Campo por el que ordenar"
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra una red VPC",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/delete",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ]
+            },
+            {
+              "name": "subnets",
+              "description": "Subredes de una VPC",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/subnets",
+              "subcommands": [
+                {
+                  "name": "create",
+                  "description": "Crea una subred en una red de modo custom",
+                  "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/subnets/create",
+                  "args": [
+                    {
+                      "name": "NOMBRE"
+                    }
+                  ],
+                  "flags": [
+                    {
+                      "name": "network",
+                      "takesValue": true,
+                      "description": "Red a la que pertenece (obligatorio)"
+                    },
+                    {
+                      "name": "range",
+                      "takesValue": true,
+                      "description": "Rango IPv4 principal en formato CIDR"
+                    },
+                    {
+                      "name": "region",
+                      "takesValue": true,
+                      "description": "Región"
+                    },
+                    {
+                      "name": "secondary-range",
+                      "takesValue": true,
+                      "description": "Rango secundario NOMBRE=CIDR (p. ej. para los Pods de GKE)"
+                    },
+                    {
+                      "name": "enable-private-ip-google-access",
+                      "takesValue": false,
+                      "description": "Acceso privado a Google: las VMs sin IP pública llegan a las APIs de Google"
+                    },
+                    {
+                      "name": "enable-flow-logs",
+                      "takesValue": false,
+                      "description": "Activa VPC Flow Logs"
+                    },
+                    {
+                      "name": "description",
+                      "takesValue": true,
+                      "description": "Descripción"
+                    }
+                  ]
+                },
+                {
+                  "name": "list",
+                  "description": "Lista las subredes",
+                  "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/networks/subnets/list",
+                  "flags": [
+                    {
+                      "name": "filter",
+                      "takesValue": true,
+                      "description": "Filtra los resultados"
+                    },
+                    {
+                      "name": "limit",
+                      "takesValue": true,
+                      "description": "Número máximo de resultados"
+                    },
+                    {
+                      "name": "sort-by",
+                      "takesValue": true,
+                      "description": "Campo por el que ordenar"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "firewall-rules",
+          "description": "Reglas de firewall de la VPC",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/firewall-rules",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una regla de firewall",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red de la regla (por defecto, default)"
+                },
+                {
+                  "name": "allow",
+                  "takesValue": true,
+                  "description": "Protocolos y puertos permitidos (p. ej. tcp:80,tcp:443)"
+                },
+                {
+                  "name": "action",
+                  "takesValue": true,
+                  "description": "ALLOW o DENY (con --rules)",
+                  "values": [
+                    "ALLOW",
+                    "DENY"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "rules",
+                  "takesValue": true,
+                  "description": "Protocolos y puertos a los que se aplica (con --action)"
+                },
+                {
+                  "name": "direction",
+                  "takesValue": true,
+                  "description": "INGRESS (por defecto) o EGRESS",
+                  "values": [
+                    "INGRESS",
+                    "EGRESS",
+                    "IN",
+                    "OUT"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "priority",
+                  "takesValue": true,
+                  "description": "0–65535; menor número = más prioridad (por defecto 1000)"
+                },
+                {
+                  "name": "source-ranges",
+                  "takesValue": true,
+                  "description": "Rangos CIDR de origen (si no hay origen, 0.0.0.0/0)"
+                },
+                {
+                  "name": "source-tags",
+                  "takesValue": true,
+                  "description": "Etiquetas de red de las VMs de origen"
+                },
+                {
+                  "name": "target-tags",
+                  "takesValue": true,
+                  "description": "Etiquetas de red de las VMs a las que se aplica"
+                },
+                {
+                  "name": "target-service-accounts",
+                  "takesValue": true,
+                  "description": "Cuentas de servicio de las VMs a las que se aplica"
+                },
+                {
+                  "name": "destination-ranges",
+                  "takesValue": true,
+                  "description": "Rangos CIDR de destino"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                },
+                {
+                  "name": "disabled",
+                  "takesValue": false,
+                  "description": "Crea la regla desactivada"
+                },
+                {
+                  "name": "enable-logging",
+                  "takesValue": false,
+                  "description": "Registra las conexiones que coinciden"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las reglas de firewall",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                },
+                {
+                  "name": "sort-by",
+                  "takesValue": true,
+                  "description": "Campo por el que ordenar"
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra una regla de firewall",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/delete",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "routers",
+          "description": "Cloud Router (necesario para Cloud NAT)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/routers",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un Cloud Router",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/routers/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red del router"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región"
+                },
+                {
+                  "name": "asn",
+                  "takesValue": true,
+                  "description": "Número de sistema autónomo BGP"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                }
+              ]
+            },
+            {
+              "name": "nats",
+              "description": "Pasarelas Cloud NAT de un Cloud Router",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/routers/nats",
+              "subcommands": [
+                {
+                  "name": "create",
+                  "description": "Crea una pasarela Cloud NAT",
+                  "source": "https://docs.cloud.google.com/sdk/gcloud/reference/compute/routers/nats/create",
+                  "args": [
+                    {
+                      "name": "NOMBRE"
+                    }
+                  ],
+                  "flags": [
+                    {
+                      "name": "router",
+                      "takesValue": true,
+                      "description": "Cloud Router que usa (obligatorio)"
+                    },
+                    {
+                      "name": "region",
+                      "takesValue": true,
+                      "description": "Región"
+                    },
+                    {
+                      "name": "auto-allocate-nat-external-ips",
+                      "takesValue": false,
+                      "description": "Reserva automáticamente las IPs externas del NAT"
+                    },
+                    {
+                      "name": "nat-all-subnet-ip-ranges",
+                      "takesValue": false,
+                      "description": "NAT para todos los rangos de todas las subredes de la región"
+                    },
+                    {
+                      "name": "nat-external-ip-pool",
+                      "takesValue": true,
+                      "description": "IPs externas reservadas que usará el NAT"
+                    },
+                    {
+                      "name": "enable-logging",
+                      "takesValue": false,
+                      "description": "Activa los logs del NAT"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "description": "Autenticación de gcloud",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth",
+      "subcommands": [
+        {
+          "name": "login",
+          "description": "Autoriza a gcloud con tu cuenta de usuario (flujo web)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth/login",
+          "args": [
+            {
+              "name": "CUENTA"
+            }
+          ],
+          "flags": [
+            {
+              "name": "no-launch-browser",
+              "takesValue": false,
+              "description": "No abre el navegador: copias la URL a mano"
+            },
+            {
+              "name": "update-adc",
+              "takesValue": false,
+              "description": "Guarda también las credenciales para las aplicaciones (ADC)"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista las cuentas autenticadas",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth/list"
+        },
+        {
+          "name": "application-default",
+          "description": "Credenciales para las aplicaciones y librerías (ADC)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default",
+          "subcommands": [
+            {
+              "name": "login",
+              "description": "Crea las credenciales ADC con tu cuenta de usuario",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login"
+            }
+          ]
+        },
+        {
+          "name": "configure-docker",
+          "description": "Configura Docker para autenticarse en Artifact Registry",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/auth/configure-docker",
+          "args": [
+            {
+              "name": "REGISTROS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "description": "Proyectos de Google Cloud",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects",
+      "subcommands": [
+        {
+          "name": "list",
+          "description": "Lista los proyectos a los que tienes acceso",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/list",
+          "flags": [
+            {
+              "name": "filter",
+              "takesValue": true,
+              "description": "Filtra los resultados"
+            },
+            {
+              "name": "limit",
+              "takesValue": true,
+              "description": "Número máximo de resultados"
+            },
+            {
+              "name": "sort-by",
+              "takesValue": true,
+              "description": "Campo por el que ordenar"
+            }
+          ]
+        },
+        {
+          "name": "create",
+          "description": "Crea un proyecto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/create",
+          "args": [
+            {
+              "name": "PROJECT_ID"
+            }
+          ],
+          "flags": [
+            {
+              "name": "name",
+              "takesValue": true,
+              "description": "Nombre visible del proyecto"
+            },
+            {
+              "name": "folder",
+              "takesValue": true,
+              "description": "Carpeta en la que crearlo"
+            },
+            {
+              "name": "organization",
+              "takesValue": true,
+              "description": "Organización en la que crearlo"
+            }
+          ]
+        },
+        {
+          "name": "describe",
+          "description": "Muestra los datos de un proyecto (ID, número, estado…)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/describe",
+          "args": [
+            {
+              "name": "PROJECT_ID"
+            }
+          ]
+        },
+        {
+          "name": "add-iam-policy-binding",
+          "description": "Concede un rol a un principal en el proyecto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding",
+          "args": [
+            {
+              "name": "PROJECT_ID"
+            }
+          ],
+          "flags": [
+            {
+              "name": "member",
+              "takesValue": true,
+              "description": "Principal: user:, serviceAccount:, group:, domain:…"
+            },
+            {
+              "name": "role",
+              "takesValue": true,
+              "description": "Rol, p. ej. roles/storage.objectViewer"
+            },
+            {
+              "name": "condition",
+              "takesValue": true,
+              "description": "Condición IAM"
+            }
+          ]
+        },
+        {
+          "name": "remove-iam-policy-binding",
+          "description": "Quita un rol a un principal en el proyecto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/remove-iam-policy-binding",
+          "args": [
+            {
+              "name": "PROJECT_ID"
+            }
+          ],
+          "flags": [
+            {
+              "name": "member",
+              "takesValue": true,
+              "description": "Principal"
+            },
+            {
+              "name": "role",
+              "takesValue": true,
+              "description": "Rol"
+            }
+          ]
+        },
+        {
+          "name": "get-iam-policy",
+          "description": "Muestra la política IAM del proyecto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/projects/get-iam-policy",
+          "args": [
+            {
+              "name": "PROJECT_ID"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "services",
+      "description": "APIs y servicios de un proyecto",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/services",
+      "subcommands": [
+        {
+          "name": "enable",
+          "description": "Activa una o varias APIs en el proyecto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/services/enable",
+          "args": [
+            {
+              "name": "SERVICIO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "async",
+              "takesValue": false,
+              "description": "No espera a que termine"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista las APIs activadas (o disponibles)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/services/list",
+          "flags": [
+            {
+              "name": "enabled",
+              "takesValue": false,
+              "description": "Las activadas (por defecto)"
+            },
+            {
+              "name": "available",
+              "takesValue": false,
+              "description": "Las que se pueden activar"
+            },
+            {
+              "name": "filter",
+              "takesValue": true,
+              "description": "Filtra los resultados"
+            },
+            {
+              "name": "limit",
+              "takesValue": true,
+              "description": "Número máximo de resultados"
+            },
+            {
+              "name": "sort-by",
+              "takesValue": true,
+              "description": "Campo por el que ordenar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "iam",
+      "description": "Identidades y roles (IAM)",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/iam",
+      "subcommands": [
+        {
+          "name": "service-accounts",
+          "description": "Cuentas de servicio",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una cuenta de servicio",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "display-name",
+                  "takesValue": true,
+                  "description": "Nombre visible"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las cuentas de servicio del proyecto",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "storage",
+      "description": "Cloud Storage: buckets y objetos",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage",
+      "subcommands": [
+        {
+          "name": "buckets",
+          "description": "Gestiona buckets",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/buckets",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un bucket (gs://NOMBRE)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/buckets/create",
+              "args": [
+                {
+                  "name": "gs://BUCKET"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región, dual-region o multirregión (EU, US, ASIA)"
+                },
+                {
+                  "name": "default-storage-class",
+                  "takesValue": true,
+                  "values": [
+                    "STANDARD",
+                    "NEARLINE",
+                    "COLDLINE",
+                    "ARCHIVE"
+                  ],
+                  "description": "Clase por defecto de los objetos nuevos"
+                },
+                {
+                  "name": "uniform-bucket-level-access",
+                  "takesValue": false,
+                  "description": "Permisos solo con IAM a nivel de bucket (recomendado)"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los buckets del proyecto",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/buckets/list"
+            },
+            {
+              "name": "describe",
+              "description": "Detalle de un bucket",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/buckets/describe",
+              "args": [
+                {
+                  "name": "gs://BUCKET"
+                }
+              ]
+            },
+            {
+              "name": "update",
+              "description": "Cambia la configuración de un bucket",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/buckets/update",
+              "args": [
+                {
+                  "name": "gs://BUCKET"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "versioning",
+                  "takesValue": false,
+                  "description": "Activa el versionado de objetos"
+                },
+                {
+                  "name": "no-versioning",
+                  "takesValue": false,
+                  "description": "Desactiva el versionado"
+                },
+                {
+                  "name": "lifecycle-file",
+                  "takesValue": true,
+                  "description": "Reglas de ciclo de vida en JSON"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "cp",
+          "description": "Sube, descarga o copia objetos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/cp",
+          "args": [
+            {
+              "name": "ORIGEN"
+            },
+            {
+              "name": "DESTINO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "short": "r",
+              "takesValue": false,
+              "description": "Recorre carpetas recursivamente"
+            }
+          ]
+        },
+        {
+          "name": "ls",
+          "description": "Lista buckets u objetos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/ls",
+          "args": [
+            {
+              "name": "URL"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "short": "r",
+              "takesValue": false,
+              "description": "Recorre carpetas recursivamente"
+            },
+            {
+              "name": "long",
+              "short": "l",
+              "takesValue": false,
+              "description": "Con tamaño y fecha"
+            }
+          ]
+        },
+        {
+          "name": "mv",
+          "description": "Mueve o renombra objetos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/mv",
+          "args": [
+            {
+              "name": "ORIGEN"
+            },
+            {
+              "name": "DESTINO"
+            }
+          ]
+        },
+        {
+          "name": "rm",
+          "description": "Borra objetos (o buckets con -r)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/rm",
+          "args": [
+            {
+              "name": "URL"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "short": "r",
+              "takesValue": false,
+              "description": "Recorre carpetas recursivamente"
+            }
+          ]
+        },
+        {
+          "name": "rsync",
+          "description": "Sincroniza dos carpetas o buckets",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/rsync",
+          "args": [
+            {
+              "name": "ORIGEN"
+            },
+            {
+              "name": "DESTINO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "short": "r",
+              "takesValue": false,
+              "description": "Recorre carpetas recursivamente"
+            },
+            {
+              "name": "delete-unmatched-destination-objects",
+              "takesValue": false,
+              "description": "Borra en destino lo que no está en origen"
+            }
+          ]
+        },
+        {
+          "name": "cat",
+          "description": "Muestra el contenido de un objeto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/storage/cat",
+          "args": [
+            {
+              "name": "URL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sql",
+      "description": "Cloud SQL: MySQL, PostgreSQL y SQL Server gestionados",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql",
+      "subcommands": [
+        {
+          "name": "instances",
+          "description": "Instancias de Cloud SQL",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una instancia (o una réplica de lectura)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/create",
+              "args": [
+                {
+                  "name": "INSTANCIA"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "database-version",
+                  "takesValue": true,
+                  "description": "Motor y versión (p. ej. POSTGRES_16, MYSQL_8_0; por defecto MYSQL_8_0)"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región de la instancia"
+                },
+                {
+                  "name": "availability-type",
+                  "takesValue": true,
+                  "description": "regional = alta disponibilidad con failover; zonal = sin failover (por defecto)",
+                  "values": [
+                    "regional",
+                    "zonal"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "edition",
+                  "takesValue": true,
+                  "description": "Edición de Cloud SQL",
+                  "values": [
+                    "enterprise",
+                    "enterprise-plus"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "tier",
+                  "takesValue": true,
+                  "description": "Tipo de máquina (p. ej. db-f1-micro, o los de Enterprise Plus)"
+                },
+                {
+                  "name": "cpu",
+                  "takesValue": true,
+                  "description": "Número de vCPU (Enterprise, con --memory)"
+                },
+                {
+                  "name": "memory",
+                  "takesValue": true,
+                  "description": "Memoria (p. ej. 8GiB; Enterprise, con --cpu)"
+                },
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red VPC para la IP privada"
+                },
+                {
+                  "name": "no-assign-ip",
+                  "takesValue": false,
+                  "description": "Sin IP pública"
+                },
+                {
+                  "name": "backup-start-time",
+                  "takesValue": true,
+                  "description": "Hora de inicio de la copia diaria (HH:MM, UTC)"
+                },
+                {
+                  "name": "enable-point-in-time-recovery",
+                  "takesValue": false,
+                  "description": "Recuperación a un momento concreto (PostgreSQL)"
+                },
+                {
+                  "name": "enable-bin-log",
+                  "takesValue": false,
+                  "description": "Recuperación a un momento concreto (MySQL)"
+                },
+                {
+                  "name": "deletion-protection",
+                  "takesValue": false,
+                  "description": "Impide borrar la instancia por error"
+                },
+                {
+                  "name": "master-instance-name",
+                  "takesValue": true,
+                  "description": "Crea una réplica de lectura de esa instancia"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las instancias",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                }
+              ]
+            },
+            {
+              "name": "describe",
+              "description": "Muestra la configuración de una instancia",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/describe",
+              "args": [
+                {
+                  "name": "INSTANCIA"
+                }
+              ]
+            },
+            {
+              "name": "failover",
+              "description": "Fuerza un failover a la instancia standby (solo instancias regionales)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/failover",
+              "args": [
+                {
+                  "name": "INSTANCIA"
+                }
+              ]
+            },
+            {
+              "name": "promote-replica",
+              "description": "Promociona una réplica de lectura a instancia principal independiente (p. ej. para DR)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/promote-replica",
+              "args": [
+                {
+                  "name": "RÉPLICA"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "async",
+                  "takesValue": false,
+                  "description": "No espera a que termine"
+                },
+                {
+                  "name": "failover",
+                  "takesValue": false,
+                  "description": "La promoción es un failover"
+                },
+                {
+                  "name": "no-failover",
+                  "takesValue": false,
+                  "description": "La promoción no es un failover"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "connect",
+          "description": "Conecta a una instancia con el cliente de línea de comandos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/sql/connect",
+          "args": [
+            {
+              "name": "INSTANCIA"
+            }
+          ],
+          "flags": [
+            {
+              "name": "user",
+              "takesValue": true,
+              "description": "Usuario de la base de datos"
+            },
+            {
+              "name": "database",
+              "takesValue": true,
+              "description": "Base de datos"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "run",
+      "description": "Cloud Run: contenedores sin servidor",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run",
+      "subcommands": [
+        {
+          "name": "deploy",
+          "description": "Despliega un servicio (crea una revisión nueva)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/deploy",
+          "args": [
+            {
+              "name": "SERVICIO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "image",
+              "takesValue": true,
+              "description": "Imagen del contenedor"
+            },
+            {
+              "name": "source",
+              "takesValue": true,
+              "description": "Código fuente a construir (con Dockerfile o buildpacks)"
+            },
+            {
+              "name": "region",
+              "takesValue": true,
+              "description": "Región del servicio"
+            },
+            {
+              "name": "allow-unauthenticated",
+              "takesValue": false,
+              "description": "Permite llamadas sin autenticar (servicio público)"
+            },
+            {
+              "name": "no-allow-unauthenticated",
+              "takesValue": false,
+              "description": "Exige autenticación con IAM"
+            },
+            {
+              "name": "port",
+              "takesValue": true,
+              "description": "Puerto del contenedor (también fija $PORT; por defecto 8080)"
+            },
+            {
+              "name": "memory",
+              "takesValue": true,
+              "description": "Límite de memoria (p. ej. 512Mi, 1Gi)"
+            },
+            {
+              "name": "cpu",
+              "takesValue": true,
+              "description": "Límite de CPU"
+            },
+            {
+              "name": "concurrency",
+              "takesValue": true,
+              "description": "Máximo de peticiones simultáneas por instancia"
+            },
+            {
+              "name": "min-instances",
+              "takesValue": true,
+              "description": "Instancias mínimas (evita arranques en frío)"
+            },
+            {
+              "name": "max-instances",
+              "takesValue": true,
+              "description": "Instancias máximas (limita coste y carga)"
+            },
+            {
+              "name": "timeout",
+              "takesValue": true,
+              "description": "Tiempo máximo por petición (por defecto 5 min, máx. 60 min)"
+            },
+            {
+              "name": "service-account",
+              "takesValue": true,
+              "description": "Cuenta de servicio con la que se ejecuta"
+            },
+            {
+              "name": "set-env-vars",
+              "takesValue": true,
+              "description": "Variables de entorno CLAVE=VALOR"
+            },
+            {
+              "name": "set-secrets",
+              "takesValue": true,
+              "description": "Secretos de Secret Manager como variables o archivos"
+            },
+            {
+              "name": "ingress",
+              "takesValue": true,
+              "description": "Desde dónde se admite tráfico",
+              "values": [
+                "all",
+                "internal",
+                "internal-and-cloud-load-balancing"
+              ],
+              "strict": true
+            },
+            {
+              "name": "no-traffic",
+              "takesValue": false,
+              "description": "Despliega la revisión sin enviarle tráfico"
+            },
+            {
+              "name": "tag",
+              "takesValue": true,
+              "description": "Etiqueta de tráfico para la revisión (URL propia)"
+            },
+            {
+              "name": "function",
+              "takesValue": true,
+              "description": "Despliega una función; el valor es el punto de entrada"
+            }
+          ]
+        },
+        {
+          "name": "services",
+          "description": "Servicios de Cloud Run",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/services",
+          "subcommands": [
+            {
+              "name": "list",
+              "description": "Lista los servicios",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/services/list",
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                },
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                }
+              ]
+            },
+            {
+              "name": "describe",
+              "description": "Muestra un servicio",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/services/describe",
+              "args": [
+                {
+                  "name": "SERVICIO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                }
+              ]
+            },
+            {
+              "name": "update-traffic",
+              "description": "Reparte el tráfico entre revisiones",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/services/update-traffic",
+              "args": [
+                {
+                  "name": "SERVICIO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                },
+                {
+                  "name": "to-revisions",
+                  "takesValue": true,
+                  "description": "REVISIÓN=PORCENTAJE,..."
+                },
+                {
+                  "name": "to-latest",
+                  "takesValue": false,
+                  "description": "Todo el tráfico a la última revisión"
+                },
+                {
+                  "name": "to-tags",
+                  "takesValue": true,
+                  "description": "ETIQUETA=PORCENTAJE,..."
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra un servicio",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/services/delete",
+              "args": [
+                {
+                  "name": "SERVICIO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "jobs",
+          "description": "Jobs de Cloud Run: tareas que se ejecutan y terminan",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/jobs",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un job",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/jobs/create",
+              "args": [
+                {
+                  "name": "JOB"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "image",
+                  "takesValue": true,
+                  "description": "Imagen del contenedor"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                },
+                {
+                  "name": "tasks",
+                  "takesValue": true,
+                  "description": "Número de tareas (por defecto 1)"
+                },
+                {
+                  "name": "parallelism",
+                  "takesValue": true,
+                  "description": "Tareas en paralelo"
+                },
+                {
+                  "name": "max-retries",
+                  "takesValue": true,
+                  "description": "Reintentos por tarea fallida"
+                },
+                {
+                  "name": "task-timeout",
+                  "takesValue": true,
+                  "description": "Tiempo máximo por intento de tarea"
+                },
+                {
+                  "name": "service-account",
+                  "takesValue": true,
+                  "description": "Cuenta de servicio con la que se ejecuta"
+                },
+                {
+                  "name": "set-env-vars",
+                  "takesValue": true,
+                  "description": "Variables de entorno CLAVE=VALOR"
+                },
+                {
+                  "name": "execute-now",
+                  "takesValue": false,
+                  "description": "Lo ejecuta nada más crearlo"
+                }
+              ]
+            },
+            {
+              "name": "execute",
+              "description": "Ejecuta un job",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/jobs/execute",
+              "args": [
+                {
+                  "name": "JOB"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                },
+                {
+                  "name": "wait",
+                  "takesValue": false,
+                  "description": "Espera a que termine"
+                },
+                {
+                  "name": "tasks",
+                  "takesValue": true,
+                  "description": "Número de tareas para esta ejecución"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los jobs",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/run/jobs/list",
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región del servicio"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "container",
+      "description": "Google Kubernetes Engine (GKE)",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container",
+      "subcommands": [
+        {
+          "name": "clusters",
+          "description": "Clústeres de GKE",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters",
+          "subcommands": [
+            {
+              "name": "create-auto",
+              "description": "Crea un clúster Autopilot",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters/create-auto",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "release-channel",
+                  "takesValue": true,
+                  "description": "Canal de versiones (por defecto regular)",
+                  "values": [
+                    "rapid",
+                    "regular",
+                    "stable",
+                    "extended",
+                    "None"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red VPC"
+                },
+                {
+                  "name": "subnetwork",
+                  "takesValue": true,
+                  "description": "Subred"
+                },
+                {
+                  "name": "enable-private-nodes",
+                  "takesValue": false,
+                  "description": "Nodos sin IP pública"
+                }
+              ]
+            },
+            {
+              "name": "create",
+              "description": "Crea un clúster Standard",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "node-locations",
+                  "takesValue": true,
+                  "description": "Zonas donde se crean los nodos"
+                },
+                {
+                  "name": "num-nodes",
+                  "takesValue": true,
+                  "description": "Nodos por zona (por defecto 3)"
+                },
+                {
+                  "name": "machine-type",
+                  "takesValue": true,
+                  "description": "Tipo de máquina de los nodos (por defecto e2-medium)"
+                },
+                {
+                  "name": "release-channel",
+                  "takesValue": true,
+                  "description": "Canal de versiones (por defecto regular)",
+                  "values": [
+                    "rapid",
+                    "regular",
+                    "stable",
+                    "extended",
+                    "None"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "workload-pool",
+                  "takesValue": true,
+                  "description": "Activa Workload Identity Federation (PROYECTO.svc.id.goog)"
+                },
+                {
+                  "name": "enable-autoscaling",
+                  "takesValue": false,
+                  "description": "Activa el autoescalado de nodos"
+                },
+                {
+                  "name": "min-nodes",
+                  "takesValue": true,
+                  "description": "Mínimo de nodos por zona"
+                },
+                {
+                  "name": "max-nodes",
+                  "takesValue": true,
+                  "description": "Máximo de nodos por zona"
+                },
+                {
+                  "name": "spot",
+                  "takesValue": false,
+                  "description": "Nodos con VMs Spot"
+                },
+                {
+                  "name": "enable-private-nodes",
+                  "takesValue": false,
+                  "description": "Nodos sin IP pública"
+                },
+                {
+                  "name": "network",
+                  "takesValue": true,
+                  "description": "Red VPC (por defecto, default)"
+                },
+                {
+                  "name": "subnetwork",
+                  "takesValue": true,
+                  "description": "Subred"
+                }
+              ]
+            },
+            {
+              "name": "get-credentials",
+              "description": "Configura kubectl para el clúster (escribe el kubeconfig)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters/get-credentials",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los clústeres",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters/list",
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                },
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra un clúster",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/clusters/delete",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "node-pools",
+          "description": "Node pools de un clúster Standard",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/node-pools",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un node pool",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/node-pools/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "cluster",
+                  "takesValue": true,
+                  "description": "Clúster al que se añade"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                },
+                {
+                  "name": "machine-type",
+                  "takesValue": true,
+                  "description": "Tipo de máquina"
+                },
+                {
+                  "name": "num-nodes",
+                  "takesValue": true,
+                  "description": "Nodos por zona (por defecto 3)"
+                },
+                {
+                  "name": "enable-autoscaling",
+                  "takesValue": false,
+                  "description": "Activa el autoescalado de nodos"
+                },
+                {
+                  "name": "min-nodes",
+                  "takesValue": true,
+                  "description": "Mínimo de nodos por zona"
+                },
+                {
+                  "name": "max-nodes",
+                  "takesValue": true,
+                  "description": "Máximo de nodos por zona"
+                },
+                {
+                  "name": "spot",
+                  "takesValue": false,
+                  "description": "Nodos con VMs Spot"
+                },
+                {
+                  "name": "node-taints",
+                  "takesValue": true,
+                  "description": "Taints para todos los nodos (clave=valor:Efecto)"
+                },
+                {
+                  "name": "node-labels",
+                  "takesValue": true,
+                  "description": "Labels para todos los nodos (clave=valor)"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los node pools de un clúster",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/node-pools/list",
+              "flags": [
+                {
+                  "name": "cluster",
+                  "takesValue": true,
+                  "description": "Clúster"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                }
+              ]
+            },
+            {
+              "name": "delete",
+              "description": "Borra un node pool",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/container/node-pools/delete",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "cluster",
+                  "takesValue": true,
+                  "description": "Clúster"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región (clúster regional)"
+                },
+                {
+                  "name": "zone",
+                  "takesValue": true,
+                  "description": "Zona (clúster zonal)"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o zona del clúster"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "logging",
+      "description": "Cloud Logging",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/logging",
+      "subcommands": [
+        {
+          "name": "read",
+          "description": "Lee entradas de log que cumplen un filtro",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/logging/read",
+          "args": [
+            {
+              "name": "FILTRO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "limit",
+              "takesValue": true,
+              "description": "Número máximo de entradas"
+            },
+            {
+              "name": "freshness",
+              "takesValue": true,
+              "description": "Antigüedad máxima (por defecto 1d)"
+            },
+            {
+              "name": "order",
+              "takesValue": true,
+              "description": "asc o desc (por defecto desc)"
+            },
+            {
+              "name": "format",
+              "takesValue": true,
+              "description": "Formato de salida (json, yaml, value(...)…)"
+            }
+          ]
+        },
+        {
+          "name": "sinks",
+          "description": "Sinks: envían logs a otros destinos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/logging/sinks",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un sink hacia un bucket de logs, Cloud Storage, BigQuery o Pub/Sub",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/logging/sinks/create",
+              "args": [
+                {
+                  "name": "NOMBRE"
+                },
+                {
+                  "name": "DESTINO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "log-filter",
+                  "takesValue": true,
+                  "description": "Filtro de las entradas que se envían"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los sinks",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/logging/sinks/list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "builds",
+      "description": "Cloud Build",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/builds",
+      "subcommands": [
+        {
+          "name": "submit",
+          "description": "Envía el código a Cloud Build y ejecuta una compilación",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/builds/submit",
+          "args": [
+            {
+              "name": "ORIGEN"
+            }
+          ],
+          "flags": [
+            {
+              "name": "tag",
+              "takesValue": true,
+              "description": "Construye con el Dockerfile y publica la imagen con esta etiqueta",
+              "short": "t"
+            },
+            {
+              "name": "config",
+              "takesValue": true,
+              "description": "Archivo de configuración (por defecto cloudbuild.yaml)"
+            },
+            {
+              "name": "substitutions",
+              "takesValue": true,
+              "description": "Sustituciones CLAVE=VALOR (las de usuario empiezan por _)"
+            },
+            {
+              "name": "region",
+              "takesValue": true,
+              "description": "Región"
+            },
+            {
+              "name": "service-account",
+              "takesValue": true,
+              "description": "Cuenta de servicio con la que se ejecuta la compilación"
+            },
+            {
+              "name": "async",
+              "takesValue": false,
+              "description": "No espera a que termine"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista las compilaciones",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/builds/list",
+          "flags": [
+            {
+              "name": "region",
+              "takesValue": true,
+              "description": "Región"
+            },
+            {
+              "name": "limit",
+              "takesValue": true,
+              "description": "Número máximo de resultados"
+            },
+            {
+              "name": "filter",
+              "takesValue": true,
+              "description": "Filtra los resultados"
+            }
+          ]
+        },
+        {
+          "name": "log",
+          "description": "Muestra el log de una compilación",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/builds/log",
+          "args": [
+            {
+              "name": "ID"
+            }
+          ],
+          "flags": [
+            {
+              "name": "region",
+              "takesValue": true,
+              "description": "Región"
+            },
+            {
+              "name": "stream",
+              "takesValue": false,
+              "description": "Sigue el log en directo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "artifacts",
+      "description": "Artifact Registry",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts",
+      "subcommands": [
+        {
+          "name": "repositories",
+          "description": "Repositorios de Artifact Registry",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/repositories",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un repositorio",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/repositories/create",
+              "args": [
+                {
+                  "name": "REPOSITORIO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "repository-format",
+                  "takesValue": true,
+                  "description": "Formato del repositorio",
+                  "values": [
+                    "apt",
+                    "conda",
+                    "docker",
+                    "go",
+                    "kfp",
+                    "maven",
+                    "npm",
+                    "python",
+                    "yum"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o multirregión"
+                },
+                {
+                  "name": "description",
+                  "takesValue": true,
+                  "description": "Descripción"
+                },
+                {
+                  "name": "immutable-tags",
+                  "takesValue": false,
+                  "description": "(Docker) Impide reutilizar una etiqueta para otra imagen"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los repositorios",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/repositories/list",
+              "flags": [
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Región o multirregión"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "docker",
+          "description": "Imágenes Docker en Artifact Registry",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/docker",
+          "subcommands": [
+            {
+              "name": "images",
+              "description": "Imágenes",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/docker/images",
+              "subcommands": [
+                {
+                  "name": "list",
+                  "description": "Lista las imágenes de un repositorio",
+                  "source": "https://docs.cloud.google.com/sdk/gcloud/reference/artifacts/docker/images/list",
+                  "args": [
+                    {
+                      "name": "RUTA"
+                    }
+                  ],
+                  "flags": [
+                    {
+                      "name": "include-tags",
+                      "takesValue": false,
+                      "description": "Muestra también las etiquetas"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deploy",
+      "description": "Cloud Deploy: entrega continua",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/deploy",
+      "subcommands": [
+        {
+          "name": "releases",
+          "description": "Releases de un pipeline de entrega",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/deploy/releases",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una release (y la despliega en el primer target)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/deploy/releases/create",
+              "args": [
+                {
+                  "name": "RELEASE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "delivery-pipeline",
+                  "takesValue": true,
+                  "description": "Pipeline de entrega"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región"
+                },
+                {
+                  "name": "images",
+                  "takesValue": true,
+                  "description": "Imágenes: NOMBRE=RUTA_COMPLETA"
+                },
+                {
+                  "name": "source",
+                  "takesValue": true,
+                  "description": "Directorio o archivo con skaffold.yaml (por defecto, el actual)"
+                },
+                {
+                  "name": "to-target",
+                  "takesValue": true,
+                  "description": "Target en el que desplegar"
+                }
+              ]
+            },
+            {
+              "name": "promote",
+              "description": "Promociona una release al siguiente target",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/deploy/releases/promote",
+              "flags": [
+                {
+                  "name": "release",
+                  "takesValue": true,
+                  "description": "Release que se promociona"
+                },
+                {
+                  "name": "delivery-pipeline",
+                  "takesValue": true,
+                  "description": "Pipeline de entrega"
+                },
+                {
+                  "name": "region",
+                  "takesValue": true,
+                  "description": "Región"
+                },
+                {
+                  "name": "to-target",
+                  "takesValue": true,
+                  "description": "Target de destino"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "secrets",
+      "description": "Secret Manager",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets",
+      "subcommands": [
+        {
+          "name": "create",
+          "description": "Crea un secreto (y opcionalmente su primera versión)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/create",
+          "args": [
+            {
+              "name": "SECRETO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "data-file",
+              "takesValue": true,
+              "description": "Archivo con el valor (- para leerlo de la entrada estándar)"
+            },
+            {
+              "name": "replication-policy",
+              "takesValue": true,
+              "description": "automatic o user-managed (con --locations)",
+              "values": [
+                "automatic",
+                "user-managed"
+              ],
+              "strict": true
+            },
+            {
+              "name": "locations",
+              "takesValue": true,
+              "description": "Regiones de réplica (con user-managed)"
+            },
+            {
+              "name": "rotation-period",
+              "takesValue": true,
+              "description": "Periodo de rotación (envía avisos a Pub/Sub)"
+            },
+            {
+              "name": "next-rotation-time",
+              "takesValue": true,
+              "description": "Próxima rotación"
+            },
+            {
+              "name": "topics",
+              "takesValue": true,
+              "description": "Temas de Pub/Sub para las notificaciones"
+            },
+            {
+              "name": "labels",
+              "takesValue": true,
+              "description": "Etiquetas CLAVE=VALOR"
+            }
+          ]
+        },
+        {
+          "name": "versions",
+          "description": "Versiones de un secreto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions",
+          "subcommands": [
+            {
+              "name": "add",
+              "description": "Añade una versión nueva (el valor nuevo)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions/add",
+              "args": [
+                {
+                  "name": "SECRETO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "data-file",
+                  "takesValue": true,
+                  "description": "Archivo con el valor (- para la entrada estándar)"
+                }
+              ]
+            },
+            {
+              "name": "access",
+              "description": "Lee el valor de una versión",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions/access",
+              "args": [
+                {
+                  "name": "VERSIÓN"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "secret",
+                  "takesValue": true,
+                  "description": "Secreto"
+                },
+                {
+                  "name": "out-file",
+                  "takesValue": true,
+                  "description": "Escribe el valor en un archivo"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las versiones de un secreto",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions/list",
+              "args": [
+                {
+                  "name": "SECRETO"
+                }
+              ]
+            },
+            {
+              "name": "disable",
+              "description": "Desactiva una versión",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions/disable",
+              "args": [
+                {
+                  "name": "VERSIÓN"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "secret",
+                  "takesValue": true,
+                  "description": "Secreto"
+                }
+              ]
+            },
+            {
+              "name": "destroy",
+              "description": "Destruye una versión (irreversible)",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/versions/destroy",
+              "args": [
+                {
+                  "name": "VERSIÓN"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "secret",
+                  "takesValue": true,
+                  "description": "Secreto"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista los secretos",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/list"
+        },
+        {
+          "name": "add-iam-policy-binding",
+          "description": "Da un rol sobre un secreto concreto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/secrets/add-iam-policy-binding",
+          "args": [
+            {
+              "name": "SECRETO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "member",
+              "takesValue": true,
+              "description": "Principal (user:, group:, serviceAccount:…)"
+            },
+            {
+              "name": "role",
+              "takesValue": true,
+              "description": "Rol que se concede"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kms",
+      "description": "Cloud KMS",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms",
+      "subcommands": [
+        {
+          "name": "keyrings",
+          "description": "Llaveros (agrupan claves)",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms/keyrings",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un llavero",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms/keyrings/create",
+              "args": [
+                {
+                  "name": "LLAVERO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Ubicación (región, multirregión o global)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "keys",
+          "description": "Claves",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms/keys",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea una clave",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms/keys/create",
+              "args": [
+                {
+                  "name": "CLAVE"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "keyring",
+                  "takesValue": true,
+                  "description": "Llavero"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Ubicación (región, multirregión o global)"
+                },
+                {
+                  "name": "purpose",
+                  "takesValue": true,
+                  "description": "Uso de la clave",
+                  "values": [
+                    "aes-wrapping",
+                    "asymmetric-encryption",
+                    "asymmetric-signing",
+                    "encryption",
+                    "key-encapsulation",
+                    "mac",
+                    "raw-encryption"
+                  ],
+                  "strict": true
+                },
+                {
+                  "name": "rotation-period",
+                  "takesValue": true,
+                  "description": "Periodo de rotación automática (p. ej. 90d)"
+                },
+                {
+                  "name": "next-rotation-time",
+                  "takesValue": true,
+                  "description": "Primera rotación"
+                },
+                {
+                  "name": "protection-level",
+                  "takesValue": true,
+                  "description": "Dónde vive la clave (por defecto software)",
+                  "values": [
+                    "software",
+                    "hsm",
+                    "hsm-single-tenant",
+                    "external",
+                    "external-vpc"
+                  ],
+                  "strict": true
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista las claves de un llavero",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/kms/keys/list",
+              "flags": [
+                {
+                  "name": "keyring",
+                  "takesValue": true,
+                  "description": "Llavero"
+                },
+                {
+                  "name": "location",
+                  "takesValue": true,
+                  "description": "Ubicación (región, multirregión o global)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "billing",
+      "description": "Cloud Billing: cuentas de facturación y presupuestos",
+      "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing",
+      "subcommands": [
+        {
+          "name": "accounts",
+          "description": "Cuentas de facturación",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/accounts",
+          "subcommands": [
+            {
+              "name": "list",
+              "description": "Lista las cuentas de facturación activas",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/accounts/list",
+              "flags": [
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "projects",
+          "description": "Vínculo entre proyectos y cuentas de facturación",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/projects",
+          "subcommands": [
+            {
+              "name": "link",
+              "description": "Vincula un proyecto a una cuenta de facturación",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/projects/link",
+              "args": [
+                {
+                  "name": "PROYECTO"
+                }
+              ],
+              "flags": [
+                {
+                  "name": "billing-account",
+                  "takesValue": true,
+                  "description": "Cuenta de facturación"
+                }
+              ]
+            },
+            {
+              "name": "describe",
+              "description": "Muestra la cuenta de facturación de un proyecto",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/projects/describe",
+              "args": [
+                {
+                  "name": "PROYECTO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "budgets",
+          "description": "Presupuestos y alertas de gasto",
+          "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/budgets",
+          "subcommands": [
+            {
+              "name": "create",
+              "description": "Crea un presupuesto",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/budgets/create",
+              "flags": [
+                {
+                  "name": "billing-account",
+                  "takesValue": true,
+                  "description": "Cuenta de facturación"
+                },
+                {
+                  "name": "display-name",
+                  "takesValue": true,
+                  "description": "Nombre del presupuesto"
+                },
+                {
+                  "name": "budget-amount",
+                  "takesValue": true,
+                  "description": "Importe (p. ej. 500EUR); o --last-period-amount"
+                },
+                {
+                  "name": "last-period-amount",
+                  "takesValue": false,
+                  "description": "Usa como importe el gasto del periodo anterior"
+                },
+                {
+                  "name": "threshold-rule",
+                  "takesValue": true,
+                  "description": "Umbral de alerta: percent=0.5[,basis=forecasted-spend]; repetible"
+                },
+                {
+                  "name": "calendar-period",
+                  "takesValue": true,
+                  "description": "Periodo del presupuesto",
+                  "values": [
+                    "month",
+                    "quarter",
+                    "year"
+                  ],
+                  "strict": false
+                },
+                {
+                  "name": "filter-projects",
+                  "takesValue": true,
+                  "description": "Solo estos proyectos (projects/ID)"
+                },
+                {
+                  "name": "filter-labels",
+                  "takesValue": true,
+                  "description": "Solo los recursos con esta etiqueta CLAVE=VALOR"
+                },
+                {
+                  "name": "filter-services",
+                  "takesValue": true,
+                  "description": "Solo estos servicios"
+                },
+                {
+                  "name": "notifications-rule-pubsub-topic",
+                  "takesValue": true,
+                  "description": "Tema de Pub/Sub para avisos programáticos"
+                },
+                {
+                  "name": "disable-default-iam-recipients",
+                  "takesValue": false,
+                  "description": "No envía los correos a los administradores de facturación"
+                }
+              ]
+            },
+            {
+              "name": "list",
+              "description": "Lista los presupuestos",
+              "source": "https://docs.cloud.google.com/sdk/gcloud/reference/billing/budgets/list",
+              "flags": [
+                {
+                  "name": "billing-account",
+                  "takesValue": true,
+                  "description": "Cuenta de facturación"
+                },
+                {
+                  "name": "filter",
+                  "takesValue": true,
+                  "description": "Filtra los resultados"
+                },
+                {
+                  "name": "limit",
+                  "takesValue": true,
+                  "description": "Número máximo de resultados"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

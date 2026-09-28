@@ -1,0 +1,30 @@
+{
+  "tracks": [
+    {
+      "id": "fundamentos",
+      "title": "Nivel 0 · Fundamentos",
+      "description": "Linux, redes y contenedores con Docker: la base para todo lo demás. Opcional: puedes saltarlo aprobando su examen.",
+      "optional": true
+    },
+    {
+      "id": "cloud",
+      "title": "Cloud",
+      "description": "Conceptos de nube independientes del proveedor, GCP a fondo y equivalencias en AWS y Azure."
+    },
+    {
+      "id": "kubernetes",
+      "title": "Kubernetes",
+      "description": "De tu primer Pod a nivel CKAD/CKA: workloads, redes, almacenamiento, seguridad y troubleshooting."
+    },
+    {
+      "id": "terraform",
+      "title": "Terraform",
+      "description": "Infraestructura como código: HCL, providers, state, módulos y buenas prácticas."
+    },
+    {
+      "id": "ansible",
+      "title": "Ansible",
+      "description": "Automatización de configuración: inventarios, playbooks, roles e idempotencia."
+    }
+  ]
+}

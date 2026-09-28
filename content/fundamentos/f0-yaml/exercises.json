@@ -1,0 +1,107 @@
+{
+  "exercises": [
+    {
+      "id": "tipo-80",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En YAML, ¿qué tipo tiene el valor de `puerto: \"80\"`?",
+      "hints": ["Fíjate en las comillas."],
+      "options": [
+        { "id": "a", "text": "Número", "correct": false, "explanation": "Sin comillas sí sería un número." },
+        { "id": "b", "text": "Texto (string)", "correct": true, "explanation": "Correcto: las comillas lo convierten en texto." },
+        { "id": "c", "text": "Booleano", "correct": false, "explanation": "Los booleanos son true o false." }
+      ],
+      "solution": {
+        "answer": "Texto",
+        "explanation": "`80` es un número y `\"80\"` es un texto. Kubernetes, por ejemplo, exige número en `containerPort`."
+      }
+    },
+    {
+      "id": "version-decimal",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Escribes `version: 1.10`. ¿Qué valor lee un programa?",
+      "hints": ["Sin comillas, YAML intenta adivinar el tipo."],
+      "options": [
+        { "id": "a", "text": "El texto \"1.10\"", "correct": false, "explanation": "Solo si lo pones entre comillas." },
+        { "id": "b", "text": "El número 1.1", "correct": true, "explanation": "Correcto: se interpreta como decimal y el cero final se pierde." },
+        { "id": "c", "text": "Da error de sintaxis", "correct": false, "explanation": "Es sintaxis válida; el problema es que cambia el significado." }
+      ],
+      "solution": {
+        "answer": "El número 1.1",
+        "explanation": "Sin comillas, `1.10` es un número decimal (1.1). Para versiones usa comillas: `version: \"1.10\"`."
+      }
+    },
+    {
+      "id": "tabuladores",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "En YAML se puede indentar con tabuladores siempre que seas coherente.",
+      "hints": ["La especificación es tajante con esto."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "YAML prohíbe los tabuladores en la indentación." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: solo espacios." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "La indentación en YAML se hace solo con espacios. Configura tu editor para que la tecla Tab inserte espacios."
+      }
+    },
+    {
+      "id": "multilinea",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres guardar un script de varias líneas **conservando los saltos de línea**. ¿Qué indicador usas tras la clave?",
+      "hints": ["Uno conserva las líneas; el otro las «pliega» en una."],
+      "options": [
+        { "id": "a", "text": "`|`", "correct": true, "explanation": "Correcto: literal, conserva los saltos." },
+        { "id": "b", "text": "`>`", "correct": false, "explanation": "`>` une las líneas en una sola." },
+        { "id": "c", "text": "`---`", "correct": false, "explanation": "`---` separa documentos." }
+      ],
+      "solution": {
+        "answer": "|",
+        "explanation": "`|` (literal) conserva cada salto de línea; `>` (plegado) los convierte en espacios."
+      }
+    },
+    {
+      "id": "lista-vs-mapa",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué representa este YAML?\n\n```yaml\nservidores:\n  - web1\n  - web2\n```",
+      "hints": ["¿Qué significa el guion al principio de la línea?"],
+      "options": [
+        { "id": "a", "text": "Un mapa cuya clave `servidores` contiene una lista de dos textos", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Dos mapas llamados web1 y web2", "correct": false, "explanation": "Los guiones indican elementos de lista, no claves." },
+        { "id": "c", "text": "Un texto con dos líneas", "correct": false, "explanation": "Para eso haría falta `|`." }
+      ],
+      "solution": {
+        "answer": "Mapa con una lista",
+        "explanation": "`servidores:` es una clave; su valor es una lista (cada `- ` es un elemento): `[\"web1\", \"web2\"]` en JSON."
+      }
+    },
+    {
+      "id": "config-app",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Escribe en YAML la configuración de una app: `app` vale `tienda`; `replicas` es el **número** 3; `version` es el **texto** `1.10`; `puertos` es una lista con 80 y 443 (números); y `env` es un mapa con `MODO: pro` y `DEBUG` a `false` (booleano).",
+      "starter": "app: tienda\n",
+      "assertions": [
+        { "path": "app", "op": "equals", "value": "tienda", "message": "app vale tienda" },
+        { "path": "replicas", "op": "equals", "value": 3, "message": "replicas es el número 3 (sin comillas)" },
+        { "path": "version", "op": "equals", "value": "1.10", "message": "version es el texto \"1.10\" (con comillas, o se leería 1.1)" },
+        { "path": "puertos", "op": "equals", "value": [80, 443], "message": "puertos es una lista con los números 80 y 443" },
+        { "path": "env.MODO", "op": "equals", "value": "pro", "message": "env es un mapa con MODO: pro" },
+        { "path": "env.DEBUG", "op": "equals", "value": false, "message": "env.DEBUG es el booleano false (sin comillas)" }
+      ],
+      "hints": [
+        "Cada clave de primer nivel empieza en la columna 0: `replicas: 3`.",
+        "La lista: `puertos:` y debajo, indentado, `- 80` y `- 443`.",
+        "`version` necesita comillas; `false` y los números no deben llevarlas."
+      ],
+      "solution": {
+        "answer": "app: tienda\nreplicas: 3\nversion: \"1.10\"\npuertos:\n  - 80\n  - 443\nenv:\n  MODO: pro\n  DEBUG: false\n",
+        "explanation": "Los números y booleanos van sin comillas; `\"1.10\"` las necesita para seguir siendo texto. Las listas usan `- ` y los mapas anidados se indentan con 2 espacios."
+      }
+    }
+  ]
+}

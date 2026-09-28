@@ -1,0 +1,139 @@
+{
+  "exercises": [
+    {
+      "id": "count-vs-for-each",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas tres buckets con `count` a partir de la lista `[\"logs\", \"backups\", \"fotos\"]`. Quitas `\"backups\"` de la lista. ¿Qué propone el plan?",
+      "hints": ["Con count, cada instancia se identifica por su posición. ¿Qué le pasa a `fotos`?"],
+      "options": [
+        { "id": "a", "text": "Solo destruir el bucket de backups", "correct": false, "explanation": "Eso pasaría con for_each." },
+        { "id": "b", "text": "Cambiar la instancia [1] (de backups a fotos) y destruir la [2]", "correct": true, "explanation": "Correcto: los índices se desplazan y afectan a recursos que no querías tocar." },
+        { "id": "c", "text": "No cambia nada", "correct": false, "explanation": "La lista cambió: el plan tendrá cambios." }
+      ],
+      "solution": {
+        "answer": "Desplaza índices",
+        "explanation": "Con `count`, `fotos` pasa del índice 2 al 1. Como el nombre de un bucket no se puede cambiar, Terraform tendría que sustituir `[1]` y destruir `[2]`. Con `for_each` solo se destruiría `[\"backups\"]`."
+      }
+    },
+    {
+      "id": "for-each-lista",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Escribes `for_each = [\"dev\", \"pro\"]` y Terraform da error. ¿Por qué?",
+      "hints": ["¿Qué tipos acepta for_each?"],
+      "options": [
+        { "id": "a", "text": "for_each solo acepta mapas o sets; hay que usar `toset([...])`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "for_each necesita al menos 3 elementos", "correct": false, "explanation": "No hay mínimo." },
+        { "id": "c", "text": "Hay que usar comillas simples", "correct": false, "explanation": "En HCL los textos van con comillas dobles." }
+      ],
+      "solution": {
+        "answer": "Usar toset",
+        "explanation": "`for_each` acepta un mapa o un conjunto de textos. Una lista se convierte con `toset([\"dev\", \"pro\"])`, que además elimina duplicados."
+      }
+    },
+    {
+      "id": "each-key",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Con `for_each = { web = \"10.0.1.0/24\", datos = \"10.0.2.0/24\" }`, ¿cuánto vale `each.value` en la instancia `web`?",
+      "hints": ["`each.key` es la clave del mapa; `each.value`, su valor."],
+      "options": [
+        { "id": "a", "text": "`\"web\"`", "correct": false, "explanation": "Eso es `each.key`." },
+        { "id": "b", "text": "`\"10.0.1.0/24\"`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "`0`", "correct": false, "explanation": "Los índices numéricos son de `count`." }
+      ],
+      "solution": {
+        "answer": "\"10.0.1.0/24\"",
+        "explanation": "En un mapa, `each.key` es la clave (`web`) y `each.value` su valor (`10.0.1.0/24`). En un set, ambos valen lo mismo."
+      }
+    },
+    {
+      "id": "data-vs-resource",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres usar la última imagen de Debian 12 que publica Google para crear una VM. ¿Qué usas?",
+      "hints": ["Tú no creas ni gestionas esa imagen: solo quieres leerla."],
+      "options": [
+        { "id": "a", "text": "Un bloque `resource \"google_compute_image\"`", "correct": false, "explanation": "Eso crearía (y gestionaría) una imagen propia." },
+        { "id": "b", "text": "Un bloque `data \"google_compute_image\"`", "correct": true, "explanation": "Correcto: un data source solo lee." },
+        { "id": "c", "text": "Una variable con el nombre de la imagen escrito a mano", "correct": false, "explanation": "Funcionaría, pero no obtendrías automáticamente la última versión." }
+      ],
+      "solution": {
+        "answer": "Un data source",
+        "explanation": "`data \"google_compute_image\" \"debian\" { family = \"debian-12\", project = \"debian-cloud\" }` lee la imagen más reciente de esa familia; se usa con `data.google_compute_image.debian.self_link`."
+      }
+    },
+    {
+      "id": "condicional",
+      "type": "fill",
+      "language": "hcl",
+      "prompt": "Completa la expresión para que haya 3 réplicas en `pro` y 1 en cualquier otro entorno.",
+      "template": "count = var.entorno == \"pro\" {{a}} 3 {{b}} 1",
+      "blanks": [
+        { "id": "a", "accepted": ["?"] },
+        { "id": "b", "accepted": [":"] }
+      ],
+      "hints": ["Es el operador ternario: CONDICIÓN ? SI_VERDADERO : SI_FALSO."],
+      "solution": {
+        "answer": "count = var.entorno == \"pro\" ? 3 : 1",
+        "explanation": "El condicional de HCL es `condición ? valor_si_verdadero : valor_si_falso`."
+      }
+    },
+    {
+      "id": "for-expresion",
+      "type": "fill",
+      "language": "hcl",
+      "prompt": "Completa la expresión que convierte la lista `var.nombres` en otra lista con los nombres en mayúsculas.",
+      "template": "[{{kw}} n in var.nombres : {{fn}}(n)]",
+      "blanks": [
+        { "id": "kw", "accepted": ["for"] },
+        { "id": "fn", "accepted": ["upper"] }
+      ],
+      "hints": [
+        "Es una expresión de recorrido, como un bucle.",
+        "La función de mayúsculas se llama como en inglés «superior»."
+      ],
+      "solution": {
+        "answer": "[for n in var.nombres : upper(n)]",
+        "explanation": "`[for x in lista : expresión]` genera una lista nueva aplicando la expresión a cada elemento. Con llaves y `=>` generaría un mapa."
+      }
+    },
+    {
+      "id": "consola",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Abre la consola interactiva de Terraform para probar funciones como `cidrsubnet`.",
+      "hints": ["El subcomando se llama «consola» en inglés."],
+      "accepted": ["terraform console"],
+      "output": "> cidrsubnet(\"10.0.0.0/16\", 8, 1)\n\"10.0.1.0/24\"\n> merge({a = 1}, {b = 2})\n{\n  \"a\" = 1\n  \"b\" = 2\n}",
+      "solution": {
+        "answer": "terraform console",
+        "explanation": "`terraform console` evalúa expresiones con las variables y el state de la configuración actual. Ideal para probar funciones antes de usarlas."
+      }
+    },
+    {
+      "id": "buckets-for-each",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Crea con **un solo bloque** `resource \"google_storage_bucket\" \"buckets\"` un bucket por cada elemento de `[\"logs\", \"backups\", \"fotos\"]` usando `for_each` (con `toset`). Cada bucket debe llamarse `tienda-` seguido de su clave y estar en la ubicación `EU`.",
+      "starter": "resource \"google_storage_bucket\" \"buckets\" {\n  \n}\n",
+      "assertions": [
+        { "path": "resource.google_storage_bucket.buckets", "op": "count", "value": 1, "message": "Hay un único bloque resource \"google_storage_bucket\" \"buckets\"" },
+        { "path": "resource.google_storage_bucket.buckets[0].for_each", "op": "matches", "value": "^toset\\(\\s*\\[\\s*\"logs\"\\s*,\\s*\"backups\"\\s*,\\s*\"fotos\"\\s*\\]\\s*\\)$", "message": "for_each = toset([\"logs\", \"backups\", \"fotos\"])" },
+        { "path": "resource.google_storage_bucket.buckets[0].name", "op": "matches", "value": "tienda-\\$\\{\\s*each\\.key\\s*\\}", "message": "name usa interpolación con each.key: \"tienda-${each.key}\"" },
+        { "path": "resource.google_storage_bucket.buckets[0].location", "op": "equals", "value": "EU", "message": "location = \"EU\"" },
+        { "path": "resource.google_storage_bucket.buckets[0].count", "op": "absent", "message": "No usa count (no se puede combinar con for_each)" }
+      ],
+      "hints": [
+        "`for_each` va como un atributo más dentro del bloque: `for_each = toset([...])`.",
+        "Para meter una expresión dentro de un texto se usa `${...}`.",
+        "El nombre queda así: `name = \"tienda-${each.key}\"`."
+      ],
+      "solution": {
+        "answer": "resource \"google_storage_bucket\" \"buckets\" {\n  for_each = toset([\"logs\", \"backups\", \"fotos\"])\n  name     = \"tienda-${each.key}\"\n  location = \"EU\"\n}\n",
+        "explanation": "`for_each` crea una instancia por elemento del set, direccionada como `google_storage_bucket.buckets[\"logs\"]`, etc. `each.key` es el elemento actual y se interpola en el nombre con `${...}`."
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "exercises": [
+    {
+      "id": "problemas-local",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "Un equipo de 4 personas usa el state local de cada portátil. ¿Qué problemas tiene?",
+      "hints": ["Piensa en copias distintas, cambios simultáneos y secretos."],
+      "options": [
+        { "id": "a", "text": "Cada uno tiene una copia del state que puede no coincidir con la realidad", "correct": true, "explanation": "Correcto: los cambios de uno no llegan al state de los demás." },
+        { "id": "b", "text": "Nada impide que dos personas apliquen a la vez", "correct": true, "explanation": "Correcto: el state local no se bloquea entre personas." },
+        { "id": "c", "text": "Los secretos del state quedan repartidos en portátiles", "correct": true, "explanation": "Correcto." },
+        { "id": "d", "text": "Terraform no puede usar providers con state local", "correct": false, "explanation": "Los providers funcionan igual con cualquier backend." }
+      ],
+      "solution": {
+        "answer": "a, b y c",
+        "explanation": "Un backend remoto resuelve los tres: un solo state compartido, bloqueo y un sitio con control de acceso."
+      }
+    },
+    {
+      "id": "s3-lock",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En un proyecto nuevo con backend S3, ¿cómo activas el bloqueo del state?",
+      "hints": ["La documentación actual marca una de estas opciones como obsoleta."],
+      "options": [
+        { "id": "a", "text": "Con una tabla de DynamoDB en `dynamodb_table`", "correct": false, "explanation": "Funciona, pero está obsoleto y se eliminará." },
+        { "id": "b", "text": "Con `use_lockfile = true`", "correct": true, "explanation": "Correcto: el bloqueo se guarda como un archivo en el propio bucket." },
+        { "id": "c", "text": "No hace falta: S3 bloquea siempre", "correct": false, "explanation": "En S3 el bloqueo hay que activarlo; GCS sí lo trae incluido." }
+      ],
+      "solution": {
+        "answer": "use_lockfile = true",
+        "explanation": "`use_lockfile = true` bloquea con un archivo en el bucket. El bloqueo con DynamoDB está obsoleto."
+      }
+    },
+    {
+      "id": "backend-variable",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Escribes `prefix = \"red/${var.entorno}\"` en el bloque `backend \"gcs\"` y `terraform init` falla. ¿Cuál es la solución?",
+      "hints": ["El backend se necesita antes de evaluar variables."],
+      "options": [
+        { "id": "a", "text": "Usar un local en vez de una variable", "correct": false, "explanation": "El bloque backend tampoco admite locals." },
+        { "id": "b", "text": "Dejar el prefix fuera y pasarlo con `terraform init -backend-config`", "correct": true, "explanation": "Correcto: es la configuración parcial." },
+        { "id": "c", "text": "Poner la variable entre comillas simples", "correct": false, "explanation": "HCL no tiene comillas simples, y el backend no evalúa expresiones." }
+      ],
+      "solution": {
+        "answer": "Configuración parcial",
+        "explanation": "El bloque `backend` no admite variables, locals ni data sources. Los valores que cambian por entorno se pasan en `init` con `-backend-config`."
+      }
+    },
+    {
+      "id": "reconfigure-peligro",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Pasas un proyecto de state local a GCS con `terraform init -reconfigure`. El siguiente plan propone **crear todos los recursos**. ¿Qué ha pasado?",
+      "hints": ["¿Cuál de los dos flags copia el state?"],
+      "options": [
+        { "id": "a", "text": "`-reconfigure` no copia el state, así que el backend nuevo está vacío", "correct": true, "explanation": "Correcto: había que usar `-migrate-state`." },
+        { "id": "b", "text": "GCS borra el state al configurarlo", "correct": false, "explanation": "GCS no borra nada." },
+        { "id": "c", "text": "Los recursos se han borrado en Google Cloud", "correct": false, "explanation": "Cambiar de backend no toca la infraestructura." }
+      ],
+      "solution": {
+        "answer": "Faltó -migrate-state",
+        "explanation": "`-reconfigure` apunta al backend nuevo sin copiar nada. Para llevarte el state hay que usar `terraform init -migrate-state`. No apliques ese plan: crearía duplicados o fallaría."
+      }
+    },
+    {
+      "id": "force-unlock-cuando",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Recibes «Error acquiring the state lock» y la información dice `Who: luis@portatil`. ¿Qué haces primero?",
+      "hints": ["Quitar un bloqueo que sigue en uso puede corromper el state."],
+      "options": [
+        { "id": "a", "text": "`terraform force-unlock` directamente", "correct": false, "explanation": "Si Luis sigue aplicando, podéis corromper el state." },
+        { "id": "b", "text": "Preguntar a Luis si tiene alguna operación en marcha", "correct": true, "explanation": "Correcto: solo si no la tiene, se fuerza el desbloqueo." },
+        { "id": "c", "text": "Borrar el state del bucket", "correct": false, "explanation": "Nunca: perderías la relación entre código y realidad." }
+      ],
+      "solution": {
+        "answer": "Preguntar primero",
+        "explanation": "El bloqueo existe para proteger una operación en curso. Si se ha quedado colgado (el apply de Luis se cortó), entonces `terraform force-unlock ID`."
+      }
+    },
+    {
+      "id": "cmd-migrar",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Has añadido un bloque `backend \"gcs\"` a un proyecto que tenía state local. Inicializa copiando el state al bucket.",
+      "hints": [
+        "Es `terraform init` con un flag.",
+        "El flag habla de «migrar el state»."
+      ],
+      "accepted": ["terraform init -migrate-state"],
+      "output": "Initializing the backend...\nDo you want to copy existing state to the new backend?\n  Enter a value: yes\n\nSuccessfully configured the backend \"gcs\"! Terraform will automatically\nuse this backend unless the backend configuration changes.\n\nTerraform has been successfully initialized!",
+      "solution": {
+        "answer": "terraform init -migrate-state",
+        "explanation": "`-migrate-state` copia el state del backend anterior al nuevo. Después, `terraform plan` debe decir «No changes»."
+      }
+    },
+    {
+      "id": "cmd-parcial",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "El bloque es `backend \"gcs\" {}`. Inicializa con los valores del archivo `pro.gcs.tfbackend`.",
+      "hints": [
+        "Es `terraform init` con un flag de configuración del backend.",
+        "El flag es `-backend-config=ARCHIVO`."
+      ],
+      "accepted": ["terraform init -backend-config=pro.gcs.tfbackend"],
+      "output": "Initializing the backend...\n\nSuccessfully configured the backend \"gcs\"! Terraform will automatically\nuse this backend unless the backend configuration changes.\n\nTerraform has been successfully initialized!",
+      "solution": {
+        "answer": "terraform init -backend-config=pro.gcs.tfbackend",
+        "explanation": "El archivo tiene atributos sueltos (`bucket = ...`, `prefix = ...`) que completan el bloque vacío. Así cada entorno usa su propio state con el mismo código."
+      }
+    },
+    {
+      "id": "cmd-unlock",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Has confirmado que nadie está aplicando. Quita el bloqueo colgado con ID `1718035912345678`.",
+      "hints": [
+        "El comando «fuerza» el desbloqueo.",
+        "Es `terraform force-unlock` seguido del ID."
+      ],
+      "accepted": ["terraform force-unlock 1718035912345678"],
+      "output": "Do you really want to force-unlock?\n  Terraform will remove the lock on the remote state.\n  Enter a value: yes\n\nTerraform state has been successfully unlocked!",
+      "solution": {
+        "answer": "terraform force-unlock 1718035912345678",
+        "explanation": "Quita el bloqueo sin tocar la infraestructura ni el contenido del state. Pide confirmación, salvo que añadas `-force`."
+      }
+    },
+    {
+      "id": "backend-gcs",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Configura el backend GCS dentro del bloque `terraform`: bucket `tienda-tfstate` y prefix `red/pro`.",
+      "starter": "terraform {\n  required_providers {\n    google = {\n      source = \"hashicorp/google\"\n    }\n  }\n}\n",
+      "assertions": [
+        { "path": "terraform", "op": "count", "value": 1, "message": "Hay un único bloque terraform" },
+        { "path": "terraform[0].backend.gcs[0].bucket", "op": "equals", "value": "tienda-tfstate", "message": "backend \"gcs\" dentro de terraform, con bucket = \"tienda-tfstate\"" },
+        { "path": "terraform[0].backend.gcs[0].prefix", "op": "equals", "value": "red/pro", "message": "prefix = \"red/pro\"" },
+        { "path": "terraform[0].required_providers[0].google.source", "op": "equals", "value": "hashicorp/google", "message": "required_providers sigue igual" }
+      ],
+      "hints": [
+        "El bloque `backend` va dentro de `terraform { }`, al mismo nivel que `required_providers`.",
+        "Lleva una etiqueta con el tipo: `backend \"gcs\" { ... }`.",
+        "Dentro: `bucket = \"...\"` y `prefix = \"...\"`."
+      ],
+      "solution": {
+        "answer": "terraform {\n  required_providers {\n    google = {\n      source = \"hashicorp/google\"\n    }\n  }\n\n  backend \"gcs\" {\n    bucket = \"tienda-tfstate\"\n    prefix = \"red/pro\"\n  }\n}\n",
+        "explanation": "El state se guardará en `gs://tienda-tfstate/red/pro/default.tfstate`, con bloqueo incluido. Después hay que ejecutar `terraform init`."
+      }
+    }
+  ]
+}

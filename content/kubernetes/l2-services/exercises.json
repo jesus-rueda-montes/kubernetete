@@ -1,0 +1,156 @@
+{
+  "exercises": [
+    {
+      "id": "por-que-service",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Por qué un frontend no debería llamar directamente a la IP de un Pod del backend?",
+      "hints": ["¿Qué pasa con los Pods (y sus IPs) en cada despliegue?"],
+      "options": [
+        { "id": "a", "text": "Porque las IPs de los Pods cambian cuando se recrean", "correct": true, "explanation": "Correcto: por eso hace falta una dirección estable, el Service." },
+        { "id": "b", "text": "Porque los Pods no tienen IP", "correct": false, "explanation": "Sí tienen: cada Pod tiene su IP." },
+        { "id": "c", "text": "Porque está prohibido por seguridad", "correct": false, "explanation": "No está prohibido; simplemente no es fiable." }
+      ],
+      "solution": {
+        "answer": "Las IPs cambian",
+        "explanation": "Los Pods son efímeros: cada recreación trae otra IP. Un Service ofrece una IP y un nombre DNS estables y reparte el tráfico entre los Pods sanos."
+      }
+    },
+    {
+      "id": "tipo-defecto",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un Service sin indicar `type`. ¿Desde dónde es accesible?",
+      "hints": ["El tipo por defecto es el más básico."],
+      "options": [
+        { "id": "a", "text": "Solo desde dentro del clúster (ClusterIP)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Desde internet, con una IP pública", "correct": false, "explanation": "Eso sería LoadBalancer." },
+        { "id": "c", "text": "Desde un puerto 30000–32767 de cada Node", "correct": false, "explanation": "Eso sería NodePort." }
+      ],
+      "solution": {
+        "answer": "ClusterIP",
+        "explanation": "El tipo por defecto es ClusterIP: una IP virtual interna solo accesible dentro del clúster."
+      }
+    },
+    {
+      "id": "sin-endpoints",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu Service `api` tiene `selector: {app: api}`, pero `kubectl get endpointslices` no muestra ninguna IP. Los Pods tienen la label `app: API`. ¿Qué pasa?",
+      "hints": ["¿Distinguen las labels entre mayúsculas y minúsculas?"],
+      "options": [
+        { "id": "a", "text": "El selector no coincide: `api` ≠ `API`", "correct": true, "explanation": "Correcto: las labels distinguen mayúsculas." },
+        { "id": "b", "text": "Los Services tardan horas en encontrar Pods", "correct": false, "explanation": "Se actualizan en segundos." },
+        { "id": "c", "text": "Falta el tipo LoadBalancer", "correct": false, "explanation": "El tipo no influye en qué Pods se seleccionan." }
+      ],
+      "solution": {
+        "answer": "El selector no coincide",
+        "explanation": "Sin Pods (ready) que cumplan el selector, el Service no tiene endpoints. Lo primero al depurar un Service es comprobar sus endpoints."
+      }
+    },
+    {
+      "id": "port-targetport",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Service tiene `port: 80` y `targetPort: 8080`. ¿Qué significa?",
+      "hints": ["Uno es el puerto del Service y el otro el del contenedor."],
+      "options": [
+        { "id": "a", "text": "Los clientes llaman al 80 del Service, que reenvía al 8080 de los Pods", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Los clientes llaman al 8080, que reenvía al 80", "correct": false, "explanation": "Al revés." },
+        { "id": "c", "text": "El Service abre el 80 y el 8080 en todos los Nodes", "correct": false, "explanation": "Eso se parece a NodePort, y no es lo que indican esos campos." }
+      ],
+      "solution": {
+        "answer": "80 → 8080",
+        "explanation": "`port` es el puerto del Service (al que se conectan los clientes); `targetPort` es el del contenedor. Si se omite `targetPort`, vale lo mismo que `port`."
+      }
+    },
+    {
+      "id": "dns-otro-namespace",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod del namespace `tienda` quiere llamar al Service `api` del namespace `pagos`. ¿Qué nombre usa?",
+      "hints": ["El nombre corto solo funciona dentro del mismo namespace."],
+      "options": [
+        { "id": "a", "text": "`api`", "correct": false, "explanation": "Resolvería a un Service `api` de `tienda`, si existiera." },
+        { "id": "b", "text": "`api.pagos`", "correct": true, "explanation": "Correcto (o el nombre completo `api.pagos.svc.cluster.local`)." },
+        { "id": "c", "text": "`pagos.api`", "correct": false, "explanation": "El orden es servicio.namespace." }
+      ],
+      "solution": {
+        "answer": "api.pagos",
+        "explanation": "El DNS de un Service es `<servicio>.<namespace>.svc.cluster.local`. Entre namespaces basta con `<servicio>.<namespace>`."
+      }
+    },
+    {
+      "id": "tipos-anidados",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Un Service de tipo `LoadBalancer` también tiene un ClusterIP y un NodePort.",
+      "hints": ["Cada tipo se construye sobre el anterior."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": true, "explanation": "Correcto: el load balancer externo envía tráfico a los NodePorts, que llegan al ClusterIP." },
+        { "id": "f", "text": "Falso", "correct": false, "explanation": "Sí los tiene: LoadBalancer ⊃ NodePort ⊃ ClusterIP." }
+      ],
+      "solution": {
+        "answer": "Verdadero",
+        "explanation": "LoadBalancer amplía NodePort, que a su vez amplía ClusterIP."
+      }
+    },
+    {
+      "id": "expose",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un Service para el Deployment `api` que escuche en el puerto `80` y envíe el tráfico al puerto `8080` de los contenedores.",
+      "hints": [
+        "El verbo es «exponer» en inglés.",
+        "Flags: `--port` (el del Service) y `--target-port` (el del contenedor)."
+      ],
+      "accepted": ["kubectl expose deployment api --port=80 --target-port=8080"],
+      "output": "service/api exposed",
+      "solution": {
+        "answer": "kubectl expose deployment api --port=80 --target-port=8080",
+        "explanation": "`kubectl expose` crea un Service (ClusterIP por defecto) con el selector del Deployment. Con `--type=LoadBalancer` sería externo."
+      }
+    },
+    {
+      "id": "port-forward",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Prueba el Service `api` (puerto 80) desde tu máquina: reenvía tu puerto local `8080` a su puerto `80`.",
+      "hints": [
+        "El comando reenvía (forward) puertos: `kubectl port-forward`.",
+        "El recurso se indica como `service/api` y los puertos como `LOCAL:REMOTO`."
+      ],
+      "accepted": ["kubectl port-forward service/api 8080:80", "kubectl port-forward svc/api 8080:80"],
+      "output": "Forwarding from 127.0.0.1:8080 -> 8080\nForwarding from [::1]:8080 -> 8080",
+      "solution": {
+        "answer": "kubectl port-forward service/api 8080:80",
+        "explanation": "`port-forward` abre un túnel desde tu máquina hasta un Pod del Service, sin exponer nada al exterior. Ideal para probar."
+      }
+    },
+    {
+      "id": "manifest-service",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Escribe un Service llamado `web` de tipo `LoadBalancer` que seleccione los Pods con `app: web` y exponga el puerto `80` enviando el tráfico al puerto `8080` de los contenedores (protocolo TCP).",
+      "starter": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n",
+      "assertions": [
+        { "path": "apiVersion", "op": "equals", "value": "v1", "message": "apiVersion es v1 (los Services están en el grupo core)" },
+        { "path": "kind", "op": "equals", "value": "Service", "message": "kind es Service" },
+        { "path": "spec.type", "op": "equals", "value": "LoadBalancer", "message": "spec.type es LoadBalancer" },
+        { "path": "spec.selector.app", "op": "equals", "value": "web", "message": "spec.selector tiene app: web (sin matchLabels: en los Services el selector es un mapa directo)" },
+        { "path": "spec.ports", "op": "count", "value": 1, "message": "spec.ports es una lista con un puerto" },
+        { "path": "spec.ports[0].port", "op": "equals", "value": 80, "message": "port: 80" },
+        { "path": "spec.ports[0].targetPort", "op": "equals", "value": 8080, "message": "targetPort: 8080" },
+        { "path": "spec.ports[0].protocol", "op": "equals", "value": "TCP", "message": "protocol: TCP" }
+      ],
+      "hints": [
+        "Al contrario que en un Deployment, el `selector` de un Service es un mapa directo: `selector:` y debajo `app: web` (sin `matchLabels`).",
+        "`ports` es una lista: `- port: 80` y, al mismo nivel, `targetPort` y `protocol`."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n  type: LoadBalancer\n  selector:\n    app: web\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 8080\n",
+        "explanation": "El Service elige Pods por `selector` (un mapa directo de labels), y cada elemento de `ports` une el puerto del Service (`port`) con el del contenedor (`targetPort`)."
+      }
+    }
+  ]
+}

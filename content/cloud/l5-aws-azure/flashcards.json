@@ -1,0 +1,17 @@
+{
+  "cards": [
+    { "id": "computo", "front": "Compute Engine / GKE / Cloud Run en AWS y Azure", "back": "AWS: EC2 / EKS / ECS con Fargate. Azure: Virtual Machines / AKS / Container Apps." },
+    { "id": "funciones", "front": "Cloud Run functions en AWS y Azure", "back": "Lambda y Azure Functions." },
+    { "id": "almacenamiento", "front": "Cloud Storage / Persistent Disk / Filestore en AWS y Azure", "back": "AWS: S3 / EBS / EFS. Azure: Blob Storage / Managed Disks / Azure Files." },
+    { "id": "bbdd", "front": "Cloud SQL y Firestore en AWS y Azure", "back": "SQL: RDS / Azure Database o Azure SQL. NoSQL: DynamoDB / Cosmos DB." },
+    { "id": "seguridad", "front": "Secret Manager, Cloud KMS y Organization Policy en AWS y Azure", "back": "AWS: Secrets Manager, KMS, SCP. Azure: Key Vault (secretos y claves), Azure Policy." },
+    { "id": "observabilidad", "front": "Cloud Logging/Monitoring y Audit Logs en AWS y Azure", "back": "AWS: CloudWatch y CloudTrail. Azure: Azure Monitor y Activity Log." },
+    { "id": "aislamiento", "front": "Equivalente del proyecto de GCP", "back": "AWS: la cuenta (en OUs de AWS Organizations). Azure: la suscripción (en management groups), con grupos de recursos dentro." },
+    { "id": "aws-iam", "front": "Evaluación de permisos en AWS", "back": "Denegado por defecto; un Allow lo permite; un Deny explícito gana siempre. Las SCP limitan, no conceden." },
+    { "id": "azure-rbac", "front": "Permisos en Azure", "back": "Identidades en Microsoft Entra ID; Azure RBAC: role assignment = principal + rol + ámbito (MG, suscripción, grupo o recurso)." },
+    { "id": "identidad-apps", "front": "Identidad de las aplicaciones en las tres nubes", "back": "GCP: cuenta de servicio. AWS: rol de IAM (STS). Azure: managed identity. En K8s: WIF for GKE, EKS Pod Identity/IRSA, Entra Workload ID." },
+    { "id": "vpc", "front": "Alcance de la red privada", "back": "GCP: VPC global, subredes regionales. AWS: VPC regional, subredes zonales. Azure: VNet regional." },
+    { "id": "az-id", "front": "AZ IDs de AWS", "back": "Los nombres de zona (us-east-1a) se asignan por cuenta; el AZ ID (use1-az1) identifica la misma ubicación en todas." },
+    { "id": "kubeconfig", "front": "Conectar kubectl a un clúster gestionado", "back": "`gcloud container clusters get-credentials`, `aws eks update-kubeconfig`, `az aks get-credentials`." }
+  ]
+}

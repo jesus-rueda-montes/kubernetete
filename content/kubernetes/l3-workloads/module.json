@@ -1,0 +1,8 @@
+{
+  "title": "StatefulSets, DaemonSets, Jobs y CronJobs",
+  "summary": "Más allá del Deployment: aplicaciones con estado e identidad, un Pod por Node, tareas que terminan y tareas programadas.",
+  "level": 3,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

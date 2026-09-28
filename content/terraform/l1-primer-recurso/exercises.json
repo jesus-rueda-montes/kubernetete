@@ -1,0 +1,59 @@
+{
+  "exercises": [
+    {
+      "id": "que-hace-plan",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres ver **qué cambios** haría Terraform en tu infraestructura **sin aplicar nada**. ¿Qué comando usas?",
+      "hints": ["Es el paso intermedio del ciclo init → ? → apply."],
+      "options": [
+        { "id": "a", "text": "`terraform init`", "correct": false, "explanation": "`init` prepara la carpeta y descarga los providers; no calcula cambios." },
+        { "id": "b", "text": "`terraform plan`", "correct": true, "explanation": "Correcto: `plan` compara tu código con el state y la realidad y muestra lo que haría, sin tocar nada." },
+        { "id": "c", "text": "`terraform apply`", "correct": false, "explanation": "`apply` también muestra el plan, pero su objetivo es aplicar los cambios tras confirmar." },
+        { "id": "d", "text": "`terraform destroy`", "correct": false, "explanation": "`destroy` borra la infraestructura gestionada." }
+      ],
+      "solution": {
+        "answer": "terraform plan",
+        "explanation": "`terraform plan` es una vista previa segura: indica qué se crearía, cambiaría o borraría, sin modificar nada."
+      }
+    },
+    {
+      "id": "nombre-local",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "En `resource \"google_storage_bucket\" \"logs\" { name = \"mi-empresa-logs\" }`, el bucket se llamará **logs** en Google Cloud.",
+      "hints": ["Hay dos nombres en ese bloque: uno en la cabecera y otro en los atributos. ¿Cuál ve Google Cloud?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "`logs` es el nombre local, solo para referirte al recurso dentro de Terraform." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: el nombre real es el atributo `name`, es decir, `mi-empresa-logs`." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "La segunda etiqueta del bloque `resource` es un nombre local de Terraform (`google_storage_bucket.logs`). El nombre en la nube lo marca el atributo `name`."
+      }
+    },
+    {
+      "id": "bucket-fotos",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Completa el recurso: un bucket de Cloud Storage con nombre local `fotos`, llamado `mis-fotos-2026` en Google Cloud, en la ubicación `EU`, con el acceso uniforme activado (`uniform_bucket_level_access`) y la etiqueta `env` con valor `dev`.",
+      "starter": "resource \"google_storage_bucket\" \"fotos\" {\n  \n}\n",
+      "assertions": [
+        { "path": "resource.google_storage_bucket.fotos", "op": "count", "value": 1, "message": "Hay un único bloque resource \"google_storage_bucket\" \"fotos\"" },
+        { "path": "resource.google_storage_bucket.fotos[0].name", "op": "equals", "value": "mis-fotos-2026", "message": "El nombre real del bucket es \"mis-fotos-2026\" (atributo name)" },
+        { "path": "resource.google_storage_bucket.fotos[0].location", "op": "equals", "value": "EU", "message": "La ubicación es \"EU\" (atributo location)" },
+        { "path": "resource.google_storage_bucket.fotos[0].uniform_bucket_level_access", "op": "equals", "value": true, "message": "uniform_bucket_level_access vale true (booleano, sin comillas)" },
+        { "path": "resource.google_storage_bucket.fotos[0].labels.env", "op": "equals", "value": "dev", "message": "Tiene la etiqueta env = \"dev\" dentro del mapa labels" }
+      ],
+      "hints": [
+        "Cada atributo va en su propia línea con la forma `nombre = valor`, dentro de las llaves del bloque.",
+        "Los textos van entre comillas; `true` va **sin** comillas porque es un booleano.",
+        "Las etiquetas son un mapa: `labels = { env = \"dev\" }`."
+      ],
+      "solution": {
+        "answer": "resource \"google_storage_bucket\" \"fotos\" {\n  name                        = \"mis-fotos-2026\"\n  location                    = \"EU\"\n  uniform_bucket_level_access = true\n\n  labels = {\n    env = \"dev\"\n  }\n}\n",
+        "explanation": "Dentro del bloque `resource`, cada atributo se asigna con `=`. `name` y `location` son textos, `uniform_bucket_level_access` es un booleano (`true` sin comillas) y `labels` es un mapa `{ clave = valor }`."
+      }
+    }
+  ]
+}

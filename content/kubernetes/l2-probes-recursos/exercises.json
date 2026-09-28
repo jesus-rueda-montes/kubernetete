@@ -1,0 +1,125 @@
+{
+  "exercises": [
+    {
+      "id": "liveness-vs-readiness",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La **readiness probe** de un Pod empieza a fallar. ¿Qué hace Kubernetes?",
+      "hints": ["Readiness responde a «¿puede recibir tráfico?», no a «¿está vivo?»."],
+      "options": [
+        { "id": "a", "text": "Reinicia el contenedor", "correct": false, "explanation": "Eso lo hace la liveness probe." },
+        { "id": "b", "text": "Saca el Pod de los endpoints de los Services: deja de recibir tráfico", "correct": true, "explanation": "Correcto: el Pod sigue vivo, pero sin tráfico." },
+        { "id": "c", "text": "Borra el Pod y crea otro en otro Node", "correct": false, "explanation": "Las probes no mueven Pods." }
+      ],
+      "solution": {
+        "answer": "Deja de enviarle tráfico",
+        "explanation": "Si falla la readiness, el Pod se marca como no listo y sale de los endpoints. Si falla la liveness, se reinicia el contenedor."
+      }
+    },
+    {
+      "id": "liveness-externa",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu liveness probe comprueba que la aplicación puede conectarse a la base de datos. La base de datos cae 5 minutos. ¿Qué pasa?",
+      "hints": ["¿Qué hace Kubernetes cuando falla la liveness? ¿Y si falla en todos los Pods a la vez?"],
+      "options": [
+        { "id": "a", "text": "Nada grave: Kubernetes espera a que vuelva la base de datos", "correct": false, "explanation": "La liveness no espera: reinicia contenedores." },
+        { "id": "b", "text": "Todos los Pods se reinician una y otra vez, sin arreglar nada", "correct": true, "explanation": "Correcto: un fallo externo provoca reinicios en cascada." },
+        { "id": "c", "text": "Kubernetes reinicia la base de datos", "correct": false, "explanation": "La probe solo actúa sobre su propio contenedor." }
+      ],
+      "solution": {
+        "answer": "Reinicios en cascada",
+        "explanation": "La liveness debe comprobar solo el estado interno del proceso. Las dependencias externas, como mucho, en la readiness."
+      }
+    },
+    {
+      "id": "startup-tiempo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una startup probe tiene `periodSeconds: 10` y `failureThreshold: 30`. ¿Cuánto tiempo máximo tiene la aplicación para arrancar?",
+      "hints": ["Multiplica los dos valores."],
+      "options": [
+        { "id": "a", "text": "30 segundos", "correct": false, "explanation": "Eso sería con un solo intento cada 30 s... multiplica." },
+        { "id": "b", "text": "5 minutos", "correct": true, "explanation": "Correcto: 30 × 10 s = 300 s." },
+        { "id": "c", "text": "10 segundos", "correct": false, "explanation": "periodSeconds es solo el intervalo entre comprobaciones." }
+      ],
+      "solution": {
+        "answer": "5 minutos",
+        "explanation": "failureThreshold × periodSeconds = 300 s. Mientras la startup no tenga éxito, liveness y readiness no se ejecutan."
+      }
+    },
+    {
+      "id": "cpu-limit",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un contenedor intenta usar más CPU que su **limit**. ¿Qué ocurre?",
+      "hints": ["La CPU y la memoria se comportan distinto al llegar al límite."],
+      "options": [
+        { "id": "a", "text": "Se le frena (throttling): va más lento", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Se mata el contenedor (OOMKilled)", "correct": false, "explanation": "Eso pasa con la memoria, no con la CPU." },
+        { "id": "c", "text": "Se mueve a otro Node", "correct": false, "explanation": "Kubernetes no mueve Pods en marcha." }
+      ],
+      "solution": {
+        "answer": "Throttling",
+        "explanation": "Pasar del limit de CPU provoca throttling. Pasar del limit de memoria puede provocar OOMKilled."
+      }
+    },
+    {
+      "id": "qos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un contenedor (el único del Pod) tiene `requests` y `limits` de CPU = `500m` y de memoria = `256Mi`. ¿Qué clase de QoS tiene el Pod?",
+      "hints": ["Compara requests con limits en CPU y memoria."],
+      "options": [
+        { "id": "a", "text": "Guaranteed", "correct": true, "explanation": "Correcto: requests = limits en CPU y memoria." },
+        { "id": "b", "text": "Burstable", "correct": false, "explanation": "Sería Burstable si requests y limits fueran distintos o faltara alguno." },
+        { "id": "c", "text": "BestEffort", "correct": false, "explanation": "BestEffort es no tener ningún request ni limit." }
+      ],
+      "solution": {
+        "answer": "Guaranteed",
+        "explanation": "Guaranteed exige requests y limits de CPU y memoria en todos los contenedores, con requests = limits. Es la última clase en ser desalojada."
+      }
+    },
+    {
+      "id": "pending-insufficient",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod se queda en `Pending` con el evento *«0/3 nodes are available: 3 Insufficient memory»*. ¿Cuál es la causa más probable?",
+      "hints": ["¿Qué usa el scheduler para decidir si un Pod cabe en un Node?"],
+      "options": [
+        { "id": "a", "text": "El contenedor tiene una fuga de memoria", "correct": false, "explanation": "El Pod ni siquiera ha arrancado: no ha podido consumir nada." },
+        { "id": "b", "text": "Sus requests de memoria no caben en ningún Node", "correct": true, "explanation": "Correcto: el scheduler no encuentra hueco para lo que reserva." },
+        { "id": "c", "text": "La imagen no existe", "correct": false, "explanation": "Eso daría ErrImagePull / ImagePullBackOff, no Insufficient memory." }
+      ],
+      "solution": {
+        "answer": "Requests demasiado grandes para los Nodes",
+        "explanation": "El scheduler solo coloca el Pod donde hay recursos sin reservar para sus requests. Soluciones: bajar los requests, liberar recursos o añadir Nodes."
+      }
+    },
+    {
+      "id": "manifest-probes-recursos",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el contenedor `api`: una `readinessProbe` HTTP a `/ready` en el puerto 8080, una `livenessProbe` HTTP a `/healthz` en el puerto 8080, `requests` de `250m` de CPU y `256Mi` de memoria, y un `limit` de memoria de `512Mi`.",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\nspec:\n  containers:\n    - name: api\n      image: ghcr.io/tienda/api:2.1.0\n      ports:\n        - containerPort: 8080\n",
+      "assertions": [
+        { "path": "spec.containers[0].readinessProbe.httpGet.path", "op": "equals", "value": "/ready", "message": "readinessProbe.httpGet.path es /ready" },
+        { "path": "spec.containers[0].readinessProbe.httpGet.port", "op": "equals", "value": 8080, "message": "readinessProbe.httpGet.port es 8080" },
+        { "path": "spec.containers[0].livenessProbe.httpGet.path", "op": "equals", "value": "/healthz", "message": "livenessProbe.httpGet.path es /healthz" },
+        { "path": "spec.containers[0].livenessProbe.httpGet.port", "op": "equals", "value": 8080, "message": "livenessProbe.httpGet.port es 8080" },
+        { "path": "spec.containers[0].resources.requests.cpu", "op": "equals", "value": "250m", "message": "resources.requests.cpu es 250m" },
+        { "path": "spec.containers[0].resources.requests.memory", "op": "equals", "value": "256Mi", "message": "resources.requests.memory es 256Mi" },
+        { "path": "spec.containers[0].resources.limits.memory", "op": "equals", "value": "512Mi", "message": "resources.limits.memory es 512Mi" }
+      ],
+      "hints": [
+        "Las probes y `resources` van dentro del contenedor, al mismo nivel que `image` y `ports`.",
+        "Una probe HTTP: `readinessProbe:` → `httpGet:` → `path` y `port`.",
+        "`resources:` → `requests:` (cpu y memory) y `limits:` (memory)."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\nspec:\n  containers:\n    - name: api\n      image: ghcr.io/tienda/api:2.1.0\n      ports:\n        - containerPort: 8080\n      readinessProbe:\n        httpGet:\n          path: /ready\n          port: 8080\n      livenessProbe:\n        httpGet:\n          path: /healthz\n          port: 8080\n      resources:\n        requests:\n          cpu: 250m\n          memory: 256Mi\n        limits:\n          memory: 512Mi\n",
+        "explanation": "Probes y recursos se definen por contenedor. La readiness controla el tráfico, la liveness los reinicios; los requests sirven al scheduler y el limit de memoria evita que el contenedor acapare el Node."
+      }
+    }
+  ]
+}

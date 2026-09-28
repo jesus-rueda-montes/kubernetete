@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "leer-variable", "front": "¿Cómo se lee la variable `region` en Terraform?", "back": "`var.region`." },
+    { "id": "prioridad", "front": "Prioridad de los valores de variables (de menor a mayor)", "back": "`default` → `TF_VAR_x` → `terraform.tfvars` → `*.auto.tfvars` → `-var` / `-var-file`." },
+    { "id": "obligatoria", "front": "¿Qué hace obligatoria una variable?", "back": "No tener `default`. Si no recibe valor, Terraform lo pregunta (o falla con `-input=false`)." },
+    { "id": "sensitive", "front": "¿Qué hace `sensitive = true`?", "back": "Oculta el valor en la salida de la CLI. No lo cifra: sigue en claro en el state." },
+    { "id": "local", "front": "Declarar y leer un local", "back": "Se declara en `locals { x = ... }` y se lee con `local.x` (singular)." },
+    { "id": "referencia", "front": "Sintaxis para leer un atributo de otro recurso", "back": "`TIPO.NOMBRE.ATRIBUTO`, p. ej. `google_compute_network.vpc.id`. Crea una dependencia implícita." },
+    { "id": "output-raw", "front": "¿Para qué sirve `terraform output -raw nombre`?", "back": "Imprime el valor sin comillas ni formato, para usarlo en scripts." }
+  ]
+}

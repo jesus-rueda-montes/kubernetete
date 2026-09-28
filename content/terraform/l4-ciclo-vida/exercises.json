@@ -1,0 +1,160 @@
+{
+  "exercises": [
+    {
+      "id": "prevent-destroy-borrar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un bucket tiene `prevent_destroy = true`. Alguien borra su bloque `resource` del código y ejecuta `terraform apply`. ¿Qué pasa?",
+      "hints": ["¿Dónde está escrita la protección?"],
+      "options": [
+        { "id": "a", "text": "Terraform da error: el bucket está protegido", "correct": false, "explanation": "La protección estaba en el bloque que se ha borrado." },
+        { "id": "b", "text": "Terraform destruye el bucket", "correct": true, "explanation": "Correcto: sin el bloque, no hay `prevent_destroy`." },
+        { "id": "c", "text": "Terraform lo quita del state sin destruirlo", "correct": false, "explanation": "Para eso hace falta un bloque `removed` con `destroy = false`." }
+      ],
+      "solution": {
+        "answer": "Lo destruye",
+        "explanation": "`prevent_destroy` vive en la configuración: si borras el bloque, desaparece con él. Revisa siempre el plan, y para dejar de gestionar algo usa `removed`."
+      }
+    },
+    {
+      "id": "cbd-nombre",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un bucket con nombre fijo `tienda-logs` tiene `create_before_destroy = true`. Un cambio obliga a sustituirlo. ¿Qué pasa?",
+      "hints": ["Durante un momento existirían los dos a la vez."],
+      "options": [
+        { "id": "a", "text": "Se sustituye sin problema", "correct": false, "explanation": "Los nombres de bucket son únicos." },
+        { "id": "b", "text": "La creación del nuevo falla porque el nombre ya está en uso", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Terraform ignora `create_before_destroy` en buckets", "correct": false, "explanation": "No lo ignora: por eso falla." }
+      ],
+      "solution": {
+        "answer": "Falla la creación",
+        "explanation": "`create_before_destroy` necesita que el objeto nuevo y el viejo puedan coexistir. Con nombres únicos se usan prefijos o sufijos generados."
+      }
+    },
+    {
+      "id": "ignore",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un autoescalado externo cambia el tamaño de un grupo de instancias y Terraform lo devuelve al valor del código en cada `apply`. ¿Qué usas?",
+      "hints": ["Quieres que Terraform no compare ese atributo."],
+      "options": [
+        { "id": "a", "text": "`ignore_changes` con ese atributo", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`prevent_destroy`", "correct": false, "explanation": "Solo impide destruirlo." },
+        { "id": "c", "text": "`terraform state rm`", "correct": false, "explanation": "Terraform dejaría de gestionar todo el recurso." }
+      ],
+      "solution": {
+        "answer": "ignore_changes",
+        "explanation": "`ignore_changes = [target_size]` hace que Terraform no intente corregir ese atributo, que gestiona el autoescalado."
+      }
+    },
+    {
+      "id": "import-plan",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Añades un bloque `import` para un bucket existente y el plan dice «1 to import, 0 to add, 1 to change». ¿Qué significa?",
+      "hints": ["¿Coincide tu código con el bucket real?"],
+      "options": [
+        { "id": "a", "text": "Que tu código no coincide del todo con la realidad y Terraform cambiará el bucket al aplicar", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Que el import ha fallado", "correct": false, "explanation": "La importación está planificada; además hay un cambio." },
+        { "id": "c", "text": "Que se creará un segundo bucket", "correct": false, "explanation": "Eso sería «1 to add»." }
+      ],
+      "solution": {
+        "answer": "Hay diferencias",
+        "explanation": "Revisa qué cambiaría. Si la realidad es la correcta, ajusta el código hasta que el plan muestre solo la importación, sin cambios."
+      }
+    },
+    {
+      "id": "que-bloque",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El bucket `legacy` pasa a gestionarlo otro equipo con otra configuración. Quieres que tu Terraform lo olvide sin borrarlo. ¿Qué haces?",
+      "hints": ["Hay un bloque para quitar algo del state de forma revisable."],
+      "options": [
+        { "id": "a", "text": "Borrar el bloque `resource`", "correct": false, "explanation": "Terraform lo destruiría." },
+        { "id": "b", "text": "Borrar el `resource` y añadir `removed` con `destroy = false`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Añadir `prevent_destroy = true`", "correct": false, "explanation": "Seguiría gestionándolo." }
+      ],
+      "solution": {
+        "answer": "Bloque removed",
+        "explanation": "`removed` con `lifecycle { destroy = false }` lo saca del state sin tocar el bucket, y pasa por plan y revisión."
+      }
+    },
+    {
+      "id": "cmd-generate",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Tienes un bloque `import` sin su `resource`. Genera la configuración en el archivo `generado.tf`.",
+      "hints": [
+        "Se hace con `terraform plan` y un flag.",
+        "El flag es `-generate-config-out=ARCHIVO`."
+      ],
+      "accepted": ["terraform plan -generate-config-out=generado.tf"],
+      "output": "google_compute_network.vpc_legacy: Preparing import... [id=projects/tienda-pro/global/networks/vpc-legacy]\ngoogle_compute_network.vpc_legacy: Refreshing state...\n\nTerraform will perform the following actions:\n\n  # google_compute_network.vpc_legacy will be imported\n  # (config will be generated)\n\nPlan: 1 to import, 0 to add, 0 to change, 0 to destroy.\n\nWarning: Config generation is experimental",
+      "solution": {
+        "answer": "terraform plan -generate-config-out=generado.tf",
+        "explanation": "Terraform escribe el bloque `resource` a partir de la realidad. Revísalo y límpialo antes de aplicar."
+      }
+    },
+    {
+      "id": "editor-import",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Añade un bloque `import` para traer el bucket real `tienda-logs` a la dirección `google_storage_bucket.logs` (su `id` es el nombre del bucket).",
+      "starter": "resource \"google_storage_bucket\" \"logs\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n",
+      "assertions": [
+        { "path": "import", "op": "count", "value": 1, "message": "Hay un bloque import" },
+        { "path": "import[0].to", "op": "equals", "value": "google_storage_bucket.logs", "message": "to = google_storage_bucket.logs (sin comillas: es una dirección)" },
+        { "path": "import[0].id", "op": "equals", "value": "tienda-logs", "message": "id = \"tienda-logs\" (entre comillas: es un texto)" },
+        { "path": "resource.google_storage_bucket.logs[0].name", "op": "equals", "value": "tienda-logs", "message": "El resource sigue igual" }
+      ],
+      "hints": [
+        "El bloque se llama `import` y no lleva etiquetas.",
+        "`to` es una referencia (sin comillas) y `id` un texto (con comillas)."
+      ],
+      "solution": {
+        "answer": "import {\n  to = google_storage_bucket.logs\n  id = \"tienda-logs\"\n}\n\nresource \"google_storage_bucket\" \"logs\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n",
+        "explanation": "El plan mostrará que el bucket «will be imported». Si el código coincide con la realidad, no habrá más cambios."
+      }
+    },
+    {
+      "id": "editor-removed",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Ya has borrado el `resource` `google_storage_bucket.legacy`. Escribe el bloque que hace que Terraform lo olvide **sin destruirlo**.",
+      "starter": "# El bloque resource \"google_storage_bucket\" \"legacy\" ya no está\n",
+      "assertions": [
+        { "path": "removed", "op": "count", "value": 1, "message": "Hay un bloque removed" },
+        { "path": "removed[0].from", "op": "equals", "value": "google_storage_bucket.legacy", "message": "from = google_storage_bucket.legacy (sin comillas)" },
+        { "path": "removed[0].lifecycle[0].destroy", "op": "equals", "value": false, "message": "lifecycle { destroy = false }" }
+      ],
+      "hints": [
+        "El bloque se llama `removed`, con `from`.",
+        "Dentro, un bloque `lifecycle` con `destroy = false`."
+      ],
+      "solution": {
+        "answer": "removed {\n  from = google_storage_bucket.legacy\n\n  lifecycle {\n    destroy = false\n  }\n}\n",
+        "explanation": "El plan dirá que el bucket «will no longer be managed by Terraform». El bucket real sigue existiendo."
+      }
+    },
+    {
+      "id": "editor-lifecycle",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Protege la instancia de Cloud SQL `pedidos` contra la destrucción con el bloque `lifecycle` de Terraform.",
+      "starter": "resource \"google_sql_database_instance\" \"pedidos\" {\n  name             = \"pedidos-pro\"\n  database_version = \"POSTGRES_16\"\n  region           = \"europe-west1\"\n\n  settings {\n    tier = \"db-custom-2-8192\"\n  }\n}\n",
+      "assertions": [
+        { "path": "resource.google_sql_database_instance.pedidos[0].lifecycle[0].prevent_destroy", "op": "equals", "value": true, "message": "lifecycle { prevent_destroy = true } dentro del resource" },
+        { "path": "resource.google_sql_database_instance.pedidos[0].name", "op": "equals", "value": "pedidos-pro", "message": "El resto del recurso sigue igual" }
+      ],
+      "hints": [
+        "`lifecycle` es un bloque dentro del `resource`, como `settings`.",
+        "Dentro: `prevent_destroy = true`."
+      ],
+      "solution": {
+        "answer": "resource \"google_sql_database_instance\" \"pedidos\" {\n  name             = \"pedidos-pro\"\n  database_version = \"POSTGRES_16\"\n  region           = \"europe-west1\"\n\n  settings {\n    tier = \"db-custom-2-8192\"\n  }\n\n  lifecycle {\n    prevent_destroy = true\n  }\n}\n",
+        "explanation": "Cualquier plan que destruya la instancia fallará. Es buena idea combinarlo con la protección del propio proveedor (`deletion_protection`)."
+      }
+    }
+  ]
+}

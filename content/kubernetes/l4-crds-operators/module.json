@@ -1,0 +1,8 @@
+{
+  "title": "CRDs y operators",
+  "summary": "Ampliar la API de Kubernetes con CustomResourceDefinitions, el bucle de reconciliación de los controladores y el patrón operator.",
+  "level": 4,
+  "order": 5,
+  "xp": 100,
+  "prereqs": []
+}

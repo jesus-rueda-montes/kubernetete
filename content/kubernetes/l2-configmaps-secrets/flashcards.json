@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "configmap", "front": "¿Qué es un ConfigMap?", "back": "Configuración no confidencial en pares clave/valor (máx. 1 MiB), separada de la imagen." },
+    { "id": "tres-formas", "front": "Formas de usar un ConfigMap o Secret en un Pod", "back": "Una variable (`configMapKeyRef` / `secretKeyRef`), todas las claves (`envFrom`) o archivos en un volumen." },
+    { "id": "actualizacion", "front": "¿Se actualizan solas las variables de entorno al cambiar un ConfigMap?", "back": "No: se leen al arrancar. Los archivos montados sí se actualizan (con retraso, y no con `subPath`)." },
+    { "id": "base64", "front": "¿Están cifrados los Secrets?", "back": "No por defecto: base64 es solo codificación y etcd los guarda en claro. Hay que activar el cifrado en reposo y aplicar RBAC." },
+    { "id": "stringdata", "front": "`data` frente a `stringData` en un Secret", "back": "`data`: valores en base64. `stringData`: texto plano que Kubernetes codifica al guardar." },
+    { "id": "tipos-secret", "front": "Tipos de Secret habituales", "back": "`Opaque` (por defecto), `kubernetes.io/tls`, `kubernetes.io/dockerconfigjson`, `basic-auth`, `ssh-auth`." },
+    { "id": "crear-secret", "front": "Crear un Secret desde la línea de comandos", "back": "`kubectl create secret generic <nombre> --from-literal=clave=valor`." }
+  ]
+}

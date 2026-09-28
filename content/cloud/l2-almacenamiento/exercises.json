@@ -1,0 +1,135 @@
+{
+  "exercises": [
+    {
+      "id": "clase-backups",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Guardas copias de seguridad que, por ley, debes conservar 5 años y que casi nunca se leen (menos de una vez al año). ¿Qué clase de almacenamiento eliges?",
+      "hints": ["La clase más barata para guardar y más cara para leer."],
+      "options": [
+        { "id": "a", "text": "Standard", "correct": false, "explanation": "La más cara de guardar; para datos de uso frecuente." },
+        { "id": "b", "text": "Nearline", "correct": false, "explanation": "Para datos que se leen aproximadamente una vez al mes." },
+        { "id": "c", "text": "Archive", "correct": true, "explanation": "Correcto: para datos que se leen menos de una vez al año." }
+      ],
+      "solution": {
+        "answer": "Archive",
+        "explanation": "Archive es la clase más barata de almacenamiento (duración mínima 365 días), a cambio de cobrar las lecturas. Todas las clases tienen latencia de milisegundos."
+      }
+    },
+    {
+      "id": "latencia-clases",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Leer un objeto de la clase Archive en Cloud Storage tarda horas, como sacar una cinta de un almacén.",
+      "hints": ["En Cloud Storage, ¿cambia la latencia entre clases o solo el precio?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "En Cloud Storage todas las clases responden en milisegundos." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: cambia el precio (guardar frente a leer), no la latencia." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Las cuatro clases (Standard, Nearline, Coldline y Archive) tienen acceso en milisegundos. Lo que cambia es el coste de almacenamiento, el de recuperación y la duración mínima."
+      }
+    },
+    {
+      "id": "nombre-bucket",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué afirmaciones sobre los nombres de los buckets son ciertas? (Marca todas.)",
+      "hints": ["Piensa en quién más usa Cloud Storage en el mundo."],
+      "options": [
+        { "id": "a", "text": "Deben ser únicos en todo el mundo", "correct": true, "explanation": "Sí: el espacio de nombres es global." },
+        { "id": "b", "text": "Son visibles públicamente", "correct": true, "explanation": "Sí: no metas datos personales en ellos." },
+        { "id": "c", "text": "Se pueden renombrar cuando quieras", "correct": false, "explanation": "No: hay que crear otro bucket y mover los datos." },
+        { "id": "d", "text": "Solo tienen que ser únicos dentro de tu proyecto", "correct": false, "explanation": "Son únicos a nivel global." }
+      ],
+      "solution": {
+        "answer": "Únicos globalmente y públicos",
+        "explanation": "Los nombres de bucket son globales, visibles y permanentes. Por eso se suele añadir un sufijo (como el ID del proyecto)."
+      }
+    },
+    {
+      "id": "bloques-ficheros",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Diez VMs deben **leer y escribir a la vez** en la misma carpeta compartida mediante el sistema de archivos. ¿Qué servicio usas?",
+      "hints": ["Un disco normal solo se monta para escritura en una máquina."],
+      "options": [
+        { "id": "a", "text": "Persistent Disk", "correct": false, "explanation": "Es almacenamiento en bloque para una VM; no sirve para escritura compartida entre muchas." },
+        { "id": "b", "text": "Filestore (NFS)", "correct": true, "explanation": "Correcto: almacenamiento de ficheros compartido." },
+        { "id": "c", "text": "SSD local", "correct": false, "explanation": "Está dentro de un servidor concreto y es efímera." }
+      ],
+      "solution": {
+        "answer": "Filestore",
+        "explanation": "Filestore ofrece un sistema de archivos NFS gestionado que muchas VMs pueden montar a la vez. Si la aplicación puede trabajar con objetos, Cloud Storage suele ser más barato."
+      }
+    },
+    {
+      "id": "ssd-local",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Para qué es adecuada una SSD local?",
+      "hints": ["Rapidísima, pero ¿está replicada?"],
+      "options": [
+        { "id": "a", "text": "Los datos principales de una base de datos", "correct": false, "explanation": "No: si falla el servidor, se pierden." },
+        { "id": "b", "text": "Caché y datos temporales que se pueden regenerar", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Copias de seguridad a largo plazo", "correct": false, "explanation": "Para eso, Cloud Storage con clases frías." }
+      ],
+      "solution": {
+        "answer": "Caché y temporales",
+        "explanation": "La SSD local está en el propio servidor: gran rendimiento, pero sus datos no se replican y no sobreviven a un fallo del host o al borrado de la VM."
+      }
+    },
+    {
+      "id": "crear-bucket",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea el bucket `gs://tienda-fotos-7f3k` en la región `europe-west1`.",
+      "hints": [
+        "Está en `gcloud storage buckets`.",
+        "La ubicación se indica con `--location`."
+      ],
+      "accepted": ["gcloud storage buckets create gs://tienda-fotos-7f3k --location=europe-west1"],
+      "output": "Creating gs://tienda-fotos-7f3k/...",
+      "solution": {
+        "answer": "gcloud storage buckets create gs://tienda-fotos-7f3k --location=europe-west1",
+        "explanation": "Los buckets se nombran con el prefijo `gs://`. Añadir `--uniform-bucket-level-access` es buena práctica para gestionar el acceso solo con IAM."
+      }
+    },
+    {
+      "id": "subir-carpeta",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Sube la carpeta local `backups` (con todo su contenido) al bucket `gs://tienda-backups-7f3k/`.",
+      "hints": [
+        "El comando para copiar es `gcloud storage cp`.",
+        "Para copiar una carpeta entera hace falta un flag de recursividad."
+      ],
+      "accepted": ["gcloud storage cp -r backups gs://tienda-backups-7f3k/", "gcloud storage cp --recursive backups gs://tienda-backups-7f3k/"],
+      "output": "Copying file://backups/2026-09-01.sql.gz to gs://tienda-backups-7f3k/backups/2026-09-01.sql.gz\nCopying file://backups/2026-09-02.sql.gz to gs://tienda-backups-7f3k/backups/2026-09-02.sql.gz\n  Completed files 2/2",
+      "solution": {
+        "answer": "gcloud storage cp -r backups gs://tienda-backups-7f3k/",
+        "explanation": "`gcloud storage cp` sube, descarga o copia; con `-r` (`--recursive`) incluye carpetas. Para sincronizar repetidamente, `gcloud storage rsync`."
+      }
+    },
+    {
+      "id": "versionado",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando que activa el versionado de objetos en el bucket `gs://tienda-backups-7f3k`.",
+      "template": "gcloud storage buckets {{accion}} gs://tienda-backups-7f3k --{{flag}}",
+      "blanks": [
+        { "id": "accion", "accepted": ["update"] },
+        { "id": "flag", "accepted": ["versioning"] }
+      ],
+      "hints": [
+        "Vas a **actualizar** la configuración de un bucket existente.",
+        "El flag es la palabra inglesa para «versionado»."
+      ],
+      "solution": {
+        "answer": "gcloud storage buckets update gs://tienda-backups-7f3k --versioning",
+        "explanation": "Con el versionado, sobrescribir o borrar un objeto conserva la versión anterior. Combínalo con reglas de ciclo de vida para no acumular versiones sin límite."
+      }
+    }
+  ]
+}

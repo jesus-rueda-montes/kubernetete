@@ -1,0 +1,123 @@
+{
+  "exercises": [
+    {
+      "id": "que-va-donde",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué deberías guardar en un **Secret** y no en un ConfigMap? (Marca todos los correctos.)",
+      "hints": ["¿Qué pasaría si lo viera cualquiera con acceso de lectura al namespace?"],
+      "options": [
+        { "id": "a", "text": "La contraseña de la base de datos", "correct": true, "explanation": "Sí: es un dato sensible." },
+        { "id": "b", "text": "El nivel de logs (`info`)", "correct": false, "explanation": "No es sensible: ConfigMap." },
+        { "id": "c", "text": "Una clave de API de un proveedor de pagos", "correct": true, "explanation": "Sí: credencial." },
+        { "id": "d", "text": "El certificado y la clave privada TLS", "correct": true, "explanation": "Sí: existe el tipo `kubernetes.io/tls`." },
+        { "id": "e", "text": "La URL pública de la web", "correct": false, "explanation": "No es sensible: ConfigMap." }
+      ],
+      "solution": {
+        "answer": "Contraseña, clave de API y clave TLS",
+        "explanation": "Credenciales, claves y certificados van en Secrets. La configuración no confidencial va en ConfigMaps."
+      }
+    },
+    {
+      "id": "base64-cifrado",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Como los valores de un Secret están en base64, están cifrados y nadie puede leerlos sin la clave.",
+      "hints": ["¿Hace falta alguna clave para deshacer base64?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "base64 es una codificación reversible por cualquiera (`base64 -d`)." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: base64 no es cifrado. Y por defecto etcd guarda los Secrets sin cifrar." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "base64 solo codifica. Para proteger los Secrets: cifrado en reposo en etcd, RBAC de mínimo privilegio y, a menudo, un gestor de secretos externo."
+      }
+    },
+    {
+      "id": "variable-no-cambia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu Deployment lee `LOG_LEVEL` de un ConfigMap como **variable de entorno**. Cambias el ConfigMap a `debug`, pero la aplicación sigue en `info`. ¿Qué haces?",
+      "hints": ["¿Cuándo se leen las variables de entorno de un contenedor?"],
+      "options": [
+        { "id": "a", "text": "Esperar unos minutos: se actualizará sola", "correct": false, "explanation": "Eso pasa con los volúmenes, no con las variables de entorno." },
+        { "id": "b", "text": "Reiniciar los Pods, por ejemplo con `kubectl rollout restart deployment/web`", "correct": true, "explanation": "Correcto: las variables se leen al arrancar el contenedor." },
+        { "id": "c", "text": "Borrar el ConfigMap y crearlo otra vez", "correct": false, "explanation": "No cambia nada para los contenedores que ya están en marcha." }
+      ],
+      "solution": {
+        "answer": "Reiniciar los Pods",
+        "explanation": "Las variables de entorno se fijan al arrancar el contenedor. `kubectl rollout restart` recrea los Pods poco a poco y leen el valor nuevo."
+      }
+    },
+    {
+      "id": "data-stringdata",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres escribir a mano un Secret en YAML sin codificar tú el base64. ¿Qué campo usas?",
+      "hints": ["Uno de los dos campos admite texto plano."],
+      "options": [
+        { "id": "a", "text": "`data`", "correct": false, "explanation": "En `data` los valores deben ir en base64." },
+        { "id": "b", "text": "`stringData`", "correct": true, "explanation": "Correcto: Kubernetes lo codifica al guardarlo." },
+        { "id": "c", "text": "`binaryData`", "correct": false, "explanation": "`binaryData` es un campo de los ConfigMaps para datos binarios." }
+      ],
+      "solution": {
+        "answer": "stringData",
+        "explanation": "`stringData` acepta texto plano y Kubernetes lo convierte a base64 en `data`. Aun así, no subas ese YAML a git con valores reales."
+      }
+    },
+    {
+      "id": "crear-configmap",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un ConfigMap llamado `web-config` con la clave `LOG_LEVEL` y el valor `info`, sin escribir YAML.",
+      "hints": [
+        "Es `kubectl create configmap <nombre>` con un flag para valores directos.",
+        "El flag es `--from-literal=CLAVE=valor`."
+      ],
+      "accepted": ["kubectl create configmap web-config --from-literal=LOG_LEVEL=info"],
+      "output": "configmap/web-config created",
+      "solution": {
+        "answer": "kubectl create configmap web-config --from-literal=LOG_LEVEL=info",
+        "explanation": "`--from-literal` añade una clave con su valor; se puede repetir. Con `--from-file` cada archivo se convierte en una clave (alias del comando: `cm`)."
+      }
+    },
+    {
+      "id": "crear-secret",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea un Secret genérico llamado `db` con la clave `password` y el valor `s3cr3t`.",
+      "hints": [
+        "Es `kubectl create secret` seguido del tipo de Secret: el genérico.",
+        "El valor se pasa igual que en un ConfigMap: `--from-literal`."
+      ],
+      "accepted": ["kubectl create secret generic db --from-literal=password=s3cr3t"],
+      "output": "secret/db created",
+      "solution": {
+        "answer": "kubectl create secret generic db --from-literal=password=s3cr3t",
+        "explanation": "`kubectl create secret generic` crea un Secret de tipo Opaque y hace el base64 por ti. Ojo: el valor queda en el historial de tu shell."
+      }
+    },
+    {
+      "id": "env-secret",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el contenedor `api`: debe tener la variable `DB_PASSWORD` tomada de la clave `password` del Secret `db`, y además **todas** las claves del ConfigMap `api-config` como variables (con `envFrom`).",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\nspec:\n  containers:\n    - name: api\n      image: ghcr.io/tienda/api:2.1.0\n",
+      "assertions": [
+        { "path": "spec.containers[0].env[name=DB_PASSWORD].valueFrom.secretKeyRef.name", "op": "equals", "value": "db", "message": "DB_PASSWORD sale del Secret db (env → valueFrom → secretKeyRef → name)" },
+        { "path": "spec.containers[0].env[name=DB_PASSWORD].valueFrom.secretKeyRef.key", "op": "equals", "value": "password", "message": "DB_PASSWORD usa la clave password (secretKeyRef.key)" },
+        { "path": "spec.containers[0].envFrom[*].configMapRef.name", "op": "equals", "value": "api-config", "message": "envFrom incluye configMapRef con name: api-config" },
+        { "path": "spec.containers[0].image", "op": "equals", "value": "ghcr.io/tienda/api:2.1.0", "message": "La imagen sigue siendo ghcr.io/tienda/api:2.1.0" }
+      ],
+      "hints": [
+        "`env` es una lista: `- name: DB_PASSWORD` y debajo `valueFrom:` → `secretKeyRef:` → `name` y `key`.",
+        "`envFrom` también es una lista: `- configMapRef:` → `name: api-config`.",
+        "`env` y `envFrom` van al mismo nivel que `image`, dentro del contenedor."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: api\nspec:\n  containers:\n    - name: api\n      image: ghcr.io/tienda/api:2.1.0\n      env:\n        - name: DB_PASSWORD\n          valueFrom:\n            secretKeyRef:\n              name: db\n              key: password\n      envFrom:\n        - configMapRef:\n            name: api-config\n",
+        "explanation": "`env[].valueFrom.secretKeyRef` trae una clave concreta de un Secret; `envFrom[].configMapRef` convierte todas las claves del ConfigMap en variables. Ambos son listas dentro del contenedor."
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "exercises": [
+    {
+      "id": "primer-paso",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Te piden «Diseña la infraestructura de una tienda online en GCP». ¿Qué haces primero?",
+      "hints": ["No puedes diseñar bien sin saber para qué."],
+      "options": [
+        { "id": "a", "text": "Preguntar por los requisitos: tráfico, disponibilidad, RTO/RPO, normativa, presupuesto y equipo", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Dibujar un clúster de GKE multirregión", "correct": false, "explanation": "Quizá sobra para los requisitos reales." },
+        { "id": "c", "text": "Enumerar todos los servicios de GCP que conoces", "correct": false, "explanation": "Sin justificar, no aporta." }
+      ],
+      "solution": {
+        "answer": "Preguntar los requisitos",
+        "explanation": "Los requisitos no funcionales (SLO, RTO/RPO, picos, normativa) deciden la arquitectura. Preguntarlos demuestra criterio."
+      }
+    },
+    {
+      "id": "rto-rpo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El negocio dice: «Podemos estar caídos como mucho 2 horas, pero no podemos perder más de 1 minuto de pedidos». ¿Qué valores son?",
+      "hints": ["Uno mide tiempo sin servicio; el otro, datos perdidos."],
+      "options": [
+        { "id": "a", "text": "RTO = 2 horas, RPO = 1 minuto", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "RTO = 1 minuto, RPO = 2 horas", "correct": false, "explanation": "Están al revés." },
+        { "id": "c", "text": "SLO = 2 horas, SLA = 1 minuto", "correct": false, "explanation": "SLO y SLA miden disponibilidad, no recuperación." }
+      ],
+      "solution": {
+        "answer": "RTO 2 h, RPO 1 min",
+        "explanation": "Un RPO de 1 minuto exige replicación continua de la base de datos; un RTO de 2 horas permite un patrón warm."
+      }
+    },
+    {
+      "id": "patron-dr",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Unos informes históricos pueden tardar un día en recuperarse y el presupuesto es mínimo. ¿Qué patrón de DR eliges?",
+      "hints": ["RTO grande y poco dinero."],
+      "options": [
+        { "id": "a", "text": "Cold: copias en otra región e infraestructura recreada con Terraform si hace falta", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Hot: activo-activo en dos regiones", "correct": false, "explanation": "Carísimo para un RTO de un día." },
+        { "id": "c", "text": "Ninguno: la alta disponibilidad regional basta", "correct": false, "explanation": "La HA regional no sobrevive a la caída de la región ni a un borrado." }
+      ],
+      "solution": {
+        "answer": "Cold",
+        "explanation": "El patrón se elige por RTO/RPO y coste. Con IaC, recrear el entorno en otra región es rápido y barato."
+      }
+    },
+    {
+      "id": "ha-no-backup",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si Cloud SQL está en alta disponibilidad regional, no hacen falta copias de seguridad.",
+      "hints": ["¿Qué le pasa a la standby si alguien ejecuta `DROP TABLE`?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "La HA replica también los errores." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "La HA protege de la caída de una zona; las copias y el PITR protegen de borrados y corrupciones. Hacen falta ambas."
+      }
+    },
+    {
+      "id": "desacoplar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El servicio de envío de emails se cae a veces y hace fallar los pedidos. ¿Qué cambio de arquitectura lo evita?",
+      "hints": ["Los pedidos no deberían esperar a que se envíe el email."],
+      "options": [
+        { "id": "a", "text": "Publicar un mensaje en Pub/Sub y enviar el email de forma asíncrona", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Dar más CPU al servicio de pedidos", "correct": false, "explanation": "No soluciona la dependencia síncrona." },
+        { "id": "c", "text": "Poner el servicio de emails en la misma VM que el de pedidos", "correct": false, "explanation": "Acopla aún más los dos servicios." }
+      ],
+      "solution": {
+        "answer": "Pub/Sub",
+        "explanation": "Una cola desacopla: si el consumidor cae, los mensajes esperan y se procesan cuando vuelve. El pedido se confirma igualmente."
+      }
+    },
+    {
+      "id": "run-o-gke",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Equipo de 3 personas sin experiencia en Kubernetes, una API HTTP sin estado con picos fuertes y noches casi sin tráfico. ¿Qué cómputo propones?",
+      "hints": ["Menos operación y escala a cero."],
+      "options": [
+        { "id": "a", "text": "Cloud Run", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "GKE Standard con varios node pools", "correct": false, "explanation": "Mucha operación para un equipo pequeño sin experiencia." },
+        { "id": "c", "text": "VMs de Compute Engine con tamaño fijo", "correct": false, "explanation": "No escalan con los picos y pagan de noche." }
+      ],
+      "solution": {
+        "answer": "Cloud Run",
+        "explanation": "Escala con los picos y a cero de noche, sin gestionar servidores. Si el sistema crece mucho, se puede migrar a GKE: ambos usan contenedores."
+      }
+    },
+    {
+      "id": "pilares",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles son pilares del Google Cloud Well-Architected Framework?",
+      "hints": ["Son seis áreas no funcionales."],
+      "options": [
+        { "id": "a", "text": "Fiabilidad", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Optimización de costes", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Sostenibilidad", "correct": true, "explanation": "Correcto." },
+        { "id": "d", "text": "Velocidad de desarrollo del frontend", "correct": false, "explanation": "No es un pilar." }
+      ],
+      "solution": {
+        "answer": "a, b y c",
+        "explanation": "Los pilares: excelencia operativa; seguridad, privacidad y cumplimiento; fiabilidad; costes; rendimiento; y sostenibilidad."
+      }
+    },
+    {
+      "id": "cmd-promote",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Ha caído la región principal. Promociona a instancia principal la réplica de Cloud SQL `tienda-db-dr` que está en la región de DR.",
+      "hints": [
+        "Es un subcomando de `gcloud sql instances`.",
+        "`gcloud sql instances promote-replica NOMBRE`."
+      ],
+      "accepted": ["gcloud sql instances promote-replica tienda-db-dr"],
+      "output": "Promoting a read replica stops replication and converts the instance to a\nstandalone primary instance with read and write capabilities. This can't be\nundone.\n\nDo you want to continue (Y/n)?  Y\n\nPromoting Cloud SQL replica...done.\nPromoted [https://sqladmin.googleapis.com/sql/v1beta4/projects/tienda/instances/tienda-db-dr].",
+      "solution": {
+        "answer": "gcloud sql instances promote-replica tienda-db-dr",
+        "explanation": "La réplica deja de replicar y acepta escrituras. Después hay que apuntar la aplicación a ella y, pasado el incidente, rehacer la réplica en la otra dirección."
+      }
+    }
+  ]
+}

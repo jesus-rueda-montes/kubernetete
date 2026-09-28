@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "hpa", "front": "¿Qué hace el HorizontalPodAutoscaler?", "back": "Ajusta el número de réplicas de un Deployment o StatefulSet según métricas, entre minReplicas y maxReplicas." },
+    { "id": "requisitos", "front": "¿Qué necesita un HPA por CPU en porcentaje?", "back": "metrics-server y `resources.requests` de CPU en los contenedores (el % es sobre los requests)." },
+    { "id": "formula", "front": "Fórmula del HPA", "back": "réplicas deseadas = ceil(réplicas actuales × valor actual / valor objetivo)." },
+    { "id": "tiempos", "front": "Tiempos por defecto del HPA", "back": "Evalúa cada 15 s; tolerancia del 10 %; para bajar espera una ventana de estabilización de 5 minutos." },
+    { "id": "varias", "front": "HPA con varias métricas", "back": "Calcula las réplicas para cada métrica y se queda con el número mayor." },
+    { "id": "replicas", "front": "¿Por qué quitar `replicas` del manifiesto con un HPA?", "back": "Porque cada `apply` devolvería el Deployment a ese número y pelearía con el HPA." },
+    { "id": "unknown", "front": "HPA con TARGETS `<unknown>`", "back": "Revisa metrics-server (`kubectl top pods`), los requests de CPU y `kubectl describe hpa`." },
+    { "id": "vpa", "front": "¿Qué hace el VPA?", "back": "Ajusta los requests de CPU y memoria. Se instala aparte. Modo `Off` = solo recomienda. Aplica cambios recreando Pods." },
+    { "id": "vpa-hpa", "front": "¿VPA y HPA juntos?", "back": "No sobre la misma métrica (CPU/memoria). Sí con VPA en modo recomendación o HPA con otras métricas." },
+    { "id": "nodos", "front": "Autoescalado de nodos", "back": "Añade nodos si hay Pods Pending por falta de recursos y consolida los infrautilizados. Cluster Autoscaler o Karpenter." },
+    { "id": "keda", "front": "¿Qué es KEDA?", "back": "Autoescalado por eventos (colas, métricas externas), capaz de bajar a cero réplicas." }
+  ]
+}

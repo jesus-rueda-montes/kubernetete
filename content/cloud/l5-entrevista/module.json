@@ -1,0 +1,8 @@
+{
+  "title": "Preparación de entrevista: diseño de arquitecturas",
+  "summary": "Cómo afrontar una pregunta de diseño de sistemas en la nube: requisitos, los pilares del Well-Architected Framework, una arquitectura web de referencia en GCP y la recuperación ante desastres (RTO, RPO y patrones cold, warm y hot).",
+  "level": 5,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

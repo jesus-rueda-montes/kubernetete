@@ -1,0 +1,8 @@
+{
+  "title": "Pods: la unidad mínima",
+  "summary": "Qué es un Pod, por qué existe y cómo crearlo, inspeccionarlo y borrarlo.",
+  "level": 1,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

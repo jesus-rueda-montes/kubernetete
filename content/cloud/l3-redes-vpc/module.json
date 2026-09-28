@@ -1,0 +1,8 @@
+{
+  "title": "Redes VPC",
+  "summary": "VPC global y subredes regionales, reglas de firewall, rutas, Cloud NAT, acceso privado a Google, balanceadores de carga y Cloud DNS.",
+  "level": 3,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

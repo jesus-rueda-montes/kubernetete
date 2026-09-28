@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "liveness", "front": "¿Qué pasa si falla la liveness probe?", "back": "El kubelet reinicia el contenedor." },
+    { "id": "readiness", "front": "¿Qué pasa si falla la readiness probe?", "back": "El Pod sale de los endpoints de los Services: no recibe tráfico, pero no se reinicia." },
+    { "id": "startup", "front": "¿Para qué sirve la startup probe?", "back": "Da tiempo a arrancar a apps lentas: hasta que tiene éxito, liveness y readiness no se ejecutan. Tiempo máximo = failureThreshold × periodSeconds." },
+    { "id": "defaults", "front": "Valores por defecto de una probe", "back": "periodSeconds 10, timeoutSeconds 1, failureThreshold 3, successThreshold 1, initialDelaySeconds 0." },
+    { "id": "liveness-externa", "front": "¿Debe la liveness comprobar la base de datos?", "back": "No: si la base de datos cae, reiniciaría todos los Pods en bucle. Solo el estado interno del proceso." },
+    { "id": "requests-limits", "front": "Requests frente a limits", "back": "Requests: reserva que usa el scheduler para colocar el Pod. Limits: máximo; CPU → throttling, memoria → OOMKilled." },
+    { "id": "qos", "front": "Clases de QoS y orden de desalojo", "back": "BestEffort (nada) se desaloja primero, luego Burstable, y Guaranteed (requests = limits) el último." },
+    { "id": "unidades", "front": "¿Qué es `500m` de CPU? ¿Y `256Mi`?", "back": "500m = medio núcleo. 256Mi = 256 mebibytes (256 × 1024 × 1024 bytes)." }
+  ]
+}

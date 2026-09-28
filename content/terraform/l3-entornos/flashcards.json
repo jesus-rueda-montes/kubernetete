@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "workspace", "front": "¿Qué es un workspace de la CLI?", "back": "Otro state para la misma configuración y el mismo backend. Siempre existe `default`, que no se puede borrar." },
+    { "id": "comandos", "front": "Comandos de workspaces", "back": "`terraform workspace list`, `show`, `new NOMBRE` (crea y cambia), `select NOMBRE`, `delete NOMBRE`." },
+    { "id": "expresion", "front": "`terraform.workspace`", "back": "Devuelve el nombre del workspace actual, para variar nombres o tamaños." },
+    { "id": "gcs-workspace", "front": "¿Dónde guarda GCS el state de cada workspace?", "back": "En `<prefix>/<workspace>.tfstate`, por ejemplo `web/dev.tfstate`." },
+    { "id": "no-aislan", "front": "¿Por qué no separar dev y pro con workspaces?", "back": "Comparten backend y credenciales (no aíslan el acceso) y es fácil aplicar en el workspace equivocado." },
+    { "id": "directorios", "front": "Alternativa habitual a los workspaces", "back": "Un directorio por entorno (módulo raíz propio con su backend y sus valores) que llama a módulos comunes." },
+    { "id": "capas", "front": "¿Por qué dividir en capas (red, clúster, apps)?", "back": "Menos radio de impacto, planes más rápidos y permisos por equipo." },
+    { "id": "remote-state", "front": "`terraform_remote_state`: qué expone y qué riesgo tiene", "back": "Solo los outputs del módulo raíz de otro state. Quien los lee puede leer el state entero; mejor un data source del provider si existe." }
+  ]
+}

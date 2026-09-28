@@ -1,0 +1,579 @@
+{
+  "cli": "terraform",
+  "description": "CLI de Terraform",
+  "source": "https://developer.hashicorp.com/terraform/cli/commands",
+  "flagStyle": "single-dash",
+  "commands": [
+    {
+      "name": "init",
+      "description": "Prepara el directorio: backend, providers y módulos",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/init",
+      "flags": [
+        {
+          "name": "upgrade",
+          "takesValue": false,
+          "description": "Actualiza providers y módulos a la última versión permitida"
+        },
+        {
+          "name": "reconfigure",
+          "takesValue": false,
+          "description": "Reconfigura el backend sin migrar el state"
+        },
+        {
+          "name": "migrate-state",
+          "takesValue": false,
+          "description": "Copia el state existente al backend nuevo"
+        },
+        {
+          "name": "backend-config",
+          "takesValue": true,
+          "description": "Configuración parcial del backend (archivo o clave=valor)"
+        },
+        {
+          "name": "backend",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no configura el backend"
+        },
+        {
+          "name": "input",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, falla en vez de preguntar"
+        },
+        {
+          "name": "lockfile",
+          "takesValue": true,
+          "values": [
+            "readonly"
+          ],
+          "strict": true,
+          "description": "Modo del archivo de dependencias .terraform.lock.hcl"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        }
+      ]
+    },
+    {
+      "name": "validate",
+      "description": "Comprueba la sintaxis y la coherencia interna de la configuración",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/validate",
+      "flags": [
+        {
+          "name": "json",
+          "takesValue": false,
+          "description": "Salida en JSON"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        }
+      ]
+    },
+    {
+      "name": "fmt",
+      "description": "Formatea los archivos .tf con el estilo canónico",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/fmt",
+      "args": [
+        {
+          "name": "RUTA"
+        }
+      ],
+      "flags": [
+        {
+          "name": "check",
+          "takesValue": false,
+          "description": "Solo comprueba el formato (falla si hay archivos sin formatear)"
+        },
+        {
+          "name": "diff",
+          "takesValue": false,
+          "description": "Muestra las diferencias de formato"
+        },
+        {
+          "name": "recursive",
+          "takesValue": false,
+          "description": "Incluye los subdirectorios"
+        },
+        {
+          "name": "write",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no modifica los archivos"
+        },
+        {
+          "name": "list",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no lista los archivos mal formateados"
+        }
+      ]
+    },
+    {
+      "name": "plan",
+      "description": "Muestra los cambios que haría Terraform, sin aplicarlos",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/plan",
+      "flags": [
+        {
+          "name": "out",
+          "takesValue": true,
+          "description": "Guarda el plan en un archivo para aplicarlo después"
+        },
+        {
+          "name": "var",
+          "takesValue": true,
+          "description": "Valor de una variable (NOMBRE=VALOR)"
+        },
+        {
+          "name": "var-file",
+          "takesValue": true,
+          "description": "Archivo .tfvars con valores de variables"
+        },
+        {
+          "name": "destroy",
+          "takesValue": false,
+          "description": "Planifica borrar todo lo gestionado"
+        },
+        {
+          "name": "refresh-only",
+          "takesValue": false,
+          "description": "Solo actualiza el state con la realidad, sin cambiar infraestructura"
+        },
+        {
+          "name": "refresh",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no consulta el estado real"
+        },
+        {
+          "name": "target",
+          "takesValue": true,
+          "description": "Limita el plan a un recurso (DIRECCIÓN)"
+        },
+        {
+          "name": "replace",
+          "takesValue": true,
+          "description": "Fuerza la sustitución de un recurso (DIRECCIÓN)"
+        },
+        {
+          "name": "detailed-exitcode",
+          "takesValue": false,
+          "description": "Código de salida 2 si hay cambios"
+        },
+        {
+          "name": "input",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, falla en vez de preguntar"
+        },
+        {
+          "name": "lock",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no bloquea el state (arriesgado)"
+        },
+        {
+          "name": "json",
+          "takesValue": false,
+          "description": "Salida en JSON"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        },
+        {
+          "name": "generate-config-out",
+          "takesValue": true,
+          "description": "(Experimental) Genera en ese archivo los bloques resource de los import sin configuración"
+        }
+      ]
+    },
+    {
+      "name": "apply",
+      "description": "Aplica los cambios (tras mostrar el plan y pedir confirmación)",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/apply",
+      "args": [
+        {
+          "name": "ARCHIVO_DE_PLAN"
+        }
+      ],
+      "flags": [
+        {
+          "name": "auto-approve",
+          "takesValue": false,
+          "description": "No pide confirmación"
+        },
+        {
+          "name": "var",
+          "takesValue": true,
+          "description": "Valor de una variable (NOMBRE=VALOR)"
+        },
+        {
+          "name": "var-file",
+          "takesValue": true,
+          "description": "Archivo .tfvars con valores de variables"
+        },
+        {
+          "name": "target",
+          "takesValue": true,
+          "description": "Limita la operación a un recurso (DIRECCIÓN)"
+        },
+        {
+          "name": "replace",
+          "takesValue": true,
+          "description": "Fuerza la sustitución de un recurso (DIRECCIÓN)"
+        },
+        {
+          "name": "refresh-only",
+          "takesValue": false,
+          "description": "Solo actualiza el state con la realidad"
+        },
+        {
+          "name": "input",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, falla en vez de preguntar"
+        },
+        {
+          "name": "lock",
+          "takesValue": true,
+          "values": [
+            "true",
+            "false"
+          ],
+          "strict": true,
+          "description": "Con false, no bloquea el state (arriesgado)"
+        },
+        {
+          "name": "parallelism",
+          "takesValue": true,
+          "description": "Operaciones simultáneas (10 por defecto)"
+        },
+        {
+          "name": "json",
+          "takesValue": false,
+          "description": "Salida en JSON"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        }
+      ]
+    },
+    {
+      "name": "destroy",
+      "description": "Borra toda la infraestructura gestionada por la configuración",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/destroy",
+      "flags": [
+        {
+          "name": "auto-approve",
+          "takesValue": false,
+          "description": "No pide confirmación"
+        },
+        {
+          "name": "var",
+          "takesValue": true,
+          "description": "Valor de una variable (NOMBRE=VALOR)"
+        },
+        {
+          "name": "var-file",
+          "takesValue": true,
+          "description": "Archivo .tfvars con valores de variables"
+        },
+        {
+          "name": "target",
+          "takesValue": true,
+          "description": "Limita el borrado a un recurso (DIRECCIÓN)"
+        }
+      ]
+    },
+    {
+      "name": "output",
+      "description": "Muestra los outputs guardados en el state",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/output",
+      "args": [
+        {
+          "name": "NOMBRE"
+        }
+      ],
+      "flags": [
+        {
+          "name": "json",
+          "takesValue": false,
+          "description": "Salida en JSON (muestra también los valores sensitive)"
+        },
+        {
+          "name": "raw",
+          "takesValue": false,
+          "description": "Imprime el valor tal cual, sin comillas (muestra también los sensitive)"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        }
+      ]
+    },
+    {
+      "name": "show",
+      "description": "Muestra el state actual o un archivo de plan de forma legible",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/show",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "json",
+          "takesValue": false,
+          "description": "Salida en JSON"
+        },
+        {
+          "name": "no-color",
+          "takesValue": false,
+          "description": "Salida sin colores"
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "description": "Gestión avanzada del state",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/state",
+      "subcommands": [
+        {
+          "name": "list",
+          "description": "Lista los recursos del state",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/state/list",
+          "args": [
+            {
+              "name": "DIRECCIÓN"
+            }
+          ],
+          "flags": [
+            {
+              "name": "id",
+              "takesValue": true,
+              "description": "Filtra por el ID del recurso"
+            }
+          ]
+        },
+        {
+          "name": "show",
+          "description": "Muestra los atributos de un recurso del state",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/state/show",
+          "args": [
+            {
+              "name": "DIRECCIÓN"
+            }
+          ]
+        },
+        {
+          "name": "mv",
+          "description": "Cambia la dirección de un recurso en el state (renombrar o mover)",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/state/mv",
+          "args": [
+            {
+              "name": "ORIGEN"
+            },
+            {
+              "name": "DESTINO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "dry-run",
+              "takesValue": false,
+              "description": "Muestra qué se movería sin hacerlo"
+            }
+          ]
+        },
+        {
+          "name": "rm",
+          "description": "Quita un recurso del state sin borrarlo en la realidad",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/state/rm",
+          "args": [
+            {
+              "name": "DIRECCIÓN"
+            }
+          ],
+          "flags": [
+            {
+              "name": "dry-run",
+              "takesValue": false,
+              "description": "Muestra qué se quitaría sin hacerlo"
+            }
+          ]
+        },
+        {
+          "name": "pull",
+          "description": "Descarga el state remoto y lo muestra",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/state/pull"
+        }
+      ]
+    },
+    {
+      "name": "import",
+      "description": "Asocia un recurso que ya existe a una dirección del state",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/import",
+      "args": [
+        {
+          "name": "DIRECCIÓN"
+        },
+        {
+          "name": "ID"
+        }
+      ],
+      "flags": [
+        {
+          "name": "var",
+          "takesValue": true,
+          "description": "Valor de una variable (NOMBRE=VALOR)"
+        },
+        {
+          "name": "var-file",
+          "takesValue": true,
+          "description": "Archivo .tfvars con valores de variables"
+        }
+      ]
+    },
+    {
+      "name": "force-unlock",
+      "description": "Quita a mano un bloqueo del state que se ha quedado colgado",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/force-unlock",
+      "args": [
+        {
+          "name": "LOCK_ID"
+        }
+      ],
+      "flags": [
+        {
+          "name": "force",
+          "takesValue": false,
+          "description": "No pide confirmación"
+        }
+      ]
+    },
+    {
+      "name": "workspace",
+      "description": "Gestiona workspaces (varios states para una misma configuración)",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace",
+      "subcommands": [
+        {
+          "name": "list",
+          "description": "Lista los workspaces",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace/list"
+        },
+        {
+          "name": "show",
+          "description": "Muestra el workspace actual",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace/show"
+        },
+        {
+          "name": "new",
+          "description": "Crea un workspace y cambia a él",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace/new",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ]
+        },
+        {
+          "name": "select",
+          "description": "Cambia de workspace",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace/select",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ]
+        },
+        {
+          "name": "delete",
+          "description": "Borra un workspace",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/workspace/delete",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "console",
+      "description": "Consola interactiva para probar expresiones y funciones",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/console",
+      "flags": [
+        {
+          "name": "var",
+          "takesValue": true,
+          "description": "Valor de una variable (NOMBRE=VALOR)"
+        },
+        {
+          "name": "var-file",
+          "takesValue": true,
+          "description": "Archivo .tfvars con valores de variables"
+        }
+      ]
+    },
+    {
+      "name": "providers",
+      "description": "Muestra los providers que necesita la configuración",
+      "source": "https://developer.hashicorp.com/terraform/cli/commands/providers",
+      "subcommands": [
+        {
+          "name": "lock",
+          "description": "Escribe en .terraform.lock.hcl los checksums de los providers para varias plataformas",
+          "source": "https://developer.hashicorp.com/terraform/cli/commands/providers/lock",
+          "flags": [
+            {
+              "name": "platform",
+              "takesValue": true,
+              "description": "Plataforma (OS_ARCH), p. ej. linux_amd64; se puede repetir"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

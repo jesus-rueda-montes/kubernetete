@@ -1,0 +1,8 @@
+{
+  "title": "Seguridad: secretos, cifrado y defensa en profundidad",
+  "summary": "Guardar secretos con Secret Manager, cifrar con claves propias en Cloud KMS y combinar capas de seguridad: IAM, red, políticas de organización, Cloud Armor, IAP y Security Command Center.",
+  "level": 4,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

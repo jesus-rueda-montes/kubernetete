@@ -1,0 +1,138 @@
+{
+  "exercises": [
+    {
+      "id": "zona-o-region",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué es `europe-west1-c`?",
+      "hints": ["Fíjate en la letra final."],
+      "options": [
+        { "id": "a", "text": "Una región", "correct": false, "explanation": "La región sería `europe-west1`, sin la letra." },
+        { "id": "b", "text": "Una zona de la región europe-west1", "correct": true, "explanation": "Correcto: región + letra = zona." },
+        { "id": "c", "text": "Un país", "correct": false, "explanation": "Los nombres de región y zona no son países." }
+      ],
+      "solution": {
+        "answer": "Una zona",
+        "explanation": "Las zonas se nombran con el nombre de su región y una letra: `europe-west1-c` es la zona `c` de `europe-west1`."
+      }
+    },
+    {
+      "id": "alcance-recursos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Google Cloud, ¿cuál de estos recursos es **zonal**?",
+      "hints": ["¿Qué recurso existe físicamente en un único edificio?"],
+      "options": [
+        { "id": "a", "text": "Una red VPC", "correct": false, "explanation": "En GCP las redes VPC son globales." },
+        { "id": "b", "text": "Una subred", "correct": false, "explanation": "En GCP las subredes son regionales." },
+        { "id": "c", "text": "Una máquina virtual (instancia de Compute Engine)", "correct": true, "explanation": "Correcto: una VM vive en una zona concreta." },
+        { "id": "d", "text": "Una regla de firewall", "correct": false, "explanation": "En GCP las reglas de firewall de VPC son globales." }
+      ],
+      "solution": {
+        "answer": "La máquina virtual",
+        "explanation": "Las instancias y sus discos zonales viven en una zona. Las subredes son regionales; las redes VPC, rutas y reglas de firewall, globales."
+      }
+    },
+    {
+      "id": "vpc-gcp-aws",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué afirmación sobre el alcance de las redes es correcta?",
+      "hints": ["En uno de los dos proveedores, la red «cruza» regiones."],
+      "options": [
+        { "id": "a", "text": "En GCP la VPC es global y sus subredes regionales; en AWS la VPC es regional y sus subredes zonales", "correct": true, "explanation": "Correcto: es una diferencia de diseño muy conocida." },
+        { "id": "b", "text": "En los dos, la VPC es global", "correct": false, "explanation": "En AWS la VPC es regional." },
+        { "id": "c", "text": "En GCP la VPC es zonal", "correct": false, "explanation": "En GCP la VPC es global." }
+      ],
+      "solution": {
+        "answer": "GCP: VPC global y subredes regionales; AWS: VPC regional y subredes zonales",
+        "explanation": "Por eso en GCP una misma VPC puede tener subredes en Europa y en América sin conectar redes distintas."
+      }
+    },
+    {
+      "id": "alta-disponibilidad",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu aplicación corre en 3 VMs, todas en `europe-west1-b`. ¿Qué cambio mejora más su tolerancia a fallos **sin cambiar de región**?",
+      "hints": ["¿Qué pasa con las 3 VMs si cae esa zona?"],
+      "options": [
+        { "id": "a", "text": "Añadir 3 VMs más en la misma zona", "correct": false, "explanation": "Más capacidad, pero siguen cayendo todas a la vez si falla la zona." },
+        { "id": "b", "text": "Repartir las VMs entre las zonas -b, -c y -d de la región, detrás de un load balancer", "correct": true, "explanation": "Correcto: si cae una zona, las otras siguen atendiendo." },
+        { "id": "c", "text": "Usar máquinas más grandes", "correct": false, "explanation": "Mejora el rendimiento, no la tolerancia a la caída de una zona." }
+      ],
+      "solution": {
+        "answer": "Repartir entre zonas",
+        "explanation": "Un despliegue multizona (por ejemplo, un grupo de instancias regional detrás de un load balancer) sobrevive a la caída de una zona."
+      }
+    },
+    {
+      "id": "nueves",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un servicio con un **99,9 %** de disponibilidad, ¿cuánto tiempo puede estar caído como máximo en un año?",
+      "hints": ["Un año tiene 8760 horas. Calcula el 0,1 %."],
+      "options": [
+        { "id": "a", "text": "Unos 5 minutos", "correct": false, "explanation": "Eso es 99,999 % (cinco nueves)." },
+        { "id": "b", "text": "Unas 8,8 horas", "correct": true, "explanation": "Correcto: 0,1 % de 8760 h ≈ 8,76 h." },
+        { "id": "c", "text": "Unos 3,65 días", "correct": false, "explanation": "Eso es 99 %." }
+      ],
+      "solution": {
+        "answer": "~8,8 horas",
+        "explanation": "8760 h × 0,001 = 8,76 h al año. Cada nueve adicional divide ese tiempo entre 10."
+      }
+    },
+    {
+      "id": "elegir-region",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué criterios debes tener en cuenta al elegir una región? (Marca todos los correctos.)",
+      "hints": ["Piensa en usuarios, leyes, catálogo y factura."],
+      "options": [
+        { "id": "a", "text": "Cercanía a los usuarios (latencia)", "correct": true, "explanation": "Sí." },
+        { "id": "b", "text": "Requisitos legales de ubicación de los datos", "correct": true, "explanation": "Sí: por ejemplo, datos que deben quedarse en la UE." },
+        { "id": "c", "text": "Que el servicio o tipo de máquina esté disponible ahí", "correct": true, "explanation": "Sí: no todo existe en todas las regiones." },
+        { "id": "d", "text": "El precio", "correct": true, "explanation": "Sí: varía según la ubicación." },
+        { "id": "e", "text": "Que sea la primera región de la lista", "correct": false, "explanation": "No es un criterio; es un error habitual." }
+      ],
+      "solution": {
+        "answer": "Latencia, ley, disponibilidad de servicios y precio",
+        "explanation": "La región se elige por cercanía a los usuarios, cumplimiento legal, servicios disponibles y coste."
+      }
+    },
+    {
+      "id": "listar-zonas",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Lista las zonas de Compute Engine disponibles en Google Cloud.",
+      "hints": [
+        "Los comandos de gcloud van de lo general a lo concreto: producto, recurso, acción.",
+        "Producto `compute`, recurso `zones`, acción `list`."
+      ],
+      "accepted": ["gcloud compute zones list"],
+      "output": "NAME              REGION        STATUS\neurope-west1-b    europe-west1  UP\neurope-west1-c    europe-west1  UP\neurope-west1-d    europe-west1  UP\n...",
+      "solution": {
+        "answer": "gcloud compute zones list",
+        "explanation": "gcloud sigue el patrón `gcloud <producto> <recurso> <acción>`: aquí `compute` (Compute Engine), `zones` y `list`."
+      }
+    },
+    {
+      "id": "region-por-defecto",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para que gcloud use `europe-west1` como región por defecto.",
+      "template": "gcloud config {{verbo}} {{propiedad}} europe-west1",
+      "blanks": [
+        { "id": "verbo", "accepted": ["set"] },
+        { "id": "propiedad", "accepted": ["compute/region"] }
+      ],
+      "hints": [
+        "El verbo significa «fijar» en inglés.",
+        "La propiedad tiene la forma `sección/nombre`, y la sección es la de Compute Engine."
+      ],
+      "solution": {
+        "answer": "gcloud config set compute/region europe-west1",
+        "explanation": "`gcloud config set compute/region` fija la región por defecto; `compute/zone` hace lo mismo con la zona y `project` con el proyecto."
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Módulos esenciales e idempotencia",
+  "summary": "Los módulos que usarás a diario (paquetes, archivos, servicios, usuarios) y cómo escribir tareas que puedes repetir sin miedo.",
+  "level": 2,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

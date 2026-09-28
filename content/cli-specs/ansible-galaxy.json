@@ -1,0 +1,180 @@
+{
+  "cli": "ansible-galaxy",
+  "description": "Gestiona roles y collections de Ansible",
+  "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html",
+  "commands": [
+    {
+      "name": "role",
+      "description": "Roles",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#role",
+      "subcommands": [
+        {
+          "name": "init",
+          "description": "Crea el esqueleto de un rol",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#role-init",
+          "args": [
+            {
+              "name": "NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "init-path",
+              "takesValue": true,
+              "description": "Directorio donde se crea (por defecto, el actual)"
+            },
+            {
+              "name": "force",
+              "takesValue": false,
+              "description": "Sobrescribe si ya existe",
+              "short": "f"
+            }
+          ]
+        },
+        {
+          "name": "install",
+          "description": "Instala roles (por nombre o desde un archivo de requisitos)",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#role-install",
+          "args": [
+            {
+              "name": "ROL"
+            }
+          ],
+          "flags": [
+            {
+              "name": "role-file",
+              "takesValue": true,
+              "description": "Archivo con la lista de roles (requirements.yml)",
+              "short": "r"
+            },
+            {
+              "name": "roles-path",
+              "takesValue": true,
+              "description": "Directorio donde instalarlos",
+              "short": "p"
+            },
+            {
+              "name": "force",
+              "takesValue": false,
+              "description": "Sobrescribe un rol ya instalado",
+              "short": "f"
+            },
+            {
+              "name": "no-deps",
+              "takesValue": false,
+              "description": "No instala las dependencias",
+              "short": "n"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista los roles instalados",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#role-list",
+          "flags": [
+            {
+              "name": "roles-path",
+              "takesValue": true,
+              "description": "Directorio de roles",
+              "short": "p"
+            }
+          ]
+        },
+        {
+          "name": "remove",
+          "description": "Borra roles instalados",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#role-remove",
+          "args": [
+            {
+              "name": "ROL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "collection",
+      "description": "Collections",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#collection",
+      "subcommands": [
+        {
+          "name": "install",
+          "description": "Instala collections (por nombre o desde un archivo de requisitos)",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#collection-install",
+          "args": [
+            {
+              "name": "COLLECTION"
+            }
+          ],
+          "flags": [
+            {
+              "name": "requirements-file",
+              "takesValue": true,
+              "description": "Archivo con la lista de collections (requirements.yml)",
+              "short": "r"
+            },
+            {
+              "name": "collections-path",
+              "takesValue": true,
+              "description": "Directorio donde instalarlas",
+              "short": "p"
+            },
+            {
+              "name": "upgrade",
+              "takesValue": false,
+              "description": "Actualiza las collections instaladas",
+              "short": "U"
+            },
+            {
+              "name": "force",
+              "takesValue": false,
+              "description": "Sobrescribe una collection ya instalada",
+              "short": "f"
+            },
+            {
+              "name": "no-deps",
+              "takesValue": false,
+              "description": "No instala las dependencias",
+              "short": "n"
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Lista las collections instaladas",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#collection-list",
+          "args": [
+            {
+              "name": "COLLECTION"
+            }
+          ],
+          "flags": [
+            {
+              "name": "collections-path",
+              "takesValue": true,
+              "description": "Directorios donde buscar",
+              "short": "p"
+            }
+          ]
+        },
+        {
+          "name": "init",
+          "description": "Crea el esqueleto de una collection (namespace.nombre)",
+          "source": "https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html#collection-init",
+          "args": [
+            {
+              "name": "NAMESPACE.NOMBRE"
+            }
+          ],
+          "flags": [
+            {
+              "name": "init-path",
+              "takesValue": true,
+              "description": "Directorio donde se crea"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "exercises": [
+    {
+      "id": "pending",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod lleva 10 minutos en `Pending`. ¿Dónde buscas la causa?",
+      "hints": ["¿Ha llegado a arrancar el contenedor?"],
+      "options": [
+        { "id": "a", "text": "En los eventos de `kubectl describe pod` (por ejemplo, `FailedScheduling`)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "En `kubectl logs`", "correct": false, "explanation": "El contenedor no ha arrancado: no hay logs." },
+        { "id": "c", "text": "En `kubectl exec` dentro del Pod", "correct": false, "explanation": "No hay contenedor en ejecución en el que entrar." }
+      ],
+      "solution": {
+        "answer": "Eventos del describe",
+        "explanation": "Pending significa que el scheduler no encuentra nodo. El evento `FailedScheduling` dice por qué: recursos insuficientes, taints, affinity o un PVC sin enlazar."
+      }
+    },
+    {
+      "id": "exit-137",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un contenedor en CrashLoopBackOff muestra en `Last State`: `Reason: OOMKilled`, `Exit Code: 137`. ¿Qué ha pasado?",
+      "hints": ["OOM = Out Of Memory."],
+      "options": [
+        { "id": "a", "text": "Superó su limit de memoria y el sistema lo mató", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "La imagen no existe", "correct": false, "explanation": "Eso sería ImagePullBackOff; el contenedor ni arrancaría." },
+        { "id": "c", "text": "El comando del contenedor no existe", "correct": false, "explanation": "Eso suele dar código 127." }
+      ],
+      "solution": {
+        "answer": "Superó el limit de memoria",
+        "explanation": "137 = 128 + 9 (SIGKILL). Con OOMKilled, sube el limit de memoria si es necesario o investiga una fuga de memoria en la aplicación."
+      }
+    },
+    {
+      "id": "config-error",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod muestra `CreateContainerConfigError`. ¿Cuál es la causa más probable?",
+      "hints": ["Falta algo que el contenedor necesita para crearse."],
+      "options": [
+        { "id": "a", "text": "Referencia a un ConfigMap o Secret (o a una clave) que no existe", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El nodo no tiene CPU suficiente", "correct": false, "explanation": "Eso dejaría el Pod en Pending." },
+        { "id": "c", "text": "La aplicación lanza una excepción al arrancar", "correct": false, "explanation": "Eso sería CrashLoopBackOff: el contenedor llega a crearse." }
+      ],
+      "solution": {
+        "answer": "Falta un ConfigMap o Secret",
+        "explanation": "Los eventos de `describe` indican qué ConfigMap, Secret o clave no se encuentra."
+      }
+    },
+    {
+      "id": "borrar-pod",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Ante un Pod en CrashLoopBackOff, lo primero que conviene hacer es borrarlo para que el Deployment cree uno nuevo.",
+      "hints": ["¿Qué pierdes al borrarlo? ¿Cambia algo en el nuevo?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El nuevo Pod tendría la misma configuración y el mismo fallo." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Primero investiga (describe, logs --previous). Borrar el Pod pierde sus logs y eventos, y el nuevo fallará igual."
+      }
+    },
+    {
+      "id": "sin-endpoints",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "Un Service no tiene endpoints. ¿Qué causas son posibles?",
+      "hints": ["Los endpoints son los Pods que el Service selecciona y que están listos."],
+      "options": [
+        { "id": "a", "text": "El selector del Service no coincide con las etiquetas de los Pods", "correct": true, "explanation": "Correcto: es la causa más frecuente." },
+        { "id": "b", "text": "Los Pods no pasan la readiness probe", "correct": true, "explanation": "Correcto: los Pods no Ready no se añaden como endpoints listos." },
+        { "id": "c", "text": "El Service es de tipo ClusterIP", "correct": false, "explanation": "El tipo no afecta a los endpoints." },
+        { "id": "d", "text": "El DNS del clúster no funciona", "correct": false, "explanation": "El DNS resuelve el nombre del Service, pero no decide sus endpoints." }
+      ],
+      "solution": {
+        "answer": "a y b",
+        "explanation": "Compara `kubectl describe svc` (Selector) con `kubectl get pods --show-labels`, y mira la columna READY de los Pods."
+      }
+    },
+    {
+      "id": "nodo-unknown",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "`kubectl describe node worker-2` muestra la condición `Ready` en `Unknown`. ¿Qué indica?",
+      "hints": ["Unknown: el control plane no sabe nada del nodo."],
+      "options": [
+        { "id": "a", "text": "El control plane lleva un tiempo sin recibir noticias del nodo: probablemente el kubelet está caído o hay un problema de red", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El nodo tiene poca memoria", "correct": false, "explanation": "Eso sería la condición MemoryPressure." },
+        { "id": "c", "text": "El nodo está en cordon", "correct": false, "explanation": "Cordon lo marca como no programable, pero sigue Ready." }
+      ],
+      "solution": {
+        "answer": "Sin noticias del nodo",
+        "explanation": "Pasados 50 s (por defecto) sin noticias, la condición pasa a Unknown y se añade el taint `node.kubernetes.io/unreachable`."
+      }
+    },
+    {
+      "id": "cmd-logs-previous",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "El Pod `api-7d9c5b6f4-x2kqp` está en CrashLoopBackOff. Muestra los logs del contenedor **anterior**, el que falló.",
+      "hints": [
+        "Es `kubectl logs POD`.",
+        "El flag es `--previous` (o `-p`)."
+      ],
+      "accepted": [
+        "kubectl logs api-7d9c5b6f4-x2kqp --previous",
+        "kubectl logs api-7d9c5b6f4-x2kqp -p",
+        "kubectl logs --previous api-7d9c5b6f4-x2kqp"
+      ],
+      "output": "Iniciando api v2.3.1...\nError: variable DATABASE_URL no definida",
+      "solution": {
+        "answer": "kubectl logs api-7d9c5b6f4-x2kqp --previous",
+        "explanation": "Sin `--previous` verías el contenedor que acaba de arrancar, que quizá aún no ha escrito el error."
+      }
+    },
+    {
+      "id": "cmd-events",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Muestra solo los eventos de tipo `Warning` del Pod `web-1`.",
+      "hints": [
+        "Es `kubectl events`.",
+        "`--for pod/web-1` y `--types=Warning`."
+      ],
+      "accepted": [
+        "kubectl events --for pod/web-1 --types=Warning",
+        "kubectl events --for=pod/web-1 --types=Warning",
+        "kubectl events --types=Warning --for pod/web-1",
+        "kubectl events --types=Warning --for=pod/web-1"
+      ],
+      "output": "LAST SEEN   TYPE      REASON             OBJECT      MESSAGE\n2m          Warning   FailedScheduling   Pod/web-1   0/3 nodes are available: 3 Insufficient memory.",
+      "solution": {
+        "answer": "kubectl events --for pod/web-1 --types=Warning",
+        "explanation": "Aquí el scheduler no encuentra nodo con memoria suficiente para las requests del Pod. Recuerda que los eventos solo duran 1 hora por defecto."
+      }
+    },
+    {
+      "id": "cmd-endpoints",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista los EndpointSlices del Service `web` usando su etiqueta `kubernetes.io/service-name`.",
+      "hints": [
+        "Es `kubectl get endpointslices`.",
+        "Filtra con `-l kubernetes.io/service-name=web`."
+      ],
+      "accepted": [
+        "kubectl get endpointslices -l kubernetes.io/service-name=web",
+        "kubectl get endpointslices --selector=kubernetes.io/service-name=web",
+        "kubectl get endpointslices --selector kubernetes.io/service-name=web",
+        "kubectl get endpointslice -l kubernetes.io/service-name=web"
+      ],
+      "output": "NAME        ADDRESSTYPE   PORTS     ENDPOINTS   AGE\nweb-8xk2p   IPv4          <unset>   <unset>     10m",
+      "solution": {
+        "answer": "kubectl get endpointslices -l kubernetes.io/service-name=web",
+        "explanation": "`<unset>` en ENDPOINTS: el Service no selecciona ningún Pod listo. Compara su selector con las etiquetas de los Pods."
+      }
+    },
+    {
+      "id": "cmd-debug",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "El Pod `web-1` usa una imagen distroless (sin shell). Añádele un contenedor efímero interactivo con la imagen `busybox` que vea los procesos del contenedor `web`.",
+      "hints": [
+        "Es `kubectl debug POD -it --image=...`.",
+        "Para ver los procesos de un contenedor concreto: `--target=web`."
+      ],
+      "accepted": [
+        "kubectl debug -it web-1 --image=busybox --target=web",
+        "kubectl debug web-1 -it --image=busybox --target=web",
+        "kubectl debug -i -t web-1 --image=busybox --target=web"
+      ],
+      "output": "Targeting container \"web\". If you don't see processes from this container it may be because the container runtime doesn't support this feature.\nDefaulting debug container name to debugger-8xzrl.\nIf you don't see a command prompt, try pressing enter.\n/ #",
+      "solution": {
+        "answer": "kubectl debug -it web-1 --image=busybox --target=web",
+        "explanation": "El contenedor efímero se añade al Pod existente sin reiniciarlo. Con `--copy-to` crearías una copia en su lugar."
+      }
+    },
+    {
+      "id": "editor-selector",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "El Service `web` no tiene endpoints: los Pods tienen la etiqueta `app: frontend` y escuchan en el puerto `8080`. Corrige el selector y el `targetPort`.",
+      "starter": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n  selector:\n    app: web\n  ports:\n    - port: 80\n      targetPort: 80\n",
+      "assertions": [
+        { "path": "spec.selector.app", "op": "equals", "value": "frontend", "message": "El selector debe ser app: frontend" },
+        { "path": "spec.ports[0].port", "op": "equals", "value": 80, "message": "El puerto del Service sigue siendo 80" },
+        { "path": "spec.ports[0].targetPort", "op": "equals", "value": 8080, "message": "targetPort debe ser el puerto del contenedor: 8080" }
+      ],
+      "hints": [
+        "El selector debe coincidir con las etiquetas de los Pods.",
+        "`port` es el del Service; `targetPort`, el del contenedor."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n  selector:\n    app: frontend\n  ports:\n    - port: 80\n      targetPort: 8080\n",
+        "explanation": "Con el selector correcto, los Pods listos aparecen como endpoints; con el `targetPort` correcto, el tráfico llega al puerto en el que escucha la aplicación."
+      }
+    }
+  ]
+}

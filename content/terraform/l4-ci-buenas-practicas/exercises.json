@@ -1,0 +1,150 @@
+{
+  "exercises": [
+    {
+      "id": "apply-plan-guardado",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Por qué en el pipeline se hace `terraform plan -out=tfplan` en la PR y `terraform apply tfplan` tras el merge, en vez de un `apply` normal?",
+      "hints": ["¿Qué garantiza aplicar un plan guardado?"],
+      "options": [
+        { "id": "a", "text": "Para aplicar exactamente lo que se revisó en la PR", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Porque `apply` sin archivo no funciona en pipelines", "correct": false, "explanation": "Funciona, pero recalcula el plan." },
+        { "id": "c", "text": "Para que el apply sea más rápido", "correct": false, "explanation": "La razón principal es la seguridad." }
+      ],
+      "solution": {
+        "answer": "Aplicar lo revisado",
+        "explanation": "Un `apply` sin plan guardado recalcula y podría hacer algo distinto de lo revisado. Con el archivo, se aplica ese plan; si el state ha cambiado entretanto, Terraform lo rechaza."
+      }
+    },
+    {
+      "id": "lock-git",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "El archivo `.terraform.lock.hcl` se debe añadir al `.gitignore`, como la carpeta `.terraform`.",
+      "hints": ["¿Quién más necesita saber qué versión exacta de cada provider usar?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "La carpeta `.terraform` sí se ignora; el lock file no." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: se sube a git." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El lock file fija versión y checksums de los providers para todo el equipo y el pipeline. `.terraform/` (los binarios descargados) sí va en `.gitignore`."
+      }
+    },
+    {
+      "id": "sensitive-state",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Marcas la variable `db_password` con `sensitive = true`. ¿Dónde puede seguir apareciendo su valor en claro?",
+      "hints": ["`sensitive` controla lo que se muestra."],
+      "options": [
+        { "id": "a", "text": "En ningún sitio", "correct": false, "explanation": "`sensitive` no cifra nada." },
+        { "id": "b", "text": "En el state", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "En la salida del plan", "correct": false, "explanation": "Ahí se muestra como `(sensitive value)`." }
+      ],
+      "solution": {
+        "answer": "En el state",
+        "explanation": "`sensitive` oculta el valor en la salida. Para que no llegue al state: argumentos write-only o valores efímeros, o que el secreto no pase por Terraform."
+      }
+    },
+    {
+      "id": "credenciales-ci",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la forma recomendada de que GitHub Actions se autentique en Google Cloud para ejecutar Terraform?",
+      "hints": ["La mejor clave es la que no existe."],
+      "options": [
+        { "id": "a", "text": "Una clave JSON de una cuenta de servicio con Owner, guardada como secreto de GitHub", "correct": false, "explanation": "Clave de larga duración y con demasiados permisos." },
+        { "id": "b", "text": "Workload Identity Federation con una cuenta de servicio de mínimo privilegio", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "La cuenta personal del administrador", "correct": false, "explanation": "Nunca: ni trazabilidad ni mínimo privilegio." }
+      ],
+      "solution": {
+        "answer": "Workload Identity Federation",
+        "explanation": "El pipeline obtiene tokens de corta duración con su propia identidad, sin claves que guardar ni rotar, y con solo los permisos que necesita."
+      }
+    },
+    {
+      "id": "input-false",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En el pipeline falta el valor de una variable obligatoria y el job se queda colgado hasta el timeout. ¿Qué flag lo evita?",
+      "hints": ["Terraform está esperando que alguien escriba el valor."],
+      "options": [
+        { "id": "a", "text": "`-input=false`", "correct": true, "explanation": "Correcto: falla en vez de esperar." },
+        { "id": "b", "text": "`-auto-approve`", "correct": false, "explanation": "Solo salta la confirmación del apply." },
+        { "id": "c", "text": "`-lock=false`", "correct": false, "explanation": "Desactiva el bloqueo: peligroso y no relacionado." }
+      ],
+      "solution": {
+        "answer": "-input=false",
+        "explanation": "Con `-input=false`, Terraform da error si falta un valor en vez de pedirlo por teclado."
+      }
+    },
+    {
+      "id": "cmd-fmt-check",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Comprueba, sin modificar nada, que todos los archivos del directorio y sus subdirectorios tienen el formato canónico.",
+      "hints": [
+        "Es `terraform fmt` con dos flags.",
+        "Uno comprueba sin escribir (`-check`) y otro recorre subdirectorios (`-recursive`)."
+      ],
+      "accepted": ["terraform fmt -check -recursive"],
+      "output": "modules/red/main.tf\nentornos/pro/variables.tf",
+      "solution": {
+        "answer": "terraform fmt -check -recursive",
+        "explanation": "Lista los archivos sin formatear y termina con error, así el pipeline falla. Para corregirlos: `terraform fmt -recursive`."
+      }
+    },
+    {
+      "id": "cmd-plan-out",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Genera el plan sin pedir datos por teclado y guárdalo en el archivo `tfplan`.",
+      "hints": [
+        "`-input=false` para no pedir datos.",
+        "`-out=ARCHIVO` para guardar el plan."
+      ],
+      "accepted": ["terraform plan -input=false -out=tfplan"],
+      "output": "Plan: 2 to add, 1 to change, 0 to destroy.\n\nSaved the plan to: tfplan\n\nTo perform exactly these actions, run the following command to apply:\n    terraform apply \"tfplan\"",
+      "solution": {
+        "answer": "terraform plan -input=false -out=tfplan",
+        "explanation": "El archivo `tfplan` es binario: para publicarlo legible en la PR se usa `terraform show tfplan`."
+      }
+    },
+    {
+      "id": "cmd-apply-plan",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Aplica exactamente el plan guardado en `tfplan`.",
+      "hints": ["El archivo del plan se pasa como argumento a `terraform apply`."],
+      "accepted": ["terraform apply tfplan", "terraform apply -input=false tfplan"],
+      "output": "google_storage_bucket.facturas: Creating...\ngoogle_storage_bucket.facturas: Creation complete after 2s [id=tienda-facturas]\n\nApply complete! Resources: 2 added, 1 changed, 0 destroyed.",
+      "solution": {
+        "answer": "terraform apply tfplan",
+        "explanation": "Con un plan guardado no pide confirmación: la aprobación fue la revisión de la PR."
+      }
+    },
+    {
+      "id": "editor-sensitive",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Declara la variable `api_token` de tipo `string`, con descripción y marcada como sensible, y un output `endpoint` cuyo valor sea `var.endpoint`, que **no** es sensible.",
+      "starter": "variable \"endpoint\" {\n  type = string\n}\n",
+      "assertions": [
+        { "path": "variable.api_token[0].type", "op": "equals", "value": "string", "message": "variable api_token con type = string" },
+        { "path": "variable.api_token[0].description", "op": "exists", "message": "variable api_token con description" },
+        { "path": "variable.api_token[0].sensitive", "op": "equals", "value": true, "message": "sensitive = true en api_token" },
+        { "path": "output.endpoint[0].value", "op": "equals", "value": "var.endpoint", "message": "output endpoint con value = var.endpoint" },
+        { "path": "variable.endpoint[0].type", "op": "equals", "value": "string", "message": "La variable endpoint sigue igual" }
+      ],
+      "hints": [
+        "Dentro de `variable \"api_token\"`: `type`, `description` y `sensitive = true`.",
+        "El output: `output \"endpoint\" { value = var.endpoint }`."
+      ],
+      "solution": {
+        "answer": "variable \"endpoint\" {\n  type = string\n}\n\nvariable \"api_token\" {\n  type        = string\n  description = \"Token de la API de pagos\"\n  sensitive   = true\n}\n\noutput \"endpoint\" {\n  value = var.endpoint\n}\n",
+        "explanation": "El token aparecerá como `(sensitive value)` en el plan. Si un output usara `var.api_token`, también tendría que ser `sensitive`, o Terraform daría error."
+      }
+    }
+  ]
+}

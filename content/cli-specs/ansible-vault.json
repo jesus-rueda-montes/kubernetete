@@ -1,0 +1,265 @@
+{
+  "cli": "ansible-vault",
+  "description": "Cifra y descifra datos de Ansible",
+  "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html",
+  "commands": [
+    {
+      "name": "create",
+      "description": "Crea un archivo cifrado y lo abre en el editor",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#create",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encrypt-vault-id",
+          "takesValue": true,
+          "description": "Vault id con el que cifrar (si hay varios)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "edit",
+      "description": "Abre un archivo cifrado en el editor y lo vuelve a cifrar al cerrar",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#edit",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encrypt-vault-id",
+          "takesValue": true,
+          "description": "Vault id con el que cifrar (si hay varios)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "view",
+      "description": "Muestra el contenido de un archivo cifrado",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#view",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "encrypt",
+      "description": "Cifra un archivo existente",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#encrypt",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encrypt-vault-id",
+          "takesValue": true,
+          "description": "Vault id con el que cifrar (si hay varios)"
+        },
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Archivo de salida (- para la salida estándar)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "decrypt",
+      "description": "Descifra un archivo (lo deja en claro)",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#decrypt",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Archivo de salida (- para la salida estándar)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "encrypt_string",
+      "description": "Cifra un texto para pegarlo como valor de una variable",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#encrypt-string",
+      "args": [
+        {
+          "name": "TEXTO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "takesValue": true,
+          "description": "Nombre de la variable",
+          "short": "n"
+        },
+        {
+          "name": "prompt",
+          "takesValue": false,
+          "description": "Pide el texto por teclado",
+          "short": "p"
+        },
+        {
+          "name": "encrypt-vault-id",
+          "takesValue": true,
+          "description": "Vault id con el que cifrar (si hay varios)"
+        },
+        {
+          "name": "output",
+          "takesValue": true,
+          "description": "Archivo de salida (- para la salida estándar)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    },
+    {
+      "name": "rekey",
+      "description": "Vuelve a cifrar un archivo con una contraseña nueva",
+      "source": "https://docs.ansible.com/ansible/latest/cli/ansible-vault.html#rekey",
+      "args": [
+        {
+          "name": "ARCHIVO"
+        }
+      ],
+      "flags": [
+        {
+          "name": "new-vault-id",
+          "takesValue": true,
+          "description": "Nueva identidad del vault"
+        },
+        {
+          "name": "new-vault-password-file",
+          "takesValue": true,
+          "description": "Archivo con la contraseña nueva"
+        },
+        {
+          "name": "encrypt-vault-id",
+          "takesValue": true,
+          "description": "Vault id con el que cifrar (si hay varios)"
+        },
+        {
+          "name": "ask-vault-password",
+          "takesValue": false,
+          "description": "Pide la contraseña del vault",
+          "short": "J"
+        },
+        {
+          "name": "vault-password-file",
+          "takesValue": true,
+          "description": "Archivo (o script) con la contraseña del vault"
+        },
+        {
+          "name": "vault-id",
+          "takesValue": true,
+          "description": "Identidad del vault: etiqueta@origen (p. ej. pro@prompt)"
+        }
+      ]
+    }
+  ]
+}

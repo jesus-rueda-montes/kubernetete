@@ -1,0 +1,136 @@
+{
+  "exercises": [
+    {
+      "id": "contenedor-vs-vm",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué diferencia principal hay entre un contenedor y una máquina virtual?",
+      "hints": ["¿Cuántos sistemas operativos (kernels) hay en cada caso?"],
+      "options": [
+        { "id": "a", "text": "El contenedor comparte el kernel del anfitrión; la VM lleva su propio sistema operativo", "correct": true, "explanation": "Correcto: por eso el contenedor es más ligero y arranca antes." },
+        { "id": "b", "text": "El contenedor lleva su propio kernel; la VM no", "correct": false, "explanation": "Es justo al revés." },
+        { "id": "c", "text": "No hay diferencia: son lo mismo con otro nombre", "correct": false, "explanation": "Son tecnologías distintas con niveles de aislamiento distintos." }
+      ],
+      "solution": {
+        "answer": "El contenedor comparte el kernel",
+        "explanation": "Un contenedor es un proceso aislado con namespaces y cgroups sobre el kernel del anfitrión. Una VM virtualiza hardware y ejecuta un sistema operativo completo."
+      }
+    },
+    {
+      "id": "datos-contenedor",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si una aplicación escribe archivos dentro de su contenedor y luego borras el contenedor con `docker rm`, los archivos se conservan en la imagen.",
+      "hints": ["La imagen es de solo lectura. ¿Dónde escribe el contenedor?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "La imagen no cambia: el contenedor escribe en su propia capa de escritura." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: se pierden con la capa de escritura del contenedor." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Cada contenedor tiene una capa de escritura propia que desaparece al borrarlo. Para datos persistentes se usan volúmenes."
+      }
+    },
+    {
+      "id": "latest",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué significa la etiqueta `latest` de una imagen?",
+      "hints": ["¿La actualiza alguien automáticamente?"],
+      "options": [
+        { "id": "a", "text": "Que siempre es la versión más reciente", "correct": false, "explanation": "No está garantizado: es una etiqueta que alguien asigna (o no) al publicar." },
+        { "id": "b", "text": "Es solo la etiqueta por defecto; puede apuntar a cualquier versión", "correct": true, "explanation": "Correcto: por eso no se usa en producción." },
+        { "id": "c", "text": "Que la imagen es estable y probada", "correct": false, "explanation": "No dice nada sobre estabilidad." }
+      ],
+      "solution": {
+        "answer": "Etiqueta por defecto",
+        "explanation": "`latest` es la etiqueta que se usa si no pones ninguna. No garantiza nada; fija siempre una versión concreta."
+      }
+    },
+    {
+      "id": "run-vs-cmd",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En un Dockerfile, ¿cuándo se ejecuta la instrucción `RUN pip install -r requirements.txt`?",
+      "hints": ["Hay instrucciones de construcción y una de arranque."],
+      "options": [
+        { "id": "a", "text": "Al construir la imagen", "correct": true, "explanation": "Correcto: el resultado queda guardado en una capa de la imagen." },
+        { "id": "b", "text": "Cada vez que arranca un contenedor", "correct": false, "explanation": "Eso es CMD (o ENTRYPOINT)." },
+        { "id": "c", "text": "Solo al hacer docker push", "correct": false, "explanation": "`push` solo sube la imagen ya construida." }
+      ],
+      "solution": {
+        "answer": "Al construir",
+        "explanation": "`RUN` se ejecuta durante `docker build` y su resultado queda en una capa. `CMD` define lo que se ejecuta al arrancar el contenedor."
+      }
+    },
+    {
+      "id": "orden-cache",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Por qué se copia `requirements.txt` e instalan las dependencias **antes** de copiar el resto del código?",
+      "hints": ["Cuando una capa cambia, se reconstruyen esa y todas las siguientes."],
+      "options": [
+        { "id": "a", "text": "Porque Docker lo exige", "correct": false, "explanation": "No lo exige; es una optimización." },
+        { "id": "b", "text": "Para aprovechar la caché: si solo cambia el código, no se reinstalan las dependencias", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Para que la imagen ocupe menos", "correct": false, "explanation": "El tamaño final es el mismo; lo que mejora es el tiempo de construcción." }
+      ],
+      "solution": {
+        "answer": "Aprovechar la caché",
+        "explanation": "Las dependencias cambian poco y el código mucho. Poniéndolas antes, la capa de instalación se reutiliza en cada build."
+      }
+    },
+    {
+      "id": "run-detached",
+      "type": "command",
+      "cli": "docker",
+      "prompt": "Arranca en **segundo plano** un contenedor llamado `web` con la imagen `nginx:1.27`, publicando el puerto `8080` de tu máquina en el `80` del contenedor.",
+      "hints": [
+        "Necesitas `docker run` con tres flags: segundo plano, nombre y puertos.",
+        "`-d`, `--name web` y `-p HOST:CONTENEDOR`; la imagen va al final."
+      ],
+      "accepted": ["docker run -d --name web -p 8080:80 nginx:1.27"],
+      "output": "3f2a9c1e7b4d5a6c8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d",
+      "solution": {
+        "answer": "docker run -d --name web -p 8080:80 nginx:1.27",
+        "explanation": "`-d` lo ejecuta en segundo plano (imprime el ID del contenedor), `--name` le da nombre y `-p 8080:80` publica el puerto: HOST primero, CONTENEDOR después."
+      }
+    },
+    {
+      "id": "listar-todos",
+      "type": "command",
+      "cli": "docker",
+      "prompt": "Lista **todos** los contenedores, también los que están parados.",
+      "hints": [
+        "El comando para listar contenedores es de dos letras, como el de Linux para ver procesos.",
+        "Por defecto solo muestra los que están en marcha; hay un flag para «todos»."
+      ],
+      "accepted": ["docker ps -a"],
+      "output": "CONTAINER ID   IMAGE        COMMAND                  STATUS                     NAMES\n3f2a9c1e7b4d   nginx:1.27   \"/docker-entrypoint.…\"   Up 5 minutes               web\n9b8a7c6d5e4f   busybox      \"sh\"                     Exited (0) 2 hours ago     prueba",
+      "solution": {
+        "answer": "docker ps -a",
+        "explanation": "`docker ps` lista los contenedores en marcha; con `-a` (`--all`) incluye también los parados."
+      }
+    },
+    {
+      "id": "build-tag",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para construir una imagen llamada `tienda-api:1.0` usando el Dockerfile de la carpeta actual.",
+      "template": "docker {{verbo}} -{{flag}} tienda-api:1.0 {{contexto}}",
+      "blanks": [
+        { "id": "verbo", "accepted": ["build"] },
+        { "id": "flag", "accepted": ["t"] },
+        { "id": "contexto", "accepted": ["."] }
+      ],
+      "hints": [
+        "El verbo es «construir» en inglés.",
+        "El flag del nombre es la inicial de «tag».",
+        "El último argumento es el contexto de construcción: la carpeta actual se escribe con un solo carácter."
+      ],
+      "solution": {
+        "answer": "docker build -t tienda-api:1.0 .",
+        "explanation": "`docker build` construye la imagen, `-t` le pone nombre y etiqueta, y `.` es el contexto (la carpeta actual, donde está el Dockerfile)."
+      }
+    }
+  ]
+}

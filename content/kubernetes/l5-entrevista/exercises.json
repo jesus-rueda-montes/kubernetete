@@ -1,0 +1,183 @@
+{
+  "exercises": [
+    {
+      "id": "flujo-apply",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tras `kubectl apply` de un Deployment, ¿qué componente asigna un nodo a cada Pod nuevo?",
+      "hints": ["Uno solo decide; otro arranca los contenedores."],
+      "options": [
+        { "id": "a", "text": "kube-scheduler", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "kubelet", "correct": false, "explanation": "El kubelet arranca los contenedores del Pod ya asignado a su nodo." },
+        { "id": "c", "text": "etcd", "correct": false, "explanation": "etcd solo guarda el estado." }
+      ],
+      "solution": {
+        "answer": "kube-scheduler",
+        "explanation": "API server → etcd → controladores (Deployment → ReplicaSet → Pods) → scheduler asigna nodo → kubelet arranca los contenedores."
+      }
+    },
+    {
+      "id": "control-plane-caido",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El control plane deja de responder durante 10 minutos. ¿Qué les pasa a los Pods que ya estaban funcionando?",
+      "hints": ["¿Quién gestiona los contenedores en cada nodo?"],
+      "options": [
+        { "id": "a", "text": "Siguen funcionando, pero no se pueden hacer cambios ni reprogramar Pods", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Se detienen todos inmediatamente", "correct": false, "explanation": "El kubelet mantiene los contenedores en marcha." },
+        { "id": "c", "text": "Se mueven a otros nodos", "correct": false, "explanation": "Sin control plane nadie reprograma nada." }
+      ],
+      "solution": {
+        "answer": "Siguen funcionando",
+        "explanation": "Los kubelets siguen ejecutando los Pods. Lo que se pierde es la capacidad de cambiar el estado y de reaccionar a fallos."
+      }
+    },
+    {
+      "id": "probes",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La aplicación pierde la conexión con la base de datos durante un minuto. Quieres que deje de recibir tráfico, pero **sin reiniciarse**. ¿Qué probe debe fallar?",
+      "hints": ["Una quita tráfico; la otra reinicia."],
+      "options": [
+        { "id": "a", "text": "Readiness", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Liveness", "correct": false, "explanation": "Reiniciaría el contenedor, y probablemente todos a la vez." },
+        { "id": "c", "text": "Startup", "correct": false, "explanation": "Solo actúa durante el arranque." }
+      ],
+      "solution": {
+        "answer": "Readiness",
+        "explanation": "Una liveness que depende de servicios externos provoca reinicios en cascada. Las dependencias se reflejan, si acaso, en la readiness."
+      }
+    },
+    {
+      "id": "statefulset",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué ofrece un StatefulSet que no ofrece un Deployment?",
+      "hints": ["Piensa en `db-0`, `db-1`…"],
+      "options": [
+        { "id": "a", "text": "Nombres de Pod estables y predecibles", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Un volumen propio por Pod (volumeClaimTemplates)", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Creación y borrado ordenados", "correct": true, "explanation": "Correcto." },
+        { "id": "d", "text": "Rolling updates", "correct": false, "explanation": "Ambos los tienen." }
+      ],
+      "solution": {
+        "answer": "a, b y c",
+        "explanation": "Por eso se usa para bases de datos y sistemas con identidad: cada réplica conserva su nombre y su disco."
+      }
+    },
+    {
+      "id": "pdb",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿De qué protege un PodDisruptionBudget?",
+      "hints": ["Distingue entre interrupciones voluntarias e involuntarias."],
+      "options": [
+        { "id": "a", "text": "De desalojar demasiados Pods a la vez en interrupciones voluntarias, como un `kubectl drain`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "De la caída de un nodo por un fallo de hardware", "correct": false, "explanation": "Eso es involuntario; ahí ayudan las réplicas repartidas." },
+        { "id": "c", "text": "De que un Pod consuma demasiada memoria", "correct": false, "explanation": "Eso lo controlan los limits." }
+      ],
+      "solution": {
+        "answer": "Interrupciones voluntarias",
+        "explanation": "Durante un drain o una actualización de nodos, Kubernetes respeta `minAvailable`/`maxUnavailable` del PDB."
+      }
+    },
+    {
+      "id": "zonas",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes 3 réplicas y el clúster usa 3 zonas. ¿Cómo te aseguras de que no acaben todas en la misma zona?",
+      "hints": ["Hay un campo del Pod para repartir según una etiqueta de topología."],
+      "options": [
+        { "id": "a", "text": "`topologySpreadConstraints` con `topologyKey: topology.kubernetes.io/zone`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Subir `replicas` a 30", "correct": false, "explanation": "Sigue sin garantizar el reparto, y multiplica el coste." },
+        { "id": "c", "text": "Un PodDisruptionBudget", "correct": false, "explanation": "Limita desalojos, no decide dónde se colocan." }
+      ],
+      "solution": {
+        "answer": "topologySpreadConstraints",
+        "explanation": "También vale una pod anti-affinity por zona. Así, la caída de una zona solo afecta a una parte de las réplicas."
+      }
+    },
+    {
+      "id": "cmd-can-i",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Comprueba si la ServiceAccount `api` del namespace `tienda` puede listar (`list`) Secrets en ese namespace.",
+      "hints": [
+        "Es `kubectl auth can-i VERBO RECURSO`.",
+        "Suplanta con `--as=system:serviceaccount:tienda:api` y añade `-n tienda`."
+      ],
+      "accepted": [
+        "kubectl auth can-i list secrets --as=system:serviceaccount:tienda:api -n tienda",
+        "kubectl auth can-i list secrets -n tienda --as=system:serviceaccount:tienda:api",
+        "kubectl auth can-i list secrets --as=system:serviceaccount:tienda:api --namespace=tienda",
+        "kubectl auth can-i list secrets --namespace=tienda --as=system:serviceaccount:tienda:api"
+      ],
+      "output": "no",
+      "solution": {
+        "answer": "kubectl auth can-i list secrets --as=system:serviceaccount:tienda:api -n tienda",
+        "explanation": "Es la forma rápida de demostrar el mínimo privilegio en una entrevista: la API no necesita leer Secrets de la API de Kubernetes."
+      }
+    },
+    {
+      "id": "cmd-undo",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "La versión nueva del Deployment `api` falla en producción. Vuelve a la revisión anterior.",
+      "hints": [
+        "Es un subcomando de `kubectl rollout`.",
+        "`kubectl rollout undo deployment/api`."
+      ],
+      "accepted": [
+        "kubectl rollout undo deployment/api",
+        "kubectl rollout undo deployment api",
+        "kubectl rollout undo deploy/api",
+        "kubectl rollout undo deploy api"
+      ],
+      "output": "deployment.apps/api rolled back",
+      "solution": {
+        "answer": "kubectl rollout undo deployment/api",
+        "explanation": "Con GitOps, lo correcto a continuación es revertir también el commit, para que el repositorio refleje lo que está desplegado."
+      }
+    },
+    {
+      "id": "editor-pdb",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el PodDisruptionBudget `api` para que, durante un drain, siempre queden al menos 2 Pods con la etiqueta `app: api`.",
+      "starter": "apiVersion: policy/v1\nkind: PodDisruptionBudget\nmetadata:\n  name: api\nspec:\n",
+      "assertions": [
+        { "path": "spec.minAvailable", "op": "equals", "value": 2, "message": "minAvailable: 2" },
+        { "path": "spec.selector.matchLabels.app", "op": "equals", "value": "api", "message": "El selector usa matchLabels con app: api" }
+      ],
+      "hints": [
+        "Hace falta `minAvailable` y un `selector`.",
+        "El selector es `selector: matchLabels: app: api`, igual que en un Deployment."
+      ],
+      "solution": {
+        "answer": "apiVersion: policy/v1\nkind: PodDisruptionBudget\nmetadata:\n  name: api\nspec:\n  minAvailable: 2\n  selector:\n    matchLabels:\n      app: api\n",
+        "explanation": "Con 3 réplicas, el drain puede desalojar de una en una; nunca bajará de 2 Pods disponibles."
+      }
+    },
+    {
+      "id": "editor-produccion",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Prepara este Deployment para producción: `maxUnavailable: 0` y `maxSurge: 1` en `strategy.rollingUpdate`, y en el contenedor un `securityContext` con `runAsNonRoot: true` y `allowPrivilegeEscalation: false`.",
+      "starter": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: api\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: api\n  template:\n    metadata:\n      labels:\n        app: api\n    spec:\n      containers:\n        - name: api\n          image: europe-west1-docker.pkg.dev/tienda/apps/api:2.3.1\n",
+      "assertions": [
+        { "path": "spec.strategy.rollingUpdate.maxUnavailable", "op": "equals", "value": 0, "message": "strategy.rollingUpdate.maxUnavailable: 0" },
+        { "path": "spec.strategy.rollingUpdate.maxSurge", "op": "equals", "value": 1, "message": "strategy.rollingUpdate.maxSurge: 1" },
+        { "path": "spec.template.spec.containers[0].securityContext.runAsNonRoot", "op": "equals", "value": true, "message": "securityContext.runAsNonRoot: true en el contenedor" },
+        { "path": "spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation", "op": "equals", "value": false, "message": "securityContext.allowPrivilegeEscalation: false en el contenedor" }
+      ],
+      "hints": [
+        "`strategy` va en `spec`, al nivel de `replicas`.",
+        "`securityContext` va dentro del contenedor, al nivel de `image`."
+      ],
+      "solution": {
+        "answer": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: api\nspec:\n  replicas: 3\n  strategy:\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  selector:\n    matchLabels:\n      app: api\n  template:\n    metadata:\n      labels:\n        app: api\n    spec:\n      containers:\n        - name: api\n          image: europe-west1-docker.pkg.dev/tienda/apps/api:2.3.1\n          securityContext:\n            runAsNonRoot: true\n            allowPrivilegeEscalation: false\n",
+        "explanation": "El rolling update nunca baja de 3 Pods listos, y el contenedor no puede ejecutarse como root ni ganar privilegios."
+      }
+    }
+  ]
+}

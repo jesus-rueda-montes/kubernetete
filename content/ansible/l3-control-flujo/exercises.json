@@ -1,0 +1,176 @@
+{
+  "exercises": [
+    {
+      "id": "handler-ok",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea `template` tiene `notify: Recargar nginx`. Ejecutas el playbook y la tarea termina en `ok` (el archivo ya estaba igual). ¿Qué pasa con el handler?",
+      "hints": ["¿Qué estado tiene que dar la tarea para avisar al handler?"],
+      "options": [
+        { "id": "a", "text": "No se ejecuta", "correct": true, "explanation": "Correcto: solo avisa si hay `changed`." },
+        { "id": "b", "text": "Se ejecuta al final del play", "correct": false, "explanation": "Solo si la tarea hubiera cambiado algo." },
+        { "id": "c", "text": "Se ejecuta inmediatamente", "correct": false, "explanation": "Ni siquiera con `changed` se ejecutaría inmediatamente." }
+      ],
+      "solution": {
+        "answer": "No se ejecuta",
+        "explanation": "`notify` solo avisa cuando la tarea da `changed`. Así nginx se recarga solo cuando cambia su configuración."
+      }
+    },
+    {
+      "id": "handler-una-vez",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tres tareas cambian archivos de nginx y las tres notifican `Recargar nginx`. ¿Cuántas veces se recarga nginx?",
+      "hints": ["Piensa en el fontanero que viene al final de la jornada."],
+      "options": [
+        { "id": "a", "text": "Tres veces, una tras cada tarea", "correct": false, "explanation": "Los handlers no se ejecutan tras cada tarea." },
+        { "id": "b", "text": "Una vez, al final", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Ninguna: hay que llamarlo a mano", "correct": false, "explanation": "`notify` basta." }
+      ],
+      "solution": {
+        "answer": "Una vez",
+        "explanation": "Aunque lo notifiquen varias tareas, un handler se ejecuta una sola vez al final del bloque de tareas del play."
+      }
+    },
+    {
+      "id": "when-llaves",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la forma correcta de ejecutar una tarea solo si la variable `entorno` vale `pro`?",
+      "hints": ["`when` ya es una expresión Jinja2."],
+      "options": [
+        { "id": "a", "text": "`when: entorno == \"pro\"`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`when: \"{{ entorno }} == pro\"`", "correct": false, "explanation": "No se usan llaves en `when`." },
+        { "id": "c", "text": "`if: entorno == \"pro\"`", "correct": false, "explanation": "La palabra clave es `when`." }
+      ],
+      "solution": {
+        "answer": "when: entorno == \"pro\"",
+        "explanation": "`when` es una expresión Jinja2 sin llaves: las variables se usan directamente."
+      }
+    },
+    {
+      "id": "register-loop",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea con `loop` sobre 3 elementos tiene `register: salida`. ¿Dónde está el `stdout` de cada elemento?",
+      "hints": ["Con un bucle hay un resultado por elemento."],
+      "options": [
+        { "id": "a", "text": "En `salida.stdout`", "correct": false, "explanation": "Eso sería sin bucle." },
+        { "id": "b", "text": "En `salida.results[N].stdout`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "En `item.stdout`", "correct": false, "explanation": "`item` es el elemento del bucle, no el resultado." }
+      ],
+      "solution": {
+        "answer": "salida.results",
+        "explanation": "Con `loop`, el registro contiene una lista `results` con el resultado de cada elemento."
+      }
+    },
+    {
+      "id": "rescue",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "En un `block` con `rescue` y `always`, falla la segunda tarea del bloque. ¿Qué se ejecuta después?",
+      "hints": ["`rescue` = plan B si falla; `always` = siempre."],
+      "options": [
+        { "id": "a", "text": "Las tareas de `rescue`", "correct": true, "explanation": "Se ejecutan porque falló una tarea del bloque." },
+        { "id": "b", "text": "Las tareas de `always`", "correct": true, "explanation": "Se ejecutan siempre." },
+        { "id": "c", "text": "La tercera tarea del bloque", "correct": false, "explanation": "El bloque se interrumpe en la tarea que falla." }
+      ],
+      "solution": {
+        "answer": "rescue y always",
+        "explanation": "Al fallar una tarea, el resto del bloque se salta, se ejecuta `rescue` y después `always`."
+      }
+    },
+    {
+      "id": "tag-never",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea que borra la caché tiene `tags: [never, limpiar]`. ¿Cuándo se ejecuta?",
+      "hints": ["`never` impide la ejecución por defecto."],
+      "options": [
+        { "id": "a", "text": "Nunca", "correct": false, "explanation": "Se puede pedir con uno de sus otros tags." },
+        { "id": "b", "text": "Solo si ejecutas con `--tags limpiar`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Siempre", "correct": false, "explanation": "Eso sería con `always`." }
+      ],
+      "solution": {
+        "answer": "Con --tags limpiar",
+        "explanation": "`never` hace que la tarea no se ejecute salvo que se pida explícitamente uno de sus tags. Útil para tareas peligrosas o de depuración."
+      }
+    },
+    {
+      "id": "cmd-tags",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Ejecuta `web.yml` con el inventario `inventario.ini`, pero solo las tareas con el tag `config`.",
+      "hints": [
+        "El inventario va con `-i`.",
+        "El flag para elegir tags es `--tags` (o `-t`)."
+      ],
+      "accepted": ["ansible-playbook -i inventario.ini web.yml --tags config"],
+      "output": "PLAY [Servidor web] ****************************************\n\nTASK [Configuración de nginx] ******************************\nchanged: [web1]\n\nRUNNING HANDLER [Recargar nginx] ***************************\nchanged: [web1]\n\nPLAY RECAP *************************************************\nweb1                       : ok=2    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0",
+      "solution": {
+        "answer": "ansible-playbook -i inventario.ini web.yml --tags config",
+        "explanation": "Solo se ejecutan las tareas con el tag `config` (y las de `always`). Como la plantilla cambió, se ejecuta también su handler."
+      }
+    },
+    {
+      "id": "cmd-list-tags",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Muestra los tags que tiene `web.yml` (inventario `inventario.ini`) sin ejecutar nada.",
+      "hints": [
+        "Es un flag que lista en vez de ejecutar.",
+        "Se llama `--list-tags`."
+      ],
+      "accepted": ["ansible-playbook -i inventario.ini web.yml --list-tags"],
+      "output": "playbook: web.yml\n\n  play #1 (web): Servidor web\tTAGS: []\n      TASK TAGS: [config, nginx, paquetes]",
+      "solution": {
+        "answer": "ansible-playbook -i inventario.ini web.yml --list-tags",
+        "explanation": "`--list-tags` muestra los tags de cada play. `--list-tasks` muestra las tareas que se ejecutarían."
+      }
+    },
+    {
+      "id": "editor-handler",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Añade a la tarea de la plantilla un `notify: Recargar nginx` y define ese handler: con `ansible.builtin.service`, `name: nginx` y `state: reloaded`.",
+      "starter": "---\n- name: Servidor web\n  hosts: web\n  become: true\n  tasks:\n    - name: Configuración de nginx\n      ansible.builtin.template:\n        src: nginx.conf.j2\n        dest: /etc/nginx/nginx.conf\n",
+      "assertions": [
+        { "path": "[0].tasks[0].notify", "op": "equals", "value": "Recargar nginx", "message": "La tarea tiene notify: Recargar nginx (al nivel de name, no dentro de template)" },
+        { "path": "[0].handlers", "op": "count", "value": 1, "message": "Hay una sección handlers con un handler" },
+        { "path": "[0].handlers[0].name", "op": "equals", "value": "Recargar nginx", "message": "El handler se llama exactamente Recargar nginx" },
+        { "path": "[0].handlers[0]['ansible.builtin.service'].name", "op": "equals", "value": "nginx", "message": "El handler usa ansible.builtin.service con name: nginx" },
+        { "path": "[0].handlers[0]['ansible.builtin.service'].state", "op": "equals", "value": "reloaded", "message": "state: reloaded" }
+      ],
+      "hints": [
+        "`notify` es una propiedad de la tarea: va al mismo nivel que `name` y `ansible.builtin.template`.",
+        "`handlers:` va al mismo nivel que `tasks:`, y dentro se escribe como una tarea más.",
+        "El nombre del handler debe coincidir exactamente con el de `notify`."
+      ],
+      "solution": {
+        "answer": "---\n- name: Servidor web\n  hosts: web\n  become: true\n  tasks:\n    - name: Configuración de nginx\n      ansible.builtin.template:\n        src: nginx.conf.j2\n        dest: /etc/nginx/nginx.conf\n      notify: Recargar nginx\n\n  handlers:\n    - name: Recargar nginx\n      ansible.builtin.service:\n        name: nginx\n        state: reloaded\n",
+        "explanation": "Si la plantilla cambia, la tarea da `changed`, avisa al handler y nginx se recarga una vez al final. Si no cambia, no se recarga."
+      }
+    },
+    {
+      "id": "editor-loop",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa la tarea para crear los usuarios `ana`, `luis` y `marta` con un `loop` (en ese orden), usando `item` en `name`, y ejecútala solo cuando `entorno == \"pro\"`.",
+      "starter": "---\n- name: Usuarios\n  hosts: all\n  become: true\n  tasks:\n    - name: Crear usuarios\n      ansible.builtin.user:\n        name: \n        state: present\n",
+      "assertions": [
+        { "path": "[0].tasks[0]['ansible.builtin.user'].name", "op": "equals", "value": "{{ item }}", "message": "name: \"{{ item }}\" (entre comillas)" },
+        { "path": "[0].tasks[0].loop", "op": "equals", "value": ["ana", "luis", "marta"], "message": "loop con ana, luis y marta (en ese orden), al nivel de name" },
+        { "path": "[0].tasks[0].when", "op": "equals", "value": "entorno == \"pro\"", "message": "when: entorno == \"pro\" (sin llaves)" }
+      ],
+      "hints": [
+        "`loop` y `when` son propiedades de la tarea, no del módulo: van al nivel de `name`.",
+        "Un valor que empieza por `{{` debe ir entre comillas en YAML: `name: \"{{ item }}\"`.",
+        "`when` va sin llaves."
+      ],
+      "solution": {
+        "answer": "---\n- name: Usuarios\n  hosts: all\n  become: true\n  tasks:\n    - name: Crear usuarios\n      ansible.builtin.user:\n        name: \"{{ item }}\"\n        state: present\n      loop:\n        - ana\n        - luis\n        - marta\n      when: entorno == \"pro\"\n",
+        "explanation": "El módulo se ejecuta una vez por elemento, con `item` valiendo cada nombre. La condición se evalúa para cada elemento."
+      }
+    }
+  ]
+}

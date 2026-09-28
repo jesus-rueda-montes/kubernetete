@@ -1,0 +1,8 @@
+{
+  "title": "Ingress y Gateway API",
+  "summary": "Un único punto de entrada HTTP(S) para muchas aplicaciones: reglas por host y ruta, TLS, Ingress controllers y su sucesor, Gateway API.",
+  "level": 3,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

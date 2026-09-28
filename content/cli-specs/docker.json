@@ -1,0 +1,118 @@
+{
+  "cli": "docker",
+  "description": "CLI de Docker",
+  "source": "https://docs.docker.com/reference/cli/docker/",
+  "commands": [
+    {
+      "name": "run",
+      "description": "Crea y arranca un contenedor a partir de una imagen (alias de docker container run)",
+      "source": "https://docs.docker.com/reference/cli/docker/container/run/",
+      "args": [{ "name": "IMAGEN" }, { "name": "COMANDO" }],
+      "flags": [
+        { "name": "detach", "short": "d", "takesValue": false, "description": "Ejecuta en segundo plano" },
+        { "name": "publish", "short": "p", "takesValue": true, "description": "Publica un puerto: PUERTO_HOST:PUERTO_CONTENEDOR" },
+        { "name": "env", "short": "e", "takesValue": true, "description": "Variable de entorno (CLAVE=valor)" },
+        { "name": "env-file", "takesValue": true, "description": "Archivo con variables de entorno" },
+        { "name": "name", "takesValue": true, "description": "Nombre del contenedor" },
+        { "name": "rm", "takesValue": false, "description": "Borra el contenedor al terminar" },
+        { "name": "interactive", "short": "i", "takesValue": false, "description": "Mantiene stdin abierto" },
+        { "name": "tty", "short": "t", "takesValue": false, "description": "Asigna una terminal" },
+        { "name": "volume", "short": "v", "takesValue": true, "description": "Monta un volumen: ORIGEN:DESTINO" },
+        { "name": "network", "takesValue": true, "description": "Red a la que conectar el contenedor" }
+      ]
+    },
+    {
+      "name": "build",
+      "description": "Construye una imagen a partir de un Dockerfile (alias de docker image build)",
+      "source": "https://docs.docker.com/reference/cli/docker/image/build/",
+      "args": [{ "name": "CONTEXTO" }],
+      "flags": [
+        { "name": "tag", "short": "t", "takesValue": true, "description": "Nombre y etiqueta de la imagen (nombre:etiqueta)" },
+        { "name": "file", "short": "f", "takesValue": true, "description": "Ruta del Dockerfile" },
+        { "name": "build-arg", "takesValue": true, "description": "Variable de construcción (ARG)" },
+        { "name": "no-cache", "takesValue": false, "description": "No usa la caché de capas" },
+        { "name": "target", "takesValue": true, "description": "Etapa a construir en un Dockerfile multi-stage" },
+        { "name": "platform", "takesValue": true, "description": "Plataforma de destino (p. ej. linux/amd64)" }
+      ]
+    },
+    {
+      "name": "ps",
+      "description": "Lista contenedores (alias de docker container ls)",
+      "source": "https://docs.docker.com/reference/cli/docker/container/ls/",
+      "flags": [
+        { "name": "all", "short": "a", "takesValue": false, "description": "Incluye los contenedores parados" },
+        { "name": "quiet", "short": "q", "takesValue": false, "description": "Solo los IDs" },
+        { "name": "filter", "short": "f", "takesValue": true, "description": "Filtra por condiciones" },
+        { "name": "latest", "short": "l", "takesValue": false, "description": "Solo el último creado" }
+      ]
+    },
+    {
+      "name": "logs",
+      "description": "Muestra los logs de un contenedor (alias de docker container logs)",
+      "source": "https://docs.docker.com/reference/cli/docker/container/logs/",
+      "args": [{ "name": "CONTENEDOR" }],
+      "flags": [
+        { "name": "follow", "short": "f", "takesValue": false, "description": "Sigue mostrando la salida nueva" },
+        { "name": "tail", "short": "n", "takesValue": true, "description": "Número de líneas finales" },
+        { "name": "timestamps", "short": "t", "takesValue": false, "description": "Añade la marca de tiempo" },
+        { "name": "since", "takesValue": true, "description": "Solo logs posteriores a un momento o duración" }
+      ]
+    },
+    {
+      "name": "exec",
+      "description": "Ejecuta un comando en un contenedor en marcha (alias de docker container exec)",
+      "source": "https://docs.docker.com/reference/cli/docker/container/exec/",
+      "args": [{ "name": "CONTENEDOR" }, { "name": "COMANDO" }],
+      "flags": [
+        { "name": "interactive", "short": "i", "takesValue": false, "description": "Mantiene stdin abierto" },
+        { "name": "tty", "short": "t", "takesValue": false, "description": "Asigna una terminal" },
+        { "name": "detach", "short": "d", "takesValue": false, "description": "Ejecuta en segundo plano" },
+        { "name": "env", "short": "e", "takesValue": true, "description": "Variable de entorno" },
+        { "name": "user", "short": "u", "takesValue": true, "description": "Usuario con el que ejecutar" },
+        { "name": "workdir", "short": "w", "takesValue": true, "description": "Directorio de trabajo" }
+      ]
+    },
+    {
+      "name": "stop",
+      "description": "Para uno o varios contenedores (SIGTERM y, tras un margen, SIGKILL)",
+      "source": "https://docs.docker.com/reference/cli/docker/container/stop/",
+      "args": [{ "name": "CONTENEDOR" }]
+    },
+    {
+      "name": "rm",
+      "description": "Borra uno o varios contenedores",
+      "source": "https://docs.docker.com/reference/cli/docker/container/rm/",
+      "args": [{ "name": "CONTENEDOR" }],
+      "flags": [
+        { "name": "force", "short": "f", "takesValue": false, "description": "Fuerza el borrado de un contenedor en marcha" }
+      ]
+    },
+    {
+      "name": "images",
+      "description": "Lista las imágenes locales (alias de docker image ls)",
+      "source": "https://docs.docker.com/reference/cli/docker/image/ls/",
+      "flags": [
+        { "name": "all", "short": "a", "takesValue": false, "description": "Incluye capas intermedias" },
+        { "name": "quiet", "short": "q", "takesValue": false, "description": "Solo los IDs" }
+      ]
+    },
+    {
+      "name": "pull",
+      "description": "Descarga una imagen de un registro",
+      "source": "https://docs.docker.com/reference/cli/docker/image/pull/",
+      "args": [{ "name": "IMAGEN" }]
+    },
+    {
+      "name": "push",
+      "description": "Sube una imagen a un registro",
+      "source": "https://docs.docker.com/reference/cli/docker/image/push/",
+      "args": [{ "name": "IMAGEN" }]
+    },
+    {
+      "name": "tag",
+      "description": "Crea un nombre nuevo (etiqueta) que apunta a una imagen existente",
+      "source": "https://docs.docker.com/reference/cli/docker/image/tag/",
+      "args": [{ "name": "ORIGEN" }, { "name": "DESTINO" }]
+    }
+  ]
+}

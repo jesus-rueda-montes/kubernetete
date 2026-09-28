@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "clases", "front": "Clases de Cloud Storage y su duración mínima", "back": "Standard (sin mínimo), Nearline (30 días), Coldline (90), Archive (365). Todas con latencia de milisegundos." },
+    { "id": "bucket-nombre", "front": "Nombres de bucket", "back": "Únicos en todo el mundo, visibles públicamente y no se pueden cambiar." },
+    { "id": "ubicaciones", "front": "Tipos de ubicación de un bucket", "back": "Región, dual-region (p. ej. EUR4) y multirregión (EU, US, ASIA)." },
+    { "id": "uniform", "front": "Acceso uniforme a nivel de bucket", "back": "Permisos gestionados solo con IAM, sin ACLs por objeto. Recomendado." },
+    { "id": "lifecycle", "front": "¿Para qué sirven las reglas de ciclo de vida?", "back": "Acciones automáticas por antigüedad u otras condiciones: cambiar de clase o borrar objetos." },
+    { "id": "tres-tipos", "front": "Bloques, ficheros y objetos en GCP", "back": "Persistent Disk/Hyperdisk (bloques), Filestore (ficheros NFS), Cloud Storage (objetos)." },
+    { "id": "equivalencias", "front": "Equivalentes de Cloud Storage, Persistent Disk y Filestore en AWS", "back": "S3, EBS y EFS." }
+  ]
+}

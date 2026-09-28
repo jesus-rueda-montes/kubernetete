@@ -1,0 +1,13 @@
+{
+  "cards": [
+    { "id": "cbd", "front": "`create_before_destroy`", "back": "Al sustituir, crea el nuevo antes de destruir el viejo. Ambos deben poder coexistir (nombres generados)." },
+    { "id": "pd", "front": "`prevent_destroy`", "back": "Error si un plan destruye el recurso. No protege si borras el bloque resource del código." },
+    { "id": "ic", "front": "`ignore_changes`", "back": "Ignora los cambios en esos atributos (gestionados por otro sistema). Con moderación: esconde drift." },
+    { "id": "rtb", "front": "`replace_triggered_by`", "back": "Fuerza la sustitución del recurso cuando cambia otro recurso o atributo." },
+    { "id": "literales", "front": "¿Admiten variables las reglas de `lifecycle`?", "back": "No, solo literales (salvo las condiciones de precondition/postcondition)." },
+    { "id": "import", "front": "Bloque `import`", "back": "`import { to = DIRECCIÓN, id = \"ID real\" }`. Ajusta el código hasta que el plan solo muestre la importación." },
+    { "id": "generate", "front": "Generar el resource de un import", "back": "`terraform plan -generate-config-out=archivo.tf` (experimental: revisa lo generado)." },
+    { "id": "removed", "front": "Dejar de gestionar un recurso sin destruirlo", "back": "Quitar el resource y añadir `removed { from = ...; lifecycle { destroy = false } }`." },
+    { "id": "tabla", "front": "Bloques frente a comandos antiguos", "back": "import ↔ terraform import; removed ↔ state rm; moved ↔ state mv. Los bloques pasan por plan y revisión." }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Services y DNS del clúster",
+  "summary": "Una dirección estable delante de Pods que cambian: ClusterIP, NodePort y LoadBalancer, endpoints y resolución DNS.",
+  "level": 2,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

@@ -1,0 +1,13 @@
+{
+  "cards": [
+    { "id": "metodo", "front": "Método para una pregunta de diseño", "back": "Requisitos → diseño de alto nivel → detalle de lo crítico → transversal (seguridad, observabilidad, costes, CI/CD) → contrapartidas y evolución." },
+    { "id": "requisitos", "front": "Requisitos no funcionales que hay que preguntar", "back": "Tráfico y picos, SLO, latencia, RTO/RPO, normativa (ubicación de datos), presupuesto y experiencia del equipo." },
+    { "id": "pilares", "front": "Pilares del Well-Architected Framework de Google Cloud", "back": "Excelencia operativa; seguridad, privacidad y cumplimiento; fiabilidad; costes; rendimiento; sostenibilidad." },
+    { "id": "referencia", "front": "Arquitectura web de referencia en GCP", "back": "Cloud DNS → balanceador global + Cloud Armor + CDN → Cloud Run/GKE → Cloud SQL HA + caché + Cloud Storage; Pub/Sub para lo asíncrono." },
+    { "id": "rto-rpo", "front": "RTO y RPO", "back": "RTO: tiempo máximo caído. RPO: tiempo máximo de datos perdidos. Más pequeños = más caro; los fija el negocio." },
+    { "id": "patrones", "front": "Patrones de DR", "back": "Cold: copias + recrear con IaC (horas/días). Warm: réplica reducida que se escala (minutos/horas). Hot: activo-activo (casi cero)." },
+    { "id": "ha-vs-dr", "front": "HA frente a DR", "back": "HA: fallos pequeños (nodo, zona). DR: fallos grandes (región, borrado, ataque). La HA replica los errores; hacen falta copias." },
+    { "id": "promote", "front": "DR de Cloud SQL", "back": "Backups + PITR; réplica en otra región que se promociona con `gcloud sql instances promote-replica`." },
+    { "id": "ensayar", "front": "Lo que más se olvida en DR", "back": "Ensayar el plan, proteger las copias en otro proyecto y revisar dependencias (DNS, secretos, cuotas, imágenes)." }
+  ]
+}

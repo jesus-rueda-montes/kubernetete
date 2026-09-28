@@ -1,0 +1,211 @@
+{
+  "cli": "aws",
+  "description": "AWS CLI v2",
+  "source": "https://docs.aws.amazon.com/cli/latest/reference/index.html",
+  "globalFlags": [
+    {
+      "name": "region",
+      "takesValue": true,
+      "description": "Región de AWS (p. ej. eu-west-1)"
+    },
+    {
+      "name": "profile",
+      "takesValue": true,
+      "description": "Perfil de ~/.aws/config que se usa"
+    },
+    {
+      "name": "output",
+      "takesValue": true,
+      "values": [
+        "json",
+        "text",
+        "table",
+        "yaml",
+        "yaml-stream",
+        "off"
+      ],
+      "strict": true,
+      "description": "Formato de salida"
+    },
+    {
+      "name": "query",
+      "takesValue": true,
+      "description": "Consulta JMESPath para filtrar la salida"
+    },
+    {
+      "name": "debug",
+      "takesValue": false,
+      "description": "Muestra el log de depuración"
+    }
+  ],
+  "commands": [
+    {
+      "name": "configure",
+      "description": "Configura credenciales y opciones de la CLI",
+      "source": "https://docs.aws.amazon.com/cli/latest/reference/configure/index.html",
+      "subcommands": [
+        {
+          "name": "list",
+          "description": "Muestra la configuración activa y de dónde sale cada valor",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/configure/list.html"
+        }
+      ]
+    },
+    {
+      "name": "sts",
+      "description": "AWS Security Token Service",
+      "source": "https://docs.aws.amazon.com/cli/latest/reference/sts/index.html",
+      "subcommands": [
+        {
+          "name": "get-caller-identity",
+          "description": "Muestra la cuenta, el usuario o rol y el ARN con los que estás autenticado",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/sts/get-caller-identity.html"
+        }
+      ]
+    },
+    {
+      "name": "s3",
+      "description": "Comandos de alto nivel de Amazon S3",
+      "source": "https://docs.aws.amazon.com/cli/latest/reference/s3/index.html",
+      "subcommands": [
+        {
+          "name": "ls",
+          "description": "Lista buckets u objetos",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/s3/ls.html",
+          "args": [
+            {
+              "name": "S3URI"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "takesValue": false,
+              "description": "Incluye todo lo que hay bajo el prefijo"
+            },
+            {
+              "name": "human-readable",
+              "takesValue": false,
+              "description": "Tamaños legibles"
+            },
+            {
+              "name": "summarize",
+              "takesValue": false,
+              "description": "Muestra el número de objetos y el tamaño total"
+            }
+          ]
+        },
+        {
+          "name": "mb",
+          "description": "Crea un bucket",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/s3/mb.html",
+          "args": [
+            {
+              "name": "S3URI"
+            }
+          ],
+          "flags": [
+            {
+              "name": "tags",
+              "takesValue": true,
+              "description": "Etiqueta CLAVE VALOR (repetible)"
+            }
+          ]
+        },
+        {
+          "name": "cp",
+          "description": "Copia archivos u objetos (local ↔ S3 o S3 → S3)",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html",
+          "args": [
+            {
+              "name": "ORIGEN"
+            },
+            {
+              "name": "DESTINO"
+            }
+          ],
+          "flags": [
+            {
+              "name": "recursive",
+              "takesValue": false,
+              "description": "Copia todo el directorio o prefijo"
+            },
+            {
+              "name": "storage-class",
+              "takesValue": true,
+              "description": "Clase de almacenamiento"
+            },
+            {
+              "name": "dryrun",
+              "takesValue": false,
+              "description": "Muestra lo que haría sin hacerlo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ec2",
+      "description": "Amazon EC2",
+      "source": "https://docs.aws.amazon.com/cli/latest/reference/ec2/index.html",
+      "subcommands": [
+        {
+          "name": "describe-instances",
+          "description": "Describe instancias EC2",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html",
+          "flags": [
+            {
+              "name": "instance-ids",
+              "takesValue": true,
+              "description": "IDs de las instancias"
+            },
+            {
+              "name": "filters",
+              "takesValue": true,
+              "description": "Filtros Name=...,Values=..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "eks",
+      "description": "Amazon EKS",
+      "source": "https://docs.aws.amazon.com/cli/latest/reference/eks/index.html",
+      "subcommands": [
+        {
+          "name": "update-kubeconfig",
+          "description": "Añade el clúster de EKS al kubeconfig para usar kubectl",
+          "source": "https://docs.aws.amazon.com/cli/latest/reference/eks/update-kubeconfig.html",
+          "flags": [
+            {
+              "name": "name",
+              "takesValue": true,
+              "description": "Nombre del clúster"
+            },
+            {
+              "name": "alias",
+              "takesValue": true,
+              "description": "Nombre del contexto en el kubeconfig"
+            },
+            {
+              "name": "role-arn",
+              "takesValue": true,
+              "description": "Rol IAM que se asume para autenticarse"
+            },
+            {
+              "name": "kubeconfig",
+              "takesValue": true,
+              "description": "Archivo kubeconfig"
+            },
+            {
+              "name": "dry-run",
+              "takesValue": false,
+              "description": "Muestra la configuración sin escribirla"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

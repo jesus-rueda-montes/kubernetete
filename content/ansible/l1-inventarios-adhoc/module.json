@@ -1,0 +1,8 @@
+{
+  "title": "Ansible, inventarios y comandos ad-hoc",
+  "summary": "Qué es Ansible y cómo funciona sin agentes, cómo describir tus máquinas en un inventario y cómo lanzar tareas sueltas.",
+  "level": 1,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

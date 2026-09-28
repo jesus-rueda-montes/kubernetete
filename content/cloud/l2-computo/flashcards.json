@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "tipo", "front": "¿Qué indica `e2-standard-4`?", "back": "Serie E2, perfil standard (4 GB por vCPU), 4 vCPUs." },
+    { "id": "familias", "front": "Familias de máquinas de Compute Engine", "back": "Uso general, optimizada para cómputo, memoria, almacenamiento y aceleradores (GPU)." },
+    { "id": "spot", "front": "Spot VMs", "back": "Hasta un 91 % más baratas; Google puede pararlas en cualquier momento (aviso de hasta 30 s), sin SLA. Para cargas tolerantes a fallos." },
+    { "id": "parada", "front": "¿Qué se paga con una VM parada?", "back": "Los discos persistentes y las IPs estáticas reservadas; no la vCPU ni la memoria." },
+    { "id": "cud", "front": "Descuentos por compromiso (CUD)", "back": "Compromiso de 1 o 3 años de uso a cambio de un descuento importante; para cargas estables." },
+    { "id": "mig", "front": "¿Qué aporta un grupo de instancias gestionado (MIG)?", "back": "VMs idénticas desde una plantilla, autoescalado, autocuración con health check, multizona (regional) y actualizaciones progresivas." },
+    { "id": "iap", "front": "SSH a una VM sin IP pública", "back": "`gcloud compute ssh VM --tunnel-through-iap` (IAP, controlado con IAM, sin abrir el 22 a internet)." }
+  ]
+}

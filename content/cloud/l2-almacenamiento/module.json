@@ -1,0 +1,8 @@
+{
+  "title": "Almacenamiento: Cloud Storage y discos",
+  "summary": "Almacenamiento de objetos, bloques y ficheros: buckets, clases de almacenamiento, ciclo de vida, Persistent Disk y Filestore.",
+  "level": 2,
+  "order": 4,
+  "xp": 100,
+  "prereqs": []
+}

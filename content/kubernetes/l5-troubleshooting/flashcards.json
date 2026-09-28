@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "metodo", "front": "Método de troubleshooting de un Pod", "back": "get (estado, reinicios) → describe (eventos) → logs (`--previous`) → exec/debug → subir a Deployment/ReplicaSet/nodo." },
+    { "id": "pending", "front": "Pod en Pending", "back": "El scheduler no encuentra nodo: requests excesivas, taints, affinity/nodeSelector o PVC sin enlazar. Evento FailedScheduling." },
+    { "id": "imagepull", "front": "ImagePullBackOff", "back": "No descarga la imagen: nombre o tag erróneo, registro privado sin imagePullSecrets o sin permisos." },
+    { "id": "configerror", "front": "CreateContainerConfigError", "back": "Falta un ConfigMap, Secret o una clave que el Pod referencia." },
+    { "id": "crashloop", "front": "CrashLoopBackOff", "back": "El contenedor termina una y otra vez; esperas crecientes (10 s, 20 s…) hasta 5 min. Causa en `logs --previous` y el código de salida." },
+    { "id": "codigos", "front": "Códigos de salida 1, 127 y 137", "back": "1: error de la app. 127: comando no encontrado. 137: SIGKILL (OOMKilled o liveness probe)." },
+    { "id": "eventos", "front": "¿Cuánto duran los eventos?", "back": "1 hora por defecto (`--event-ttl` del API server). `kubectl events --for pod/X`." },
+    { "id": "svc-endpoints", "front": "Service sin endpoints", "back": "El selector no coincide con las etiquetas de los Pods, o los Pods no están Ready. Mira EndpointSlices con `-l kubernetes.io/service-name=NOMBRE`." },
+    { "id": "svc-orden", "front": "Orden para depurar un Service", "back": "Endpoints → targetPort → DNS (CoreDNS) → NetworkPolicy (y egress al DNS) → Ingress y su controlador." },
+    { "id": "nodo", "front": "Nodo con Ready = Unknown", "back": "Más de 50 s sin noticias del nodo (kubelet caído o red). Se añade el taint node.kubernetes.io/unreachable." },
+    { "id": "debug", "front": "Tres usos de `kubectl debug`", "back": "Contenedor efímero en un Pod (`--target`), copia del Pod (`--copy-to`) y en un nodo (`node/NOMBRE`, disco del nodo en /host)." }
+  ]
+}

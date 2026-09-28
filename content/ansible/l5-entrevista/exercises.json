@@ -1,0 +1,199 @@
+{
+  "exercises": [
+    {
+      "id": "agentless",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué necesita un servidor Linux para que Ansible pueda gestionarlo?",
+      "hints": ["Ansible no instala nada permanente en los hosts."],
+      "options": [
+        { "id": "a", "text": "Acceso por SSH y Python", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Un agente de Ansible instalado y en ejecución", "correct": false, "explanation": "Ansible es sin agente." },
+        { "id": "c", "text": "Un clúster de Kubernetes", "correct": false, "explanation": "No tiene relación." }
+      ],
+      "solution": {
+        "answer": "SSH y Python",
+        "explanation": "El nodo de control se conecta por SSH, copia el módulo, lo ejecuta con Python y lo borra. Modelo push, sin agente."
+      }
+    },
+    {
+      "id": "quitar-tarea",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un playbook instalaba el paquete `telnet`. Borras esa tarea y lo vuelves a ejecutar. ¿Qué pasa con `telnet` en los servidores?",
+      "hints": ["Ansible no tiene state que recuerde lo que hizo."],
+      "options": [
+        { "id": "a", "text": "Sigue instalado: hay que escribir una tarea con `state: absent`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Se desinstala automáticamente", "correct": false, "explanation": "Eso haría Terraform con un recurso, no Ansible." },
+        { "id": "c", "text": "Ansible da un error", "correct": false, "explanation": "Simplemente no hace nada con telnet." }
+      ],
+      "solution": {
+        "answer": "Sigue instalado",
+        "explanation": "Es una diferencia clave con Terraform: Ansible no tiene state, así que para quitar algo hay que declararlo."
+      }
+    },
+    {
+      "id": "vs-terraform",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué afirmaciones sobre Ansible y Terraform son correctas?",
+      "hints": ["Piensa en el state y en para qué se usa cada uno."],
+      "options": [
+        { "id": "a", "text": "Terraform guarda un state; Ansible consulta el estado real en cada ejecución", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Es habitual que Terraform cree las VMs y Ansible las configure", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Ansible necesita un agente y Terraform no", "correct": false, "explanation": "Ninguno de los dos usa agente." },
+        { "id": "d", "text": "Ansible ejecuta las tareas en el orden en que están escritas", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "a, b y d",
+        "explanation": "Terraform: infraestructura declarativa con state. Ansible: configuración, tareas en orden, sin state. Se complementan."
+      }
+    },
+    {
+      "id": "changed-siempre",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea `ansible.builtin.shell: /opt/app/migrar.sh` sale `changed` en cada ejecución. ¿Cómo la haces idempotente si el script crea `/opt/app/.migrado`?",
+      "hints": ["Hay un argumento para que no se ejecute si un archivo existe."],
+      "options": [
+        { "id": "a", "text": "Añadir `creates: /opt/app/.migrado`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Añadir `ignore_errors: true`", "correct": false, "explanation": "Solo ignora fallos; seguiría ejecutándose siempre." },
+        { "id": "c", "text": "Cambiar `shell` por `command`", "correct": false, "explanation": "`command` tampoco es idempotente por sí mismo." }
+      ],
+      "solution": {
+        "answer": "creates",
+        "explanation": "Con `creates`, si el archivo existe la tarea se salta y no informa cambio. Alternativa: `changed_when` según la salida del script."
+      }
+    },
+    {
+      "id": "forks",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Por defecto, ¿en cuántos hosts a la vez ejecuta Ansible cada tarea?",
+      "hints": ["Es el valor por defecto de `forks`."],
+      "options": [
+        { "id": "a", "text": "5", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "1", "correct": false, "explanation": "Ansible trabaja en paralelo." },
+        { "id": "c", "text": "En todos los del inventario a la vez", "correct": false, "explanation": "Está limitado por `forks`." }
+      ],
+      "solution": {
+        "answer": "5",
+        "explanation": "Con la estrategia `linear`, cada tarea se ejecuta en todos los hosts, 5 a la vez, antes de pasar a la siguiente. Se sube con `-f` o en `ansible.cfg`."
+      }
+    },
+    {
+      "id": "serial",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes 40 servidores web y `serial: 10` con `max_fail_percentage: 30`. En el primer lote fallan 4. ¿Qué ocurre?",
+      "hints": ["El porcentaje se aplica a cada lote."],
+      "options": [
+        { "id": "a", "text": "Se detiene el play: fallaron más del 30 % del lote y los otros 30 servidores no se tocan", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Sigue con los siguientes lotes, porque 4 de 40 es solo el 10 %", "correct": false, "explanation": "Con serial, el porcentaje se calcula por lote." },
+        { "id": "c", "text": "Vuelve a intentar el lote hasta que funcione", "correct": false, "explanation": "No reintenta; para." }
+      ],
+      "solution": {
+        "answer": "Se detiene",
+        "explanation": "4 de 10 es un 40 %, más del 30 %. Así un fallo no se extiende a todo el parque."
+      }
+    },
+    {
+      "id": "inventario-dinamico",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Las VMs de GCP se crean y destruyen con autoescalado. ¿Cómo las encuentra Ansible?",
+      "hints": ["Un plugin que pregunta a la API en cada ejecución."],
+      "options": [
+        { "id": "a", "text": "Con el plugin de inventario `google.cloud.gcp_compute`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Actualizando a mano el archivo `hosts.ini` cada día", "correct": false, "explanation": "Se queda desactualizado y es propenso a errores." },
+        { "id": "c", "text": "Con `gather_facts: true`", "correct": false, "explanation": "Recoge datos de hosts que ya conoce; no descubre hosts nuevos." }
+      ],
+      "solution": {
+        "answer": "Inventario dinámico",
+        "explanation": "El plugin consulta la API de Compute Engine y crea grupos a partir de etiquetas con `keyed_groups`."
+      }
+    },
+    {
+      "id": "cmd-limit-check",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Antes de aplicar `site.yml` (inventario `inventario/pro`), comprueba qué cambiaría **solo** en el host `web1`, mostrando las diferencias de los archivos.",
+      "hints": [
+        "Necesitas `-i`, `--limit`, `--check` y `--diff`.",
+        "`ansible-playbook -i inventario/pro site.yml --limit web1 --check --diff`."
+      ],
+      "accepted": [
+        "ansible-playbook -i inventario/pro site.yml --limit web1 --check --diff",
+        "ansible-playbook -i inventario/pro site.yml -l web1 --check --diff",
+        "ansible-playbook -i inventario/pro site.yml -l web1 -C -D",
+        "ansible-playbook -i inventario/pro site.yml --limit web1 -C -D",
+        "ansible-playbook site.yml -i inventario/pro --limit web1 --check --diff"
+      ],
+      "output": "PLAY [web] *********************************************************************\n\nTASK [nginx : Plantilla de configuración] **************************************\n--- before: /etc/nginx/nginx.conf\n+++ after: /home/jesus/.ansible/tmp/nginx.conf.j2\n@@ -1,4 +1,4 @@\n-worker_processes 2;\n+worker_processes auto;\nchanged: [web1]\n\nPLAY RECAP *********************************************************************\nweb1 : ok=6 changed=1 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0",
+      "solution": {
+        "answer": "ansible-playbook -i inventario/pro site.yml --limit web1 --check --diff",
+        "explanation": "`--check` simula sin cambiar nada y `--diff` muestra qué cambiaría en cada archivo. `--limit` restringe la ejecución a un host."
+      }
+    },
+    {
+      "id": "cmd-forks",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Ejecuta `site.yml` con el inventario `inventario/pro` en 20 hosts a la vez en lugar de 5.",
+      "hints": [
+        "El flag es `--forks` (o `-f`).",
+        "`ansible-playbook -i inventario/pro site.yml --forks 20`."
+      ],
+      "accepted": [
+        "ansible-playbook -i inventario/pro site.yml --forks 20",
+        "ansible-playbook -i inventario/pro site.yml --forks=20",
+        "ansible-playbook -i inventario/pro site.yml -f 20",
+        "ansible-playbook site.yml -i inventario/pro -f 20"
+      ],
+      "output": "PLAY [all] *********************************************************************\n\nTASK [Gathering Facts] *********************************************************\nok: [web1]\nok: [web2]\n...",
+      "solution": {
+        "answer": "ansible-playbook -i inventario/pro site.yml --forks 20",
+        "explanation": "Más forks acelera los inventarios grandes, a costa de más CPU y memoria en el nodo de control. También se fija en `ansible.cfg`."
+      }
+    },
+    {
+      "id": "editor-serial",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el play para que actualice los servidores **de 2 en 2** y se detenga si falla más del 25 % de un lote.",
+      "starter": "- name: Actualizar la web\n  hosts: web\n  become: true\n  tasks:\n    - name: Instalar la nueva versión\n      ansible.builtin.apt:\n        name: tienda-web=2.3.1\n        state: present\n",
+      "assertions": [
+        { "path": "[0].serial", "op": "equals", "value": 2, "message": "serial: 2 a nivel del play" },
+        { "path": "[0].max_fail_percentage", "op": "equals", "value": 25, "message": "max_fail_percentage: 25 a nivel del play" },
+        { "path": "[0].tasks[0]['ansible.builtin.apt'].name", "op": "equals", "value": "tienda-web=2.3.1", "message": "La tarea de instalación se mantiene" }
+      ],
+      "hints": [
+        "Las dos claves van en el play, al nivel de `hosts`.",
+        "`serial: 2` y `max_fail_percentage: 25`."
+      ],
+      "solution": {
+        "answer": "- name: Actualizar la web\n  hosts: web\n  become: true\n  serial: 2\n  max_fail_percentage: 25\n  tasks:\n    - name: Instalar la nueva versión\n      ansible.builtin.apt:\n        name: tienda-web=2.3.1\n        state: present\n",
+        "explanation": "El play completo se ejecuta en 2 servidores antes de pasar a los 2 siguientes. Con `serial: [1, 2]` el primer lote sería un canary de 1."
+      }
+    },
+    {
+      "id": "editor-delegate",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "La primera tarea debe ejecutarse en el balanceador `lb1.tienda.internal`, no en el servidor web. Añade la delegación.",
+      "starter": "- name: Actualizar la web\n  hosts: web\n  serial: 1\n  tasks:\n    - name: Sacar el servidor del balanceador\n      ansible.builtin.command: /usr/local/bin/lb-remove {{ inventory_hostname }}\n",
+      "assertions": [
+        { "path": "[0].tasks[0].delegate_to", "op": "equals", "value": "lb1.tienda.internal", "message": "delegate_to: lb1.tienda.internal en la tarea" },
+        { "path": "[0].tasks[0]['ansible.builtin.command']", "op": "equals", "value": "/usr/local/bin/lb-remove {{ inventory_hostname }}", "message": "El comando se mantiene igual" }
+      ],
+      "hints": [
+        "La clave va en la tarea, al nivel de `name`.",
+        "`delegate_to: lb1.tienda.internal`."
+      ],
+      "solution": {
+        "answer": "- name: Actualizar la web\n  hosts: web\n  serial: 1\n  tasks:\n    - name: Sacar el servidor del balanceador\n      ansible.builtin.command: /usr/local/bin/lb-remove {{ inventory_hostname }}\n      delegate_to: lb1.tienda.internal\n",
+        "explanation": "La tarea corre en el balanceador, pero `inventory_hostname` sigue siendo el servidor web del lote: así se saca justo ese servidor."
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "cards": [
+    { "id": "region-zona", "front": "Región frente a zona", "back": "Región: área geográfica independiente (`europe-west1`). Zona: área aislada de fallos dentro de una región (`europe-west1-b`)." },
+    { "id": "alcances", "front": "Ejemplos de recursos zonales, regionales y globales en GCP", "back": "Zonal: VM, disco zonal. Regional: subred, IP estática regional. Global: red VPC, firewall, imágenes." },
+    { "id": "vpc-gcp-aws", "front": "Alcance de la VPC en GCP y en AWS", "back": "GCP: VPC global, subredes regionales. AWS: VPC regional, subredes zonales." },
+    { "id": "multizona", "front": "¿Qué protege un despliegue multizona?", "back": "Frente a la caída de una zona. Para la caída de una región entera hace falta multirregión." },
+    { "id": "tres-nueves", "front": "Caída máxima anual con 99,9 % y 99,99 %", "back": "99,9 %: ~8,8 horas. 99,99 %: ~53 minutos." },
+    { "id": "criterios-region", "front": "Criterios para elegir región", "back": "Latencia a los usuarios, requisitos legales, servicios disponibles y precio." }
+  ]
+}

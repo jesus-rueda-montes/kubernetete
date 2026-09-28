@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "declarativo", "front": "¿Qué significa que Kubernetes es declarativo?", "back": "Describes el estado deseado (`spec`) y los controllers trabajan continuamente para que el estado real (`status`) coincida." },
+    { "id": "reconciliacion", "front": "Los 3 pasos de un bucle de reconciliación", "back": "Observar el estado actual, compararlo con el deseado y actuar para igualarlos." },
+    { "id": "apiserver", "front": "kube-apiserver", "back": "La puerta de entrada al clúster: expone la API, autentica, autoriza y valida. Es el único componente que habla con etcd." },
+    { "id": "etcd", "front": "etcd", "back": "Almacén clave-valor consistente y de alta disponibilidad con todo el estado del clúster." },
+    { "id": "scheduler", "front": "kube-scheduler", "back": "Asigna un Node a cada Pod que aún no lo tiene. Solo decide; no arranca nada." },
+    { "id": "controller-manager", "front": "kube-controller-manager", "back": "Ejecuta los controllers (Deployments, ReplicaSets, Nodes, Jobs…), cada uno con su bucle de reconciliación." },
+    { "id": "kubelet", "front": "kubelet", "back": "Agente de cada Node: arranca los contenedores de los Pods asignados (vía CRI) e informa de su estado." },
+    { "id": "runtime", "front": "¿Kubernetes necesita Docker?", "back": "No. Necesita un container runtime compatible con CRI, como containerd o CRI-O. Las imágenes creadas con Docker funcionan igual." }
+  ]
+}

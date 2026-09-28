@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "count", "front": "`count`: índice y direcciones", "back": "`count.index` (0, 1, 2…); direcciones `recurso[0]`, `recurso[1]`… Útil para el 0/1 condicional." },
+    { "id": "for-each", "front": "`for_each`: qué acepta y qué expone", "back": "Un mapa o un set de textos (`toset()` para listas); expone `each.key` y `each.value`; direcciones `recurso[\"clave\"]`." },
+    { "id": "count-o-for-each", "front": "¿Por qué `for_each` en vez de `count` para una lista de nombres?", "back": "Con `count`, quitar un elemento del medio desplaza índices y toca otros recursos; con `for_each` la identidad es la clave." },
+    { "id": "ternario", "front": "Condicional en HCL", "back": "`condición ? valor_si_verdadero : valor_si_falso`." },
+    { "id": "for-expr", "front": "Expresión `for` para lista y para mapa", "back": "`[for x in lista : f(x)]` y `{for x in lista : x => f(x)}`; `if` filtra." },
+    { "id": "data", "front": "Data source frente a resource", "back": "Un data source solo lee datos existentes (`data.TIPO.NOMBRE.ATTR`); un resource crea, cambia y borra." },
+    { "id": "console", "front": "¿Dónde pruebas funciones de Terraform?", "back": "En `terraform console`." }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "nodeselector", "front": "¿Qué hace `nodeSelector`?", "back": "El Pod solo va a Nodes que tengan todas esas labels exactas." },
+    { "id": "required-preferred", "front": "Afinidad required frente a preferred", "back": "Required: obligatoria (si nadie cumple, Pending). Preferred: preferencia con peso 1–100." },
+    { "id": "ignored", "front": "¿Qué significa IgnoredDuringExecution?", "back": "La regla solo se aplica al programar; el Pod no se mueve si luego cambian las labels." },
+    { "id": "topologykey", "front": "`topologyKey` en afinidad entre Pods", "back": "El dominio: `kubernetes.io/hostname` (Node), `topology.kubernetes.io/zone` (zona)…" },
+    { "id": "efectos", "front": "Efectos de un taint", "back": "NoSchedule (no nuevos), PreferNoSchedule (evitar), NoExecute (no nuevos y desaloja los actuales)." },
+    { "id": "toleration", "front": "¿Una toleration obliga a ir al Node con taint?", "back": "No, solo lo permite. Para Nodes dedicados: taint + toleration + afinidad/nodeSelector." },
+    { "id": "drain", "front": "Mantenimiento de un Node", "back": "`kubectl drain N --ignore-daemonsets` (cordon + desalojo), mantenimiento, `kubectl uncordon N`." },
+    { "id": "quitar-taint", "front": "¿Cómo se quita un taint?", "back": "`kubectl taint nodes N clave=valor:Efecto-` (guion al final)." }
+  ]
+}

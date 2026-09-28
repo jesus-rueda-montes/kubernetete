@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "jerarquia", "front": "Jerarquía de recursos de GCP", "back": "Organización → Carpetas (opcionales) → Proyectos → Recursos. Cada elemento tiene un solo padre." },
+    { "id": "herencia", "front": "¿Cómo se heredan los permisos IAM en GCP?", "back": "Hacia abajo y de forma aditiva: un nivel inferior no puede quitar lo heredado. Para prohibir, deny policies." },
+    { "id": "ids", "front": "Nombre, ID y número de proyecto", "back": "Nombre: editable, no único. ID: elegido por ti, único global y permanente. Número: lo asigna Google." },
+    { "id": "apis", "front": "¿Qué hay que hacer antes de usar un servicio en un proyecto?", "back": "Activar su API: `gcloud services enable <servicio>.googleapis.com`." },
+    { "id": "budget", "front": "¿Un budget de facturación corta el gasto?", "back": "No: un presupuesto normal solo avisa." },
+    { "id": "auth", "front": "`gcloud auth login` frente a `gcloud auth application-default login`", "back": "El primero autentica la CLI gcloud; el segundo crea las ADC para aplicaciones y herramientas como Terraform." },
+    { "id": "configurations", "front": "¿Cómo trabajar con varios proyectos en gcloud sin mezclarlos?", "back": "Configuraciones con nombre: `gcloud config configurations create/activate`, y revisar `gcloud config list`." }
+  ]
+}

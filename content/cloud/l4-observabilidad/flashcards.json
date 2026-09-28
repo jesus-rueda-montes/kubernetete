@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "pilares", "front": "Los tres pilares de la observabilidad", "back": "Logs (eventos), métricas (números en el tiempo) y trazas (recorrido de una petición)." },
+    { "id": "buckets", "front": "Buckets de logs creados por Google Cloud", "back": "`_Required`: audit logs obligatorios, 400 días fijos. `_Default`: el resto, 30 días por defecto." },
+    { "id": "sinks", "front": "¿Qué es un sink de Cloud Logging?", "back": "Una regla que envía los logs que cumplen un filtro a otro destino: bucket de logs, Cloud Storage, BigQuery o Pub/Sub." },
+    { "id": "audit", "front": "Admin Activity frente a Data Access audit logs", "back": "Admin Activity: cambios de configuración, siempre activos. Data Access: lecturas y escrituras de datos, desactivados por defecto (salvo BigQuery)." },
+    { "id": "ops-agent", "front": "¿Para qué sirve el Ops Agent?", "back": "Envía logs y métricas del sistema operativo y de las aplicaciones de una VM a Cloud Logging y Monitoring." },
+    { "id": "monitoring", "front": "Qué ofrece Cloud Monitoring", "back": "Métricas (de servicios, agente, personalizadas, basadas en logs), dashboards, uptime checks y políticas de alerta." },
+    { "id": "sli-slo-sla", "front": "SLI, SLO y SLA", "back": "SLI: la medida. SLO: el objetivo interno. SLA: el contrato con el cliente (menos exigente que el SLO)." },
+    { "id": "presupuesto", "front": "Presupuesto de error de un SLO del 99,9 % en 30 días", "back": "El 0,1 %: unos 43 minutos de fallo al mes." },
+    { "id": "senales", "front": "Las cuatro señales doradas", "back": "Latencia, tráfico, errores y saturación." },
+    { "id": "alertas", "front": "¿Sobre qué conviene alertar?", "back": "Sobre síntomas que notan los usuarios y el burn rate del presupuesto de error; alertas accionables." }
+  ]
+}

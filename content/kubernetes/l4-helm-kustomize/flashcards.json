@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "conceptos", "front": "Chart, values y release", "back": "Chart: el paquete (plantillas + values.yaml). Values: la configuración. Release: una instalación del chart en el clúster, con revisiones." },
+    { "id": "prioridad", "front": "Prioridad de los valores en Helm", "back": "values.yaml del chart < archivos `-f` (el último gana) < `--set`." },
+    { "id": "upgrade-install", "front": "¿Por qué `helm upgrade --install` en un pipeline?", "back": "Instala si no existe y actualiza si existe: funciona siempre, la primera vez y las siguientes." },
+    { "id": "rollback", "front": "Volver atrás con Helm", "back": "`helm history RELEASE` para ver las revisiones y `helm rollback RELEASE [REVISIÓN]`." },
+    { "id": "atomic", "front": "`--rollback-on-failure`", "back": "Si la instalación o actualización falla, Helm la deshace. En Helm 3 se llamaba `--atomic`." },
+    { "id": "template", "front": "`helm template`", "back": "Genera los manifiestos en local, sin tocar el clúster. Útil para revisar o combinar con otras herramientas." },
+    { "id": "version", "front": "¿Por qué fijar `--version` en Helm?", "back": "Sin ella se instala la última versión del chart: el mismo comando daría resultados distintos con el tiempo." },
+    { "id": "kustomize", "front": "¿Qué es Kustomize?", "back": "Personalización de YAML sin plantillas: una base y overlays con las diferencias. Integrado en kubectl." },
+    { "id": "comandos-k", "front": "Kustomize con kubectl", "back": "`kubectl kustomize DIR` muestra el resultado; `kubectl apply -k DIR` lo aplica." },
+    { "id": "hash", "front": "¿Por qué los ConfigMaps generados por Kustomize llevan un hash?", "back": "Si cambia el contenido, cambia el nombre y el Deployment que lo usa se reinicia con la nueva configuración." },
+    { "id": "helm-o-kustomize", "front": "¿Helm o Kustomize?", "back": "Helm: software de terceros, releases con rollback. Kustomize: variaciones por entorno de tus propias apps." }
+  ]
+}

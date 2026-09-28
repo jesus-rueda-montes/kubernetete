@@ -1,0 +1,135 @@
+{
+  "exercises": [
+    {
+      "id": "ruta-absoluta",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál de estas rutas es **absoluta**?",
+      "hints": ["Una ruta absoluta empieza siempre en la raíz del árbol."],
+      "options": [
+        { "id": "a", "text": "`logs/app.log`", "correct": false, "explanation": "Es relativa: depende de la carpeta actual." },
+        { "id": "b", "text": "`/var/log/app.log`", "correct": true, "explanation": "Correcto: empieza por `/`." },
+        { "id": "c", "text": "`../app.log`", "correct": false, "explanation": "Es relativa: `..` es la carpeta padre de la actual." }
+      ],
+      "solution": {
+        "answer": "/var/log/app.log",
+        "explanation": "Las rutas absolutas empiezan por `/` y apuntan siempre al mismo sitio, estés donde estés."
+      }
+    },
+    {
+      "id": "leer-permisos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un archivo tiene los permisos `-rw-r-----`. ¿Qué pueden hacer los usuarios que no son el dueño ni están en su grupo?",
+      "hints": ["Los tres últimos caracteres son los del «resto» (others)."],
+      "options": [
+        { "id": "a", "text": "Leerlo", "correct": false, "explanation": "La lectura la tiene el grupo, no el resto." },
+        { "id": "b", "text": "Nada", "correct": true, "explanation": "Correcto: los tres últimos caracteres son `---`." },
+        { "id": "c", "text": "Leerlo y modificarlo", "correct": false, "explanation": "Eso sería `rw-` en el último grupo." }
+      ],
+      "solution": {
+        "answer": "Nada",
+        "explanation": "`rw-` (dueño) `r--` (grupo) `---` (resto). En número: 640."
+      }
+    },
+    {
+      "id": "octal-600",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué permisos debe tener tu clave SSH privada para que SSH acepte usarla?",
+      "hints": ["Solo tú deberías poder leerla. r=4, w=2, x=1."],
+      "options": [
+        { "id": "a", "text": "`777`", "correct": false, "explanation": "Cualquiera podría leerla y modificarla. SSH la rechaza." },
+        { "id": "b", "text": "`644`", "correct": false, "explanation": "Todos podrían leerla; SSH avisa de que está desprotegida y no la usa." },
+        { "id": "c", "text": "`600`", "correct": true, "explanation": "Correcto: lectura y escritura solo para el dueño." }
+      ],
+      "solution": {
+        "answer": "600",
+        "explanation": "`600` = `rw-------`: solo el dueño puede leerla y escribirla. Se aplica con `chmod 600 ~/.ssh/id_ed25519`."
+      }
+    },
+    {
+      "id": "sigterm-sigkill",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un proceso no responde. ¿Cuál es el orden recomendado para pararlo?",
+      "hints": ["Primero la forma «educada», que deja cerrar ordenadamente."],
+      "options": [
+        { "id": "a", "text": "Primero `kill -9 PID`; si no funciona, `kill PID`", "correct": false, "explanation": "Al revés: `-9` no deja cerrar ordenadamente y además nunca falla." },
+        { "id": "b", "text": "Primero `kill PID` (SIGTERM); si no termina, `kill -9 PID` (SIGKILL)", "correct": true, "explanation": "Correcto: es también lo que hace Kubernetes al parar un contenedor." },
+        { "id": "c", "text": "Reiniciar el servidor", "correct": false, "explanation": "Desproporcionado: afecta a todos los demás procesos." }
+      ],
+      "solution": {
+        "answer": "kill y luego kill -9",
+        "explanation": "SIGTERM permite al programa cerrar ficheros y conexiones. SIGKILL lo mata al instante, sin posibilidad de limpieza."
+      }
+    },
+    {
+      "id": "redireccion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Ejecutas `echo hola > notas.txt` sobre un archivo que ya tenía 100 líneas. ¿Qué contiene después?",
+      "hints": ["Hay dos símbolos: uno sobrescribe y otro añade."],
+      "options": [
+        { "id": "a", "text": "Las 100 líneas y `hola` al final", "correct": false, "explanation": "Eso haría `>>`." },
+        { "id": "b", "text": "Solo `hola`", "correct": true, "explanation": "Correcto: `>` sobrescribe el archivo." },
+        { "id": "c", "text": "Da error porque el archivo existe", "correct": false, "explanation": "Por defecto no da error: lo sobrescribe." }
+      ],
+      "solution": {
+        "answer": "Solo hola",
+        "explanation": "`>` reemplaza el contenido del archivo; `>>` añade al final."
+      }
+    },
+    {
+      "id": "contar-errores",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para contar cuántas líneas de `app.log` contienen `ERROR`.",
+      "template": "{{filtro}} ERROR app.log {{tuberia}} wc -l",
+      "blanks": [
+        { "id": "filtro", "accepted": ["grep"] },
+        { "id": "tuberia", "accepted": ["|"] }
+      ],
+      "hints": [
+        "El comando que filtra líneas por texto tiene un nombre de 4 letras.",
+        "El símbolo que pasa la salida de un comando al siguiente es una barra vertical."
+      ],
+      "solution": {
+        "answer": "grep ERROR app.log | wc -l",
+        "explanation": "`grep` se queda con las líneas que contienen «ERROR», y la tubería `|` las pasa a `wc -l`, que cuenta líneas."
+      }
+    },
+    {
+      "id": "dar-ejecucion",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para dar permiso de ejecución al script `desplegar.sh`.",
+      "template": "{{cmd}} {{permiso}} desplegar.sh",
+      "blanks": [
+        { "id": "cmd", "accepted": ["chmod"] },
+        { "id": "permiso", "accepted": ["+x", "u+x", "a+x", "755"] }
+      ],
+      "hints": [
+        "El comando que cambia permisos es «change mode».",
+        "Para **añadir** ejecución se usa `+` y la letra del permiso de ejecución."
+      ],
+      "solution": {
+        "answer": "chmod +x desplegar.sh",
+        "explanation": "`chmod +x` añade el permiso de ejecución. `chmod 755` también sirve, aunque además fija el resto de permisos."
+      }
+    },
+    {
+      "id": "exportar-variable",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando para crear la variable de entorno `PORT` con valor `8080`, de forma que la vean los programas que lances después.",
+      "template": "{{cmd}} PORT=8080",
+      "blanks": [{ "id": "cmd", "accepted": ["export"] }],
+      "hints": ["Sin esta palabra, la variable solo existe en la shell actual y no se hereda."],
+      "solution": {
+        "answer": "export PORT=8080",
+        "explanation": "`export` hace que la variable pase al entorno de los procesos hijos. Luego se lee con `$PORT`."
+      }
+    }
+  ]
+}

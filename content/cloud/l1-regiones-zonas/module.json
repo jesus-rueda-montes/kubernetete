@@ -1,0 +1,8 @@
+{
+  "title": "Regiones, zonas y alta disponibilidad",
+  "summary": "Dónde vive físicamente la nube, recursos zonales, regionales y globales, y cómo diseñar para que un fallo no te tire el servicio.",
+  "level": 1,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

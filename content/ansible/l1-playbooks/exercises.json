@@ -1,0 +1,140 @@
+{
+  "exercises": [
+    {
+      "id": "estructura",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la jerarquía correcta de un playbook?",
+      "hints": ["El play dice «a quién»; la task dice «qué»."],
+      "options": [
+        { "id": "a", "text": "Playbook → plays → tasks → módulo con parámetros", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Playbook → tasks → plays → hosts", "correct": false, "explanation": "Los hosts se eligen en el play, y las tasks van dentro del play." },
+        { "id": "c", "text": "Inventario → playbook → módulos → plays", "correct": false, "explanation": "El inventario es independiente del playbook; los plays contienen las tasks." }
+      ],
+      "solution": {
+        "answer": "Playbook → plays → tasks",
+        "explanation": "Un playbook es una lista de plays; cada play elige hosts y tiene una lista de tasks; cada task llama a un módulo con sus parámetros."
+      }
+    },
+    {
+      "id": "orden-ejecucion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un play tiene 3 tareas y se ejecuta sobre `web1` y `web2`. ¿En qué orden se ejecutan?",
+      "hints": ["Ansible avanza tarea a tarea, no host a host."],
+      "options": [
+        { "id": "a", "text": "Las 3 tareas en web1 y después las 3 en web2", "correct": false, "explanation": "Esa es la estrategia «host a host», que no es la predeterminada." },
+        { "id": "b", "text": "Tarea 1 en web1 y web2, luego tarea 2 en ambos, luego tarea 3", "correct": true, "explanation": "Correcto: cada tarea termina en todos los hosts antes de pasar a la siguiente." },
+        { "id": "c", "text": "En orden aleatorio", "correct": false, "explanation": "Las tareas siempre siguen el orden del archivo." }
+      ],
+      "solution": {
+        "answer": "Tarea a tarea en todos los hosts",
+        "explanation": "Por defecto, Ansible ejecuta cada tarea en todos los hosts del play (en paralelo) antes de pasar a la siguiente."
+      }
+    },
+    {
+      "id": "fallo-host",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La tarea 2 falla en `web2` pero funciona en `web1`. ¿Qué pasa con las tareas siguientes?",
+      "hints": ["Ansible «aparta» al host que falla."],
+      "options": [
+        { "id": "a", "text": "Se detiene todo el playbook para todos los hosts", "correct": false, "explanation": "Por defecto no: los demás hosts continúan." },
+        { "id": "b", "text": "web2 sale del resto del playbook; web1 continúa", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Se reintenta la tarea en web2 hasta que funcione", "correct": false, "explanation": "No hay reintentos automáticos salvo que los configures." }
+      ],
+      "solution": {
+        "answer": "web2 sale y web1 sigue",
+        "explanation": "Cuando una tarea falla en un host, Ansible lo retira del resto del playbook. En el PLAY RECAP aparecerá con `failed=1`."
+      }
+    },
+    {
+      "id": "shell-idempotencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea hace `ansible.builtin.shell: apt-get install -y nginx`. ¿Qué problema tiene?",
+      "hints": ["¿Sabe `shell` si nginx ya estaba instalado?"],
+      "options": [
+        { "id": "a", "text": "Ninguno: es equivalente al módulo apt", "correct": false, "explanation": "No es equivalente: shell no conoce el estado del paquete." },
+        { "id": "b", "text": "Pierde la idempotencia: siempre informa de `changed` aunque no haya nada que hacer", "correct": true, "explanation": "Correcto: por eso se prefieren módulos específicos." },
+        { "id": "c", "text": "No funciona en Linux", "correct": false, "explanation": "Funciona, pero no es la forma recomendada." }
+      ],
+      "solution": {
+        "answer": "Pierde la idempotencia",
+        "explanation": "`shell` y `command` no saben si su acción es necesaria: siempre la ejecutan y marcan `changed`. `ansible.builtin.apt` con `state: present` comprueba primero."
+      }
+    },
+    {
+      "id": "ensayo-check-diff",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Ensaya el playbook `web.yml` con el inventario `inventario.ini`: que **no cambie nada** y que **muestre las diferencias** en los archivos.",
+      "hints": [
+        "Necesitas dos flags: uno de simulación y otro de diferencias.",
+        "`--check` (`-C`) y `--diff` (`-D`)."
+      ],
+      "accepted": ["ansible-playbook -i inventario.ini web.yml --check --diff"],
+      "output": "PLAY [Configurar servidores web] ****\nTASK [Gathering Facts] **** ok: [web1]\nTASK [Instalar nginx] **** ok: [web1]\nTASK [Publicar la página de inicio] ****\n--- before: /var/www/html/index.html\n+++ after: /var/www/html/index.html\n@@ -1 +1 @@\n-<h1>Bienvenido a nginx</h1>\n+<h1>Hola desde web1</h1>\nchanged: [web1]\n\nPLAY RECAP ****\nweb1 : ok=3  changed=1  unreachable=0  failed=0",
+      "solution": {
+        "answer": "ansible-playbook -i inventario.ini web.yml --check --diff",
+        "explanation": "`--check` simula sin aplicar cambios y `--diff` muestra qué cambiaría dentro de los archivos. Equivale a `-C -D` (o `-CD`)."
+      }
+    },
+    {
+      "id": "limitar-host",
+      "type": "command",
+      "cli": "ansible-playbook",
+      "prompt": "Ejecuta `web.yml` (inventario `inventario.ini`) **solo en el host `web1`**.",
+      "hints": [
+        "Hay un flag para restringir los hosts sin editar el playbook.",
+        "Es `-l` (`--limit`)."
+      ],
+      "accepted": ["ansible-playbook -i inventario.ini web.yml -l web1"],
+      "output": "PLAY [Configurar servidores web] ****\n...\nPLAY RECAP ****\nweb1 : ok=4  changed=0  unreachable=0  failed=0",
+      "solution": {
+        "answer": "ansible-playbook -i inventario.ini web.yml -l web1",
+        "explanation": "`--limit web1` (`-l web1`) restringe los hosts del play a los que además cumplen ese patrón. Muy útil para probar en un solo servidor."
+      }
+    },
+    {
+      "id": "sintaxis",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando que solo comprueba la sintaxis de `web.yml`, sin conectarse a ningún host.",
+      "template": "ansible-playbook web.yml --{{flag}}",
+      "blanks": [{ "id": "flag", "accepted": ["syntax-check"] }],
+      "hints": ["Son dos palabras inglesas: «sintaxis» y «comprobar», unidas por un guion."],
+      "solution": {
+        "answer": "ansible-playbook web.yml --syntax-check",
+        "explanation": "`--syntax-check` valida el YAML y la estructura del playbook. Es rápido y buena idea en CI."
+      }
+    },
+    {
+      "id": "playbook-nginx",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el playbook: un play llamado como quieras, para el grupo `web`, con `become: true` y dos tareas (cada una con `name`): la primera instala `nginx` con `ansible.builtin.apt` (`state: present`) y la segunda lo deja arrancado y habilitado con `ansible.builtin.service` (`state: started`, `enabled: true`).",
+      "starter": "---\n- name: Configurar servidores web\n  hosts: \n  tasks:\n",
+      "assertions": [
+        { "path": "[0].hosts", "op": "equals", "value": "web", "message": "El play se aplica al grupo web (hosts: web)" },
+        { "path": "[0].become", "op": "equals", "value": true, "message": "El play tiene become: true (sin comillas)" },
+        { "path": "[0].tasks", "op": "count", "value": 2, "message": "tasks es una lista con 2 tareas" },
+        { "path": "[0].tasks[*].name", "op": "exists", "message": "Cada tarea tiene name" },
+        { "path": "[0].tasks[0]['ansible.builtin.apt'].name", "op": "equals", "value": "nginx", "message": "La primera tarea usa ansible.builtin.apt con name: nginx" },
+        { "path": "[0].tasks[0]['ansible.builtin.apt'].state", "op": "equals", "value": "present", "message": "La primera tarea pide state: present" },
+        { "path": "[0].tasks[1]['ansible.builtin.service'].name", "op": "equals", "value": "nginx", "message": "La segunda tarea usa ansible.builtin.service con name: nginx" },
+        { "path": "[0].tasks[1]['ansible.builtin.service'].state", "op": "equals", "value": "started", "message": "La segunda tarea pide state: started" },
+        { "path": "[0].tasks[1]['ansible.builtin.service'].enabled", "op": "equals", "value": true, "message": "La segunda tarea pide enabled: true" }
+      ],
+      "hints": [
+        "`become: true` va al mismo nivel que `hosts` y `tasks`.",
+        "Cada tarea empieza con `- name: ...` y, en la línea siguiente (misma indentación que `name`), el módulo: `ansible.builtin.apt:`.",
+        "Los parámetros del módulo van indentados **debajo** del módulo: `name: nginx`, `state: present`…"
+      ],
+      "solution": {
+        "answer": "---\n- name: Configurar servidores web\n  hosts: web\n  become: true\n  tasks:\n    - name: Instalar nginx\n      ansible.builtin.apt:\n        name: nginx\n        state: present\n\n    - name: Arrancar y habilitar nginx\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n",
+        "explanation": "El playbook es una lista con un play. El play define `hosts`, `become` y `tasks`. Cada tarea es un elemento de la lista con `name` y un módulo, y los parámetros del módulo van anidados debajo de él."
+      }
+    }
+  ]
+}

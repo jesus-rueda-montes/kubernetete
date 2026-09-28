@@ -1,0 +1,8 @@
+{
+  "title": "Roles, Galaxy y collections",
+  "summary": "Organizar la automatización en roles reutilizables, usarlos desde un playbook, e instalar roles y collections de Ansible Galaxy con un requirements.yml.",
+  "level": 3,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

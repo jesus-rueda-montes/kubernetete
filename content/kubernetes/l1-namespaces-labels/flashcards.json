@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "namespace", "front": "¿Qué es un namespace?", "back": "Un espacio de nombres dentro del clúster: los nombres son únicos por namespace y permite aplicar RBAC y cuotas por equipo o aplicación." },
+    { "id": "namespace-red", "front": "¿Un namespace aísla la red?", "back": "No. Por defecto todos los Pods se comunican entre sí; para restringirlo se usan NetworkPolicies." },
+    { "id": "namespaces-iniciales", "front": "Namespaces que trae todo clúster", "back": "`default`, `kube-system`, `kube-public` y `kube-node-lease`." },
+    { "id": "cluster-scope", "front": "Ejemplos de recursos sin namespace", "back": "Nodes, Namespaces, PersistentVolumes y StorageClasses. Se listan con `kubectl api-resources --namespaced=false`." },
+    { "id": "todos-ns", "front": "Flag de kubectl para mirar en todos los namespaces", "back": "`-A` (`--all-namespaces`)." },
+    { "id": "label-vs-annotation", "front": "Labels frente a annotations", "back": "Las labels identifican y sirven en selectors; las annotations guardan información para personas o herramientas y no se pueden seleccionar." },
+    { "id": "selector-and", "front": "¿Qué significa `-l app=web,env!=dev`?", "back": "Pods con app=web **y** env distinto de dev. Las comas combinan con Y; no hay O entre condiciones." },
+    { "id": "quitar-label", "front": "¿Cómo se quita la label `env` del Pod `web`?", "back": "`kubectl label pods web env-` (la clave con un guion al final)." }
+  ]
+}

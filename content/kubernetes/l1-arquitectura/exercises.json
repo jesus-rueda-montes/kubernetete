@@ -1,0 +1,140 @@
+{
+  "exercises": [
+    {
+      "id": "declarativo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué frase describe mejor el **modelo declarativo** de Kubernetes?",
+      "hints": [
+        "Recuerda la analogía del termostato: ¿le das pasos o un objetivo?",
+        "Piensa en quién escribe `spec` y qué hacen los controllers con él."
+      ],
+      "options": [
+        { "id": "a", "text": "Describes el estado deseado y Kubernetes trabaja continuamente para que la realidad coincida", "correct": true, "explanation": "Correcto: tú escribes el `spec` y los controllers reconcilian el estado real con él." },
+        { "id": "b", "text": "Escribes un script con los pasos exactos que Kubernetes ejecuta una vez", "correct": false, "explanation": "Eso es un enfoque imperativo: si algo falla después, nadie lo corrige." },
+        { "id": "c", "text": "Kubernetes decide solo qué aplicaciones ejecutar", "correct": false, "explanation": "Kubernetes no decide qué ejecutar: ejecuta lo que tú declaras." },
+        { "id": "d", "text": "Cada cambio se hace entrando por SSH en los nodes", "correct": false, "explanation": "Justo lo contrario: con Kubernetes no se configuran las máquinas a mano." }
+      ],
+      "solution": {
+        "answer": "Describes el estado deseado",
+        "explanation": "En Kubernetes declaras cómo quieres que esté el sistema (`spec`). Los controllers observan, comparan con el estado real (`status`) y actúan hasta que coinciden."
+      }
+    },
+    {
+      "id": "quien-guarda-estado",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué componente guarda **todo el estado del clúster**?",
+      "hints": ["Es una base de datos clave-valor."],
+      "options": [
+        { "id": "a", "text": "kube-apiserver", "correct": false, "explanation": "El API server es la puerta de entrada y el único que habla con la base de datos, pero no guarda el estado él mismo." },
+        { "id": "b", "text": "etcd", "correct": true, "explanation": "Correcto: etcd es el almacén clave-valor consistente con todo el estado del clúster." },
+        { "id": "c", "text": "kubelet", "correct": false, "explanation": "El kubelet es el agente de cada Node; informa del estado de sus Pods, pero no lo almacena." },
+        { "id": "d", "text": "kube-scheduler", "correct": false, "explanation": "El scheduler solo decide en qué Node va cada Pod." }
+      ],
+      "solution": {
+        "answer": "etcd",
+        "explanation": "etcd es la única fuente de verdad del clúster. Por eso sus copias de seguridad son críticas en los clústeres que gestionas tú."
+      }
+    },
+    {
+      "id": "quien-arranca",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "El **kube-scheduler** es quien arranca los contenedores de un Pod en el Node elegido.",
+      "hints": ["El scheduler decide... ¿y quién ejecuta en cada Node?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El scheduler solo asigna el Node. Arrancar los contenedores es trabajo del kubelet." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: el scheduler decide y el kubelet de ese Node arranca los contenedores mediante el container runtime." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El scheduler asigna un Node al Pod. El kubelet de ese Node ve el Pod nuevo y pide al container runtime (containerd, CRI-O…) que arranque los contenedores."
+      }
+    },
+    {
+      "id": "piezas-control-plane",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles de estos componentes forman parte del **control plane**? (Marca todos los correctos.)",
+      "hints": [
+        "El control plane es el «cerebro»: guarda el estado, decide y reconcilia.",
+        "Los componentes que corren en **cada** Node no son del control plane."
+      ],
+      "options": [
+        { "id": "a", "text": "kube-apiserver", "correct": true, "explanation": "Sí: es la puerta de entrada al clúster." },
+        { "id": "b", "text": "etcd", "correct": true, "explanation": "Sí: guarda el estado." },
+        { "id": "c", "text": "kube-scheduler", "correct": true, "explanation": "Sí: asigna Pods a Nodes." },
+        { "id": "d", "text": "kubelet", "correct": false, "explanation": "No: es el agente de cada Node." },
+        { "id": "e", "text": "kube-controller-manager", "correct": true, "explanation": "Sí: ejecuta los controllers." },
+        { "id": "f", "text": "container runtime", "correct": false, "explanation": "No: ejecuta los contenedores en cada Node." }
+      ],
+      "solution": {
+        "answer": "kube-apiserver, etcd, kube-scheduler y kube-controller-manager",
+        "explanation": "Control plane: API server, etcd, scheduler y controller-manager (más el cloud-controller-manager opcional). En los Nodes: kubelet, kube-proxy y container runtime."
+      }
+    },
+    {
+      "id": "borrar-pod-deployment",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Deployment declara `replicas: 3`. Borras a mano uno de sus Pods. ¿Qué ocurre?",
+      "hints": ["Piensa en el bucle de reconciliación: observar, comparar, actuar."],
+      "options": [
+        { "id": "a", "text": "Quedan 2 Pods hasta que vuelvas a hacer `kubectl apply`", "correct": false, "explanation": "No hace falta volver a aplicar: el controller está vigilando continuamente." },
+        { "id": "b", "text": "Un controller detecta que faltan réplicas y crea un Pod nuevo", "correct": true, "explanation": "Correcto: el estado real (2) no coincide con el deseado (3), así que se crea otro Pod." },
+        { "id": "c", "text": "Kubernetes restaura exactamente el mismo Pod, con el mismo nombre e IP", "correct": false, "explanation": "Los Pods no se restauran: se crea uno nuevo, con otro nombre y otra IP." },
+        { "id": "d", "text": "Se borra todo el Deployment", "correct": false, "explanation": "Borrar un Pod no afecta al objeto Deployment." }
+      ],
+      "solution": {
+        "answer": "Se crea un Pod nuevo",
+        "explanation": "Es la autorreparación de Kubernetes: el controller compara 2 Pods reales con 3 deseados y crea uno nuevo (con otro nombre y otra IP)."
+      }
+    },
+    {
+      "id": "listar-nodes",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista las máquinas (Nodes) del clúster y comprueba si están `Ready`.",
+      "hints": [
+        "Es el mismo verbo que usaste para listar Pods.",
+        "`kubectl get` seguido del tipo de recurso de las máquinas."
+      ],
+      "accepted": ["kubectl get nodes", "kubectl get node", "kubectl get no"],
+      "output": "NAME     STATUS   ROLES           AGE   VERSION\nnodo-1   Ready    control-plane   12d   v1.34.1\nnodo-2   Ready    <none>          12d   v1.34.1",
+      "solution": {
+        "answer": "kubectl get nodes",
+        "explanation": "`kubectl get nodes` (o `node`, o `no`) lista las máquinas. `Ready` indica que su kubelet informa de que todo va bien."
+      }
+    },
+    {
+      "id": "pods-sistema",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista los Pods del namespace `kube-system`, donde viven los componentes de sistema del clúster.",
+      "hints": [
+        "Es un `kubectl get pods` normal, pero en otro namespace.",
+        "El flag para elegir namespace es `-n` (o `--namespace`)."
+      ],
+      "accepted": ["kubectl get pods -n kube-system"],
+      "output": "NAME                        READY   STATUS    RESTARTS   AGE\ncoredns-6f6b679f8f-8xk2p    1/1     Running   0          12d\nkube-proxy-7mz4q            1/1     Running   0          12d\nkube-proxy-q2w9d            1/1     Running   0          12d",
+      "solution": {
+        "answer": "kubectl get pods -n kube-system",
+        "explanation": "`-n kube-system` (o `--namespace=kube-system`) cambia el namespace del comando. Allí verás Pods de sistema como el DNS del clúster o kube-proxy (depende de cada clúster)."
+      }
+    },
+    {
+      "id": "info-cluster",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando que muestra la dirección del control plane del clúster.",
+      "template": "kubectl {{sub}}",
+      "blanks": [{ "id": "sub", "accepted": ["cluster-info"] }],
+      "hints": ["Son dos palabras en inglés unidas por un guion: «clúster» e «información»."],
+      "solution": {
+        "answer": "kubectl cluster-info",
+        "explanation": "`kubectl cluster-info` muestra la dirección del control plane y de algunos servicios del clúster. Es útil para comprobar a qué clúster estás conectado."
+      }
+    }
+  ]
+}

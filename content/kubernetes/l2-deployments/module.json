@@ -1,0 +1,8 @@
+{
+  "title": "Deployments y ReplicaSets",
+  "summary": "Mantener N réplicas vivas, actualizar sin cortes (rolling update) y volver atrás cuando algo sale mal.",
+  "level": 2,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

@@ -1,0 +1,174 @@
+{
+  "exercises": [
+    {
+      "id": "defaults-o-vars",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu rol `nginx` tiene la variable `nginx_puerto`, que cada proyecto debe poder cambiar desde `group_vars`. ¿Dónde la defines dentro del rol?",
+      "hints": ["¿Qué archivo del rol tiene la precedencia más baja?"],
+      "options": [
+        { "id": "a", "text": "`defaults/main.yml`", "correct": true, "explanation": "Correcto: cualquier otra fuente la sobrescribe." },
+        { "id": "b", "text": "`vars/main.yml`", "correct": false, "explanation": "Su precedencia es alta: `group_vars` no la sobrescribiría." },
+        { "id": "c", "text": "`meta/main.yml`", "correct": false, "explanation": "`meta` es para metadatos y dependencias." }
+      ],
+      "solution": {
+        "answer": "defaults/main.yml",
+        "explanation": "`defaults` tiene la precedencia más baja de todas, así que sirve para valores por defecto que el usuario del rol puede cambiar."
+      }
+    },
+    {
+      "id": "plantilla-en-rol",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Dentro de `roles/nginx/tasks/main.yml` escribes `template: src: nginx.conf.j2`. ¿Dónde busca Ansible el archivo?",
+      "hints": ["Cada tipo de archivo tiene su carpeta en el rol."],
+      "options": [
+        { "id": "a", "text": "En `roles/nginx/templates/`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "En la carpeta del playbook", "correct": false, "explanation": "Dentro de un rol, busca primero en sus propias carpetas." },
+        { "id": "c", "text": "En `roles/nginx/files/`", "correct": false, "explanation": "`files/` es para el módulo `copy`." }
+      ],
+      "solution": {
+        "answer": "roles/nginx/templates/",
+        "explanation": "El módulo `template` busca en la carpeta `templates/` del rol, y `copy` en `files/`. No hace falta escribir la ruta completa."
+      }
+    },
+    {
+      "id": "orden-roles",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un play tiene `roles: [nginx]` y también una sección `tasks:`. ¿En qué orden se ejecutan?",
+      "hints": ["Los roles de `roles:` preparan el terreno."],
+      "options": [
+        { "id": "a", "text": "Primero el rol, después las tasks", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Primero las tasks, después el rol", "correct": false, "explanation": "Es al revés." },
+        { "id": "c", "text": "Depende del orden en que estén escritas en el archivo", "correct": false, "explanation": "El orden lo fija Ansible, no el archivo." }
+      ],
+      "solution": {
+        "answer": "Rol y después tasks",
+        "explanation": "Los roles de `roles:` se ejecutan antes que las `tasks:` del play. Si necesitas intercalarlos, usa `import_role` o `include_role` como tareas."
+      }
+    },
+    {
+      "id": "include-dinamico",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres aplicar un rol distinto según una variable que calcula una tarea anterior del mismo play. ¿Qué usas?",
+      "hints": ["Necesitas que el rol se elija durante la ejecución."],
+      "options": [
+        { "id": "a", "text": "`include_role`", "correct": true, "explanation": "Correcto: es dinámico." },
+        { "id": "b", "text": "`import_role`", "correct": false, "explanation": "Es estático: se resuelve al leer el playbook, antes de ejecutar nada." },
+        { "id": "c", "text": "`roles:` a nivel de play", "correct": false, "explanation": "También se resuelve antes de ejecutar las tareas." }
+      ],
+      "solution": {
+        "answer": "include_role",
+        "explanation": "`include_role` se procesa al llegar a esa tarea, así que puede usar variables calculadas antes, bucles y condiciones de ejecución."
+      }
+    },
+    {
+      "id": "fqcn",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un playbook falla con «couldn't resolve module/action 'community.docker.docker_container'». ¿Qué es lo más probable?",
+      "hints": ["El nombre del módulo incluye la collection."],
+      "options": [
+        { "id": "a", "text": "La collection `community.docker` no está instalada", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Docker no está instalado en el nodo de control", "correct": false, "explanation": "El error es de Ansible: no encuentra el módulo." },
+        { "id": "c", "text": "Hay que quitar el prefijo `community.docker.`", "correct": false, "explanation": "El FQCN es la forma recomendada." }
+      ],
+      "solution": {
+        "answer": "Falta la collection",
+        "explanation": "Instálala con `ansible-galaxy collection install community.docker` y añádela al `requirements.yml` para que el resto del equipo y el pipeline también la tengan."
+      }
+    },
+    {
+      "id": "ansible-core",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si instalas solo `ansible-core`, tienes disponibles los módulos de `community.general`.",
+      "hints": ["¿Qué collection trae `ansible-core`?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Solo trae `ansible.builtin`." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "`ansible-core` solo incluye `ansible.builtin`. El paquete `ansible` de la comunidad sí incluye muchas collections; con `ansible-core` hay que instalarlas."
+      }
+    },
+    {
+      "id": "cmd-role-init",
+      "type": "command",
+      "cli": "ansible-galaxy",
+      "prompt": "Crea el esqueleto de un rol llamado `postgres`.",
+      "hints": [
+        "Es un subcomando de `ansible-galaxy role`.",
+        "El subcomando es `init`."
+      ],
+      "accepted": ["ansible-galaxy role init postgres"],
+      "output": "- Role postgres was created successfully",
+      "solution": {
+        "answer": "ansible-galaxy role init postgres",
+        "explanation": "Crea la carpeta `postgres/` con `tasks`, `handlers`, `templates`, `files`, `defaults`, `vars`, `meta`, `tests` y un `README.md`. Con `--init-path roles` la crea dentro de `roles/`."
+      }
+    },
+    {
+      "id": "cmd-requirements",
+      "type": "command",
+      "cli": "ansible-galaxy",
+      "prompt": "Instala las collections declaradas en `requirements.yml`.",
+      "hints": [
+        "Es `ansible-galaxy collection install`.",
+        "El archivo se pasa con `-r` (o `--requirements-file`)."
+      ],
+      "accepted": ["ansible-galaxy collection install -r requirements.yml"],
+      "output": "Starting galaxy collection install process\nProcess install dependency map\nStarting collection install process\nInstalling 'community.docker:5.3.0' to '/home/ana/.ansible/collections/ansible_collections/community/docker'\ncommunity.docker:5.3.0 was installed successfully",
+      "solution": {
+        "answer": "ansible-galaxy collection install -r requirements.yml",
+        "explanation": "Instala cada collection con la versión que permite su restricción. `ansible-galaxy install -r requirements.yml` instala también los roles del mismo archivo."
+      }
+    },
+    {
+      "id": "editor-roles",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el play para que aplique el rol `common` y después el rol `nginx` pasándole la variable `nginx_puerto: 8080`.",
+      "starter": "---\n- name: Servidores web\n  hosts: web\n  become: true\n",
+      "assertions": [
+        { "path": "[0].roles", "op": "count", "value": 2, "message": "La sección roles tiene 2 roles" },
+        { "path": "[0].roles[0]", "op": "equals", "value": "common", "message": "El primer rol es common" },
+        { "path": "[0].roles[1].role", "op": "equals", "value": "nginx", "message": "El segundo es `- role: nginx`" },
+        { "path": "[0].roles[1].vars.nginx_puerto", "op": "equals", "value": 8080, "message": "Con vars: nginx_puerto: 8080" }
+      ],
+      "hints": [
+        "`roles:` va al nivel de `hosts` y `become`.",
+        "Un rol sin parámetros puede ser solo su nombre: `- common`.",
+        "Con parámetros: `- role: nginx` y debajo `vars:`."
+      ],
+      "solution": {
+        "answer": "---\n- name: Servidores web\n  hosts: web\n  become: true\n  roles:\n    - common\n    - role: nginx\n      vars:\n        nginx_puerto: 8080\n",
+        "explanation": "Los roles se ejecutan en el orden de la lista. Las `vars` pasadas así ganan a las `defaults` del rol."
+      }
+    },
+    {
+      "id": "editor-requirements",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Escribe un `requirements.yml` con dos collections: `community.docker` con la versión `\">=5.0.0,<6.0.0\"` y `kubernetes.core` sin versión.",
+      "starter": "# requirements.yml\n",
+      "assertions": [
+        { "path": "collections", "op": "count", "value": 2, "message": "Hay una lista collections con 2 elementos" },
+        { "path": "collections[name=community.docker].version", "op": "equals", "value": ">=5.0.0,<6.0.0", "message": "community.docker con version: \">=5.0.0,<6.0.0\" (entre comillas)" },
+        { "path": "collections[name=kubernetes.core].name", "op": "equals", "value": "kubernetes.core", "message": "Está kubernetes.core" }
+      ],
+      "hints": [
+        "La clave raíz es `collections:`, con una lista.",
+        "Cada elemento: `- name: ...` y, si hace falta, `version: ...`.",
+        "Pon la versión entre comillas: empieza por `>`, que en YAML tiene un significado especial."
+      ],
+      "solution": {
+        "answer": "collections:\n  - name: community.docker\n    version: \">=5.0.0,<6.0.0\"\n  - name: kubernetes.core\n",
+        "explanation": "Con `ansible-galaxy collection install -r requirements.yml` todos instalan lo mismo. Mejor fijar también la de `kubernetes.core` en un proyecto real."
+      }
+    }
+  ]
+}

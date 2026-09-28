@@ -1,0 +1,8 @@
+{
+  "title": "Preparación de entrevista",
+  "summary": "Las preguntas de Ansible que más se repiten, con respuestas modelo; Ansible frente a Terraform; y escenarios prácticos: actualizaciones por lotes con serial, delegación, inventarios dinámicos y rendimiento.",
+  "level": 5,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

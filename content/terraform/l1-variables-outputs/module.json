@@ -1,0 +1,8 @@
+{
+  "title": "Variables, outputs y locals",
+  "summary": "Parametrizar una configuración con variables, exponer resultados con outputs, evitar repeticiones con locals y enlazar recursos entre sí.",
+  "level": 1,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

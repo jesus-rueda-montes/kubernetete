@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "service", "front": "¿Para qué sirve un Service?", "back": "Da una IP y un nombre DNS estables delante de un grupo de Pods (por selector) y reparte el tráfico entre los que están ready." },
+    { "id": "tipos", "front": "Tipos de Service", "back": "ClusterIP (interno, por defecto), NodePort (puerto en cada Node, 30000–32767), LoadBalancer (load balancer externo), ExternalName (alias DNS)." },
+    { "id": "port-target", "front": "`port` frente a `targetPort`", "back": "`port`: puerto del Service. `targetPort`: puerto del contenedor (por defecto, igual que `port`)." },
+    { "id": "dns", "front": "Nombre DNS de un Service", "back": "`<servicio>.<namespace>.svc.cluster.local`. En el mismo namespace basta con `<servicio>`." },
+    { "id": "headless", "front": "¿Qué es un headless Service?", "back": "Un Service con `clusterIP: None`: sin IP virtual; el DNS devuelve directamente las IPs de los Pods." },
+    { "id": "depurar", "front": "Primer paso para depurar un Service que no responde", "back": "Comprobar si tiene endpoints. Si no, revisar el selector frente a las labels de los Pods y que estén ready." },
+    { "id": "selector-service", "front": "Selector de un Service frente al de un Deployment", "back": "Service: mapa directo (`selector: {app: web}`). Deployment: `selector.matchLabels` (o `matchExpressions`)." }
+  ]
+}

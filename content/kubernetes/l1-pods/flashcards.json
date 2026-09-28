@@ -1,0 +1,7 @@
+{
+  "cards": [
+    { "id": "pod-definicion", "front": "¿Qué es un Pod?", "back": "La unidad mínima de Kubernetes: uno o varios contenedores que comparten red (una IP) y pueden compartir volúmenes, siempre en el mismo Node." },
+    { "id": "pod-ip", "front": "¿Se conserva la IP de un Pod si se recrea?", "back": "No. Los Pods son efímeros; el nuevo Pod suele tener otra IP. Para una dirección estable se usa un Service." },
+    { "id": "pod-depurar", "front": "Primer comando para ver por qué un Pod no arranca", "back": "`kubectl describe pod <nombre>`: muestra la configuración y los eventos." }
+  ]
+}

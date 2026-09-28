@@ -1,0 +1,13 @@
+{
+  "cards": [
+    { "id": "que-es", "front": "¿Qué es un módulo de Terraform?", "back": "Un directorio con archivos `.tf`. El raíz (donde ejecutas Terraform) llama a módulos hijos con bloques `module`." },
+    { "id": "entradas-salidas", "front": "Entradas y salidas de un módulo", "back": "Entradas: sus `variable` (se rellenan con los argumentos del bloque `module`). Salidas: sus `output`, leídos con `module.NOMBRE.OUTPUT`." },
+    { "id": "internos", "front": "¿Se pueden leer los recursos internos de un módulo desde fuera?", "back": "No. Solo sus outputs." },
+    { "id": "local", "front": "Ruta local en `source`", "back": "Debe empezar por `./` o `../`; si no, se interpreta como dirección del Registry. No admite `version`." },
+    { "id": "registry", "front": "Formato de un módulo del Registry", "back": "`namespace/nombre/provider`, con el argumento `version`." },
+    { "id": "git", "front": "Versión de un módulo en git", "back": "`?ref=` con una etiqueta, rama o commit (mejor etiqueta). Subdirectorio con `//`." },
+    { "id": "tilde", "front": "`~> 5.1` frente a `~> 5.1.0`", "back": "`~> 5.1`: 5.x desde la 5.1 (no 6.0). `~> 5.1.0`: 5.1.x (no 5.2.0)." },
+    { "id": "init", "front": "¿Cuándo hay que ejecutar `terraform init` por los módulos?", "back": "Al añadir un módulo o cambiar su `source` o `version`. `-upgrade` busca la versión más nueva permitida." },
+    { "id": "lock", "front": "¿`.terraform.lock.hcl` fija las versiones de los módulos?", "back": "No, solo las de los providers. Los módulos se fijan con `version` o `?ref=`." }
+  ]
+}

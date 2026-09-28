@@ -1,0 +1,138 @@
+{
+  "exercises": [
+    {
+      "id": "emptydir-vida",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un contenedor escribe archivos en un volumen `emptyDir` y se reinicia por un fallo. ¿Qué pasa con los archivos?",
+      "hints": ["¿La vida del emptyDir va ligada al contenedor o al Pod?"],
+      "options": [
+        { "id": "a", "text": "Se conservan: el emptyDir vive lo que vive el Pod", "correct": true, "explanation": "Correcto: solo se pierde cuando el Pod desaparece." },
+        { "id": "b", "text": "Se pierden al reiniciar el contenedor", "correct": false, "explanation": "Eso pasa con el sistema de archivos del contenedor, no con el emptyDir." },
+        { "id": "c", "text": "Se copian a un PersistentVolume", "correct": false, "explanation": "No hay ninguna copia automática." }
+      ],
+      "solution": {
+        "answer": "Se conservan",
+        "explanation": "`emptyDir` se crea al programar el Pod y se borra cuando el Pod deja de existir; sobrevive a los reinicios de los contenedores."
+      }
+    },
+    {
+      "id": "pv-pvc-ambito",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué afirmación es correcta sobre el ámbito de PV y PVC?",
+      "hints": ["Uno es la petición de una aplicación; el otro, un recurso del clúster."],
+      "options": [
+        { "id": "a", "text": "El PVC tiene namespace; el PV es de todo el clúster", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Los dos tienen namespace", "correct": false, "explanation": "El PV no tiene namespace." },
+        { "id": "c", "text": "El PV tiene namespace; el PVC es de todo el clúster", "correct": false, "explanation": "Al revés." }
+      ],
+      "solution": {
+        "answer": "PVC con namespace, PV de clúster",
+        "explanation": "El PVC es la petición de una aplicación en su namespace; el PV representa almacenamiento real del clúster y se vincula 1 a 1 con un PVC."
+      }
+    },
+    {
+      "id": "rwo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Deployment con 3 réplicas repartidas en 3 Nodes quiere **escribir** en el mismo volumen. ¿Qué access mode necesita?",
+      "hints": ["RWO limita a un Node."],
+      "options": [
+        { "id": "a", "text": "ReadWriteOnce", "correct": false, "explanation": "Solo un Node puede montarlo en escritura." },
+        { "id": "b", "text": "ReadWriteMany", "correct": true, "explanation": "Correcto: escritura desde varios Nodes (almacenamiento de ficheros)." },
+        { "id": "c", "text": "ReadOnlyMany", "correct": false, "explanation": "Solo permite leer." }
+      ],
+      "solution": {
+        "answer": "ReadWriteMany",
+        "explanation": "RWX permite escritura desde varios Nodes; suele requerir almacenamiento de ficheros (Filestore, EFS, NFS). Los discos de bloque normalmente solo admiten RWO."
+      }
+    },
+    {
+      "id": "reclaim-delete",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Borras un PVC creado dinámicamente con la StorageClass por defecto (`reclaimPolicy: Delete`). ¿Qué pasa con el disco?",
+      "hints": ["Delete es literal."],
+      "options": [
+        { "id": "a", "text": "Se borra el disco y sus datos", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El disco se conserva para siempre", "correct": false, "explanation": "Eso sería con Retain." },
+        { "id": "c", "text": "Se mueve a otro namespace", "correct": false, "explanation": "No existe ese comportamiento." }
+      ],
+      "solution": {
+        "answer": "Se borra",
+        "explanation": "Con `Delete` (por defecto en aprovisionamiento dinámico), borrar el PVC borra el PV y el disco real. Para datos críticos: `Retain` y copias de seguridad."
+      }
+    },
+    {
+      "id": "pvc-pending",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "Un PVC se queda en `Pending`. ¿Cuáles pueden ser las causas? (Marca todas.)",
+      "hints": ["Piensa en la clase, el access mode y el modo de vinculación."],
+      "options": [
+        { "id": "a", "text": "No hay StorageClass por defecto y el PVC no indica ninguna", "correct": true, "explanation": "Sí: nadie crea el disco." },
+        { "id": "b", "text": "Pide ReadWriteMany a un driver que solo soporta RWO", "correct": true, "explanation": "Sí." },
+        { "id": "c", "text": "La clase usa WaitForFirstConsumer y aún no hay ningún Pod que lo use", "correct": true, "explanation": "Sí: es normal, se crea al llegar el Pod." },
+        { "id": "d", "text": "El namespace tiene demasiados Services", "correct": false, "explanation": "No tiene relación." }
+      ],
+      "solution": {
+        "answer": "Clase inexistente, access mode no soportado o esperando al Pod",
+        "explanation": "`kubectl describe pvc` muestra el motivo en los eventos. Con WaitForFirstConsumer, `Pending` es el estado esperado hasta que un Pod lo use."
+      }
+    },
+    {
+      "id": "listar-pvc",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Lista los PersistentVolumeClaims del namespace actual (usa la abreviatura).",
+      "hints": ["La abreviatura de persistentvolumeclaims tiene tres letras."],
+      "accepted": ["kubectl get pvc"],
+      "output": "NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE\ndatos-postgres   Bound    pvc-3f1c2a9e-7b4d-4e1f-9c2a-1b2c3d4e5f60   20Gi       RWO            standard-rwo   3m",
+      "solution": {
+        "answer": "kubectl get pvc",
+        "explanation": "`pvc` es la abreviatura de persistentvolumeclaims. `Bound` indica que está vinculado a un PV."
+      }
+    },
+    {
+      "id": "manifest-pvc",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Escribe un PersistentVolumeClaim llamado `datos-postgres` que pida **20Gi** en modo **ReadWriteOnce** con la StorageClass `standard-rwo`.",
+      "starter": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: datos-postgres\nspec:\n",
+      "assertions": [
+        { "path": "kind", "op": "equals", "value": "PersistentVolumeClaim", "message": "kind es PersistentVolumeClaim" },
+        { "path": "spec.accessModes", "op": "equals", "value": ["ReadWriteOnce"], "message": "accessModes es una lista con ReadWriteOnce" },
+        { "path": "spec.resources.requests.storage", "op": "equals", "value": "20Gi", "message": "resources.requests.storage es 20Gi" },
+        { "path": "spec.storageClassName", "op": "equals", "value": "standard-rwo", "message": "storageClassName: standard-rwo" }
+      ],
+      "hints": [
+        "`accessModes` es una **lista**: `accessModes: [ReadWriteOnce]` o con guion en la línea siguiente.",
+        "El tamaño va en `resources:` → `requests:` → `storage: 20Gi`, como los requests de CPU."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: datos-postgres\nspec:\n  accessModes:\n    - ReadWriteOnce\n  storageClassName: standard-rwo\n  resources:\n    requests:\n      storage: 20Gi\n",
+        "explanation": "El PVC pide tamaño (`resources.requests.storage`), modo de acceso (lista `accessModes`) y clase. La StorageClass creará el disco y el PV automáticamente."
+      }
+    },
+    {
+      "id": "montar-pvc",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Monta el PVC `datos-postgres` en el contenedor `postgres` en la ruta `/var/lib/postgresql/data`, usando un volumen llamado `datos`.",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: postgres\nspec:\n  containers:\n    - name: postgres\n      image: postgres:17\n",
+      "assertions": [
+        { "path": "spec.volumes[name=datos].persistentVolumeClaim.claimName", "op": "equals", "value": "datos-postgres", "message": "spec.volumes tiene un volumen datos con persistentVolumeClaim.claimName: datos-postgres" },
+        { "path": "spec.containers[0].volumeMounts[name=datos].mountPath", "op": "equals", "value": "/var/lib/postgresql/data", "message": "El contenedor monta datos en /var/lib/postgresql/data (volumeMounts)" }
+      ],
+      "hints": [
+        "Dos partes: `volumes` al nivel de `containers`, y `volumeMounts` dentro del contenedor.",
+        "El volumen: `- name: datos` y `persistentVolumeClaim:` → `claimName: datos-postgres`."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: postgres\nspec:\n  containers:\n    - name: postgres\n      image: postgres:17\n      volumeMounts:\n        - name: datos\n          mountPath: /var/lib/postgresql/data\n  volumes:\n    - name: datos\n      persistentVolumeClaim:\n        claimName: datos-postgres\n",
+        "explanation": "El Pod declara el volumen en `spec.volumes` (apuntando al PVC por su nombre) y el contenedor lo monta con `volumeMounts`, uniendo ambos por el nombre `datos`."
+      }
+    }
+  ]
+}

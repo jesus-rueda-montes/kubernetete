@@ -1,0 +1,137 @@
+{
+  "exercises": [
+    {
+      "id": "para-que-state",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la función principal del state de Terraform?",
+      "hints": ["El código dice qué quieres. ¿Cómo sabe Terraform qué objeto real corresponde a cada bloque?"],
+      "options": [
+        { "id": "a", "text": "Relacionar cada recurso del código con el objeto real que gestiona", "correct": true, "explanation": "Correcto: sin esa correspondencia no sabría qué crear, cambiar o borrar." },
+        { "id": "b", "text": "Guardar una copia del código por si se pierde", "correct": false, "explanation": "El código se guarda en git; el state guarda la realidad gestionada." },
+        { "id": "c", "text": "Almacenar los logs de cada apply", "correct": false, "explanation": "El state no es un registro de ejecuciones." }
+      ],
+      "solution": {
+        "answer": "Relacionar código y realidad",
+        "explanation": "El state mapea cada dirección (`google_storage_bucket.logs`) con el objeto real (su ID y atributos), además de metadatos como las dependencias."
+      }
+    },
+    {
+      "id": "state-git",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Es buena práctica subir `terraform.tfstate` al repositorio de git para compartirlo con el equipo.",
+      "hints": ["¿Qué tipo de valores puede contener el state?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El state puede contener secretos en claro y git no evita que dos personas apliquen a la vez." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: en equipo se usa un backend remoto con bloqueo." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El state contiene valores sensibles en claro. Para compartirlo se usa un backend remoto (GCS, S3, HCP Terraform) con control de acceso y bloqueo."
+      }
+    },
+    {
+      "id": "drift",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un compañero cambió a mano, desde la consola, la etiqueta `env` de un bucket gestionado por Terraform. El código dice `env = \"pro\"`. ¿Qué pasará en el próximo `terraform apply`?",
+      "hints": ["¿Quién manda: la realidad o el código?"],
+      "options": [
+        { "id": "a", "text": "Terraform respeta el cambio manual", "correct": false, "explanation": "Terraform trabaja para que la realidad coincida con el código." },
+        { "id": "b", "text": "Terraform detecta el drift y vuelve a poner `env = \"pro\"`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Terraform borra el bucket y lo crea de nuevo", "correct": false, "explanation": "Una etiqueta se puede cambiar en el sitio; no hace falta sustituir el bucket." }
+      ],
+      "solution": {
+        "answer": "Vuelve a poner el valor del código",
+        "explanation": "`plan` refresca la realidad, detecta la diferencia (drift) y propone devolverla al estado del código. Si el cambio manual era correcto, hay que llevarlo al código."
+      }
+    },
+    {
+      "id": "state-rm",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Ejecutas `terraform state rm google_storage_bucket.logs`. ¿Qué pasa con el bucket en Google Cloud?",
+      "hints": ["Los comandos `terraform state` solo tocan el state."],
+      "options": [
+        { "id": "a", "text": "Se borra", "correct": false, "explanation": "Para borrarlo habría que quitarlo del código y aplicar (o usar destroy)." },
+        { "id": "b", "text": "Sigue existiendo, pero Terraform deja de gestionarlo", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Se mueve a otro proyecto", "correct": false, "explanation": "No se mueve nada en la realidad." }
+      ],
+      "solution": {
+        "answer": "Sigue existiendo",
+        "explanation": "`state rm` hace que Terraform olvide el recurso. Hay que quitar también su bloque del código; si no, el siguiente plan intentará crearlo de nuevo."
+      }
+    },
+    {
+      "id": "simbolos-plan",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En la salida de `terraform plan`, un recurso aparece con el símbolo `-/+`. ¿Qué significa?",
+      "hints": ["Combina dos símbolos: destruir y crear."],
+      "options": [
+        { "id": "a", "text": "Se modificará en el sitio", "correct": false, "explanation": "Eso es `~`." },
+        { "id": "b", "text": "Se destruirá y se volverá a crear (sustitución)", "correct": true, "explanation": "Correcto: ¡cuidado si guarda datos!" },
+        { "id": "c", "text": "Se ignorará", "correct": false, "explanation": "No existe un símbolo para ignorar." }
+      ],
+      "solution": {
+        "answer": "Sustitución",
+        "explanation": "`+` crear, `-` destruir, `~` modificar en el sitio, `-/+` destruir y crear. Una sustitución de una base de datos o un disco implica perder sus datos: revisa siempre el plan."
+      }
+    },
+    {
+      "id": "listar-state",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Lista todos los recursos que Terraform tiene en el state.",
+      "hints": [
+        "Es un subcomando de `terraform state`.",
+        "Se llama como en inglés «listar»."
+      ],
+      "accepted": ["terraform state list"],
+      "output": "google_compute_network.vpc\ngoogle_compute_subnetwork.web\ngoogle_storage_bucket.logs",
+      "solution": {
+        "answer": "terraform state list",
+        "explanation": "`terraform state list` muestra las direcciones de todos los recursos del state. Con `terraform state show <dirección>` ves los atributos de uno."
+      }
+    },
+    {
+      "id": "forzar-sustitucion",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "La VM `google_compute_instance.web` funciona mal. Recréala con la misma configuración aplicando los cambios.",
+      "hints": [
+        "Es un `terraform apply` con un flag que fuerza la sustitución de un recurso.",
+        "El flag es `-replace=DIRECCIÓN`."
+      ],
+      "accepted": ["terraform apply -replace=google_compute_instance.web"],
+      "output": "  # google_compute_instance.web will be replaced, as requested\n-/+ resource \"google_compute_instance\" \"web\" {\n      ...\n    }\n\nPlan: 1 to add, 0 to change, 1 to destroy.",
+      "solution": {
+        "answer": "terraform apply -replace=google_compute_instance.web",
+        "explanation": "`-replace` planifica destruir y volver a crear ese recurso aunque su configuración no haya cambiado. Sustituye al antiguo `terraform taint`."
+      }
+    },
+    {
+      "id": "renombrar-moved",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Has renombrado el recurso `google_storage_bucket.logs` a `google_storage_bucket.registros` en el código. Añade el bloque necesario para que Terraform **no** destruya y recree el bucket.",
+      "starter": "resource \"google_storage_bucket\" \"registros\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n",
+      "assertions": [
+        { "path": "resource.google_storage_bucket.registros[0].name", "op": "equals", "value": "tienda-logs", "message": "El recurso registros sigue igual (name = \"tienda-logs\")" },
+        { "path": "moved", "op": "count", "value": 1, "message": "Hay un bloque moved" },
+        { "path": "moved[0].from", "op": "equals", "value": "google_storage_bucket.logs", "message": "moved.from es la dirección antigua (google_storage_bucket.logs, sin comillas)" },
+        { "path": "moved[0].to", "op": "equals", "value": "google_storage_bucket.registros", "message": "moved.to es la dirección nueva (google_storage_bucket.registros, sin comillas)" }
+      ],
+      "hints": [
+        "El bloque se llama `moved` y no lleva etiquetas: `moved { ... }`.",
+        "Tiene dos atributos: `from` y `to`.",
+        "Las direcciones van **sin comillas**: son referencias, no textos."
+      ],
+      "solution": {
+        "answer": "resource \"google_storage_bucket\" \"registros\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n\nmoved {\n  from = google_storage_bucket.logs\n  to   = google_storage_bucket.registros\n}\n",
+        "explanation": "El bloque `moved` le dice a Terraform que el objeto que estaba en `google_storage_bucket.logs` ahora está en `google_storage_bucket.registros`. En el plan aparecerá como movido, sin destruir nada."
+      }
+    }
+  ]
+}

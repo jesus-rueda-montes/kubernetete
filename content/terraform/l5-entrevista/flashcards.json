@@ -1,0 +1,15 @@
+{
+  "cards": [
+    { "id": "terraform-vs-ansible", "front": "Terraform frente a Ansible", "back": "Terraform: IaC declarativa con state, crea infraestructura. Ansible: gestión de configuración por tareas, sin state. Se complementan." },
+    { "id": "state", "front": "¿Por qué es crítico el state?", "back": "Relaciona código y recursos reales. Backend remoto con bloqueo y versionado, acceso restringido: guarda valores sensibles." },
+    { "id": "count-foreach", "front": "¿count o for_each?", "back": "for_each para colecciones (claves estables); count para 0/1. Con count, quitar un elemento del medio renumera y recrea." },
+    { "id": "lock", "front": "`.terraform.lock.hcl`", "back": "Fija versión exacta y hashes de los providers. Se sube a git; se ignora `.terraform/`." },
+    { "id": "bloqueo", "front": "State bloqueado", "back": "Leer el ID y el dueño del bloqueo, confirmar que nadie aplica y `terraform force-unlock LOCK_ID`." },
+    { "id": "drift", "front": "Drift", "back": "Cambios fuera de Terraform. `plan -refresh-only` para verlos; pasar al código o revertir con apply." },
+    { "id": "renombrar", "front": "Renombrar un recurso sin recrearlo", "back": "Bloque `moved { from = ..., to = ... }`." },
+    { "id": "dividir-state", "front": "Mover un recurso a otro state", "back": "`removed` con `lifecycle { destroy = false }` en el origen + `import` en el destino; verificar con plan." },
+    { "id": "replace", "front": "Recrear un recurso concreto", "back": "`terraform apply -replace=DIRECCIÓN` (sustituye a `terraform taint`)." },
+    { "id": "apply-mitad", "front": "¿Y si el apply falla a mitad?", "back": "Lo creado queda en el state; no hay rollback. Corrige y vuelve a plan/apply." },
+    { "id": "opentofu", "front": "Terraform y OpenTofu", "back": "Terraform ≥ 1.6 usa BUSL 1.1 (antes MPL 2.0). OpenTofu: fork MPL 2.0 bajo la Linux Foundation." }
+  ]
+}

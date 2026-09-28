@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "sts", "front": "¿Qué garantiza un StatefulSet?", "back": "Nombres fijos y ordenados (db-0…), DNS por Pod (headless Service en serviceName), un PVC por Pod (volumeClaimTemplates) y orden al crear y borrar." },
+    { "id": "sts-pvc", "front": "¿Qué pasa con los PVC al borrar o escalar un StatefulSet?", "back": "Se conservan por defecto, para no perder datos." },
+    { "id": "ds", "front": "¿Qué es un DaemonSet?", "back": "Un Pod en cada Node (o en un subconjunto), también en los nuevos. Para logs, métricas, red." },
+    { "id": "job", "front": "Job: campos clave y defaults", "back": "completions (1), parallelism (1), backoffLimit (6); restartPolicy Never u OnFailure." },
+    { "id": "cron", "front": "Orden de los 5 campos cron", "back": "Minuto, hora, día del mes, mes, día de la semana (domingo = 0)." },
+    { "id": "concurrency", "front": "concurrencyPolicy de un CronJob", "back": "Allow (por defecto, se solapan), Forbid (se salta la nueva), Replace (cancela la anterior)." },
+    { "id": "from-cronjob", "front": "Lanzar un CronJob a mano", "back": "`kubectl create job <nombre> --from=cronjob/<cronjob>`." }
+  ]
+}

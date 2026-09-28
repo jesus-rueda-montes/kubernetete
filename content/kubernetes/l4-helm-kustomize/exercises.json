@@ -1,0 +1,158 @@
+{
+  "exercises": [
+    {
+      "id": "prioridad-valores",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El `values.yaml` del chart tiene `replicas: 1`, `pro.yaml` tiene `replicas: 3` y ejecutas `helm upgrade web ./chart -f pro.yaml --set replicas=5`. ¿Cuántas réplicas habrá?",
+      "hints": ["¿Qué fuente de valores gana?"],
+      "options": [
+        { "id": "a", "text": "1", "correct": false, "explanation": "Es el valor por defecto, el de menor prioridad." },
+        { "id": "b", "text": "3", "correct": false, "explanation": "`--set` tiene más prioridad que `-f`." },
+        { "id": "c", "text": "5", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "5",
+        "explanation": "Prioridad: values.yaml < archivos `-f` < `--set`. Por eso conviene evitar `--set` para valores permanentes: no quedan en ningún archivo."
+      }
+    },
+    {
+      "id": "pipeline",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un pipeline ejecuta `helm install web ./chart` en cada despliegue. La segunda vez falla. ¿Qué comando debería usar?",
+      "hints": ["Necesitas algo que sirva la primera vez y las siguientes."],
+      "options": [
+        { "id": "a", "text": "`helm upgrade --install web ./chart`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`helm uninstall web` y luego `helm install web ./chart`", "correct": false, "explanation": "Provocaría una caída en cada despliegue y perdería el historial." },
+        { "id": "c", "text": "`helm template web ./chart`", "correct": false, "explanation": "Solo genera YAML en local; no despliega." }
+      ],
+      "solution": {
+        "answer": "helm upgrade --install",
+        "explanation": "`upgrade --install` instala la release si no existe y la actualiza si ya existe, creando una revisión nueva cada vez."
+      }
+    },
+    {
+      "id": "edit-manual",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Alguien cambió a mano, con `kubectl edit`, las réplicas de un Deployment gestionado por Helm. ¿Qué pasará en el próximo `helm upgrade`?",
+      "hints": ["¿Quién es la fuente de verdad: el clúster o el chart con sus valores?"],
+      "options": [
+        { "id": "a", "text": "El cambio manual se sobrescribe con lo que digan el chart y los valores", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Helm detecta el cambio y lo guarda en values.yaml", "correct": false, "explanation": "Helm no modifica tus archivos de valores." },
+        { "id": "c", "text": "El upgrade falla", "correct": false, "explanation": "No falla; simplemente aplica lo que dice el chart." }
+      ],
+      "solution": {
+        "answer": "Se sobrescribe",
+        "explanation": "Los recursos de una release se cambian con los valores y `helm upgrade`, no con `kubectl edit`. Si no, los cambios se pierden."
+      }
+    },
+    {
+      "id": "helm-o-kustomize",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué afirmaciones sobre Kustomize son correctas?",
+      "hints": ["Piensa en plantillas, historial y kubectl."],
+      "options": [
+        { "id": "a", "text": "Viene integrado en kubectl (`kubectl apply -k`)", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Usa YAML normal con overlays, sin plantillas", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Guarda un historial de releases para hacer rollback", "correct": false, "explanation": "Eso lo hace Helm. Con Kustomize, el historial es git." },
+        { "id": "d", "text": "Los ConfigMaps generados llevan un sufijo hash", "correct": true, "explanation": "Correcto: así los Pods se reinician al cambiar la configuración." }
+      ],
+      "solution": {
+        "answer": "a, b y d",
+        "explanation": "Kustomize personaliza YAML normal con bases y overlays, está integrado en kubectl y genera ConfigMaps y Secrets con hash. No gestiona releases."
+      }
+    },
+    {
+      "id": "parche",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un parche de un overlay no se aplica y el Deployment sale con las réplicas de la base. ¿Qué es lo más probable?",
+      "hints": ["¿Cómo sabe Kustomize a qué objeto aplicar el parche?"],
+      "options": [
+        { "id": "a", "text": "El `kind` o el `metadata.name` del parche no coinciden con los de la base", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Los parches solo funcionan con Services", "correct": false, "explanation": "Funcionan con cualquier recurso." },
+        { "id": "c", "text": "Hay que usar `kubectl apply -f` en vez de `-k`", "correct": false, "explanation": "Con `-f` no se aplica ninguna transformación." }
+      ],
+      "solution": {
+        "answer": "No coincide el objeto",
+        "explanation": "El parche identifica su objetivo por `apiVersion`, `kind` y `metadata.name`. Comprueba el resultado con `kubectl kustomize overlays/pro`."
+      }
+    },
+    {
+      "id": "cmd-helm-install",
+      "type": "command",
+      "cli": "helm",
+      "prompt": "Instala la release `monitoring` del chart `prometheus-community/kube-prometheus-stack` en el namespace `monitoring` (créalo si no existe), con los valores de `monitoring-pro.yaml`.",
+      "hints": [
+        "Es `helm install RELEASE CHART`.",
+        "Flags: `-n`, `--create-namespace` y `-f` para el archivo de valores."
+      ],
+      "accepted": [
+        "helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace -f monitoring-pro.yaml",
+        "helm install monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace --values monitoring-pro.yaml"
+      ],
+      "output": "NAME: monitoring\nLAST DEPLOYED: Mon Sep 28 10:12:44 2026\nNAMESPACE: monitoring\nSTATUS: deployed\nREVISION: 1",
+      "solution": {
+        "answer": "helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace -f monitoring-pro.yaml",
+        "explanation": "Crea la revisión 1 de la release `monitoring`. En un proyecto real, fija también `--version` del chart."
+      }
+    },
+    {
+      "id": "cmd-helm-rollback",
+      "type": "command",
+      "cli": "helm",
+      "prompt": "La revisión 4 de la release `web` (namespace `tienda`) da errores. Vuelve a la revisión 3.",
+      "hints": [
+        "Es `helm rollback RELEASE REVISIÓN`.",
+        "No olvides el namespace con `-n`."
+      ],
+      "accepted": ["helm rollback web 3 -n tienda", "helm rollback web 3 --namespace tienda"],
+      "output": "Rollback was a success! Happy Helming!",
+      "solution": {
+        "answer": "helm rollback web 3 -n tienda",
+        "explanation": "El rollback crea una revisión nueva (la 5) con la configuración de la 3. `helm history web -n tienda` lo muestra."
+      }
+    },
+    {
+      "id": "cmd-kustomize",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Aplica al clúster el overlay de Kustomize que está en `overlays/pro`.",
+      "hints": [
+        "Es `kubectl apply` con el flag de Kustomize.",
+        "El flag es `-k` (o `--kustomize`)."
+      ],
+      "accepted": ["kubectl apply -k overlays/pro", "kubectl apply --kustomize overlays/pro", "kubectl apply -k overlays/pro/"],
+      "output": "service/web created\ndeployment.apps/web created",
+      "solution": {
+        "answer": "kubectl apply -k overlays/pro",
+        "explanation": "Con `-k`, kubectl construye el resultado de Kustomize y lo aplica. Para verlo antes: `kubectl kustomize overlays/pro`."
+      }
+    },
+    {
+      "id": "editor-overlay",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el `kustomization.yaml` del overlay de pro: que parta de `../../base`, ponga el namespace `tienda-pro`, cambie la etiqueta de la imagen `ghcr.io/tienda/web` a `\"2.3.1\"` y aplique el parche `replicas.yaml`.",
+      "starter": "# overlays/pro/kustomization.yaml\n",
+      "assertions": [
+        { "path": "resources", "op": "equals", "value": ["../../base"], "message": "resources: [../../base]" },
+        { "path": "namespace", "op": "equals", "value": "tienda-pro", "message": "namespace: tienda-pro" },
+        { "path": "images[name=ghcr.io/tienda/web].newTag", "op": "equals", "value": "2.3.1", "message": "images: name ghcr.io/tienda/web con newTag: \"2.3.1\" (entre comillas)" },
+        { "path": "patches[0].path", "op": "equals", "value": "replicas.yaml", "message": "patches: - path: replicas.yaml" }
+      ],
+      "hints": [
+        "`resources` es una lista con la ruta a la base.",
+        "`images` es una lista: `- name: ...` y `newTag: \"...\"`.",
+        "`patches` es una lista de objetos con `path`."
+      ],
+      "solution": {
+        "answer": "resources:\n  - ../../base\nnamespace: tienda-pro\nimages:\n  - name: ghcr.io/tienda/web\n    newTag: \"2.3.1\"\npatches:\n  - path: replicas.yaml\n",
+        "explanation": "El overlay solo describe lo que cambia en pro. La etiqueta va entre comillas para que YAML la trate como texto."
+      }
+    }
+  ]
+}

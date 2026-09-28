@@ -1,0 +1,16 @@
+{
+  "cards": [
+    { "id": "secret-manager", "front": "Secret Manager", "back": "Secretos con versiones (`latest`, 1, 2…), IAM por secreto (`roles/secretmanager.secretAccessor`), auditoría y avisos de rotación por Pub/Sub." },
+    { "id": "rotacion", "front": "¿Secret Manager rota los secretos solo?", "back": "No. Avisa por Pub/Sub en la fecha de rotación; tu proceso genera el valor nuevo y añade la versión." },
+    { "id": "cloud-run-secretos", "front": "Secretos en Cloud Run", "back": "`--set-secrets=VAR=secreto:latest` (como variable de entorno) o montados como archivo." },
+    { "id": "cifrado-defecto", "front": "¿Están cifrados los datos en reposo sin hacer nada?", "back": "Sí, siempre, con claves gestionadas por Google y cifrado de sobre (DEK cifrada con una KEK)." },
+    { "id": "cmek", "front": "CMEK", "back": "Customer-managed encryption keys: la KEK es una clave tuya de Cloud KMS. Controlas rotación, acceso y revocación." },
+    { "id": "kms-jerarquia", "front": "Jerarquía de Cloud KMS", "back": "Llavero (en una ubicación) → clave → versiones. Llaveros y claves no se borran; las versiones se destruyen tras un periodo de espera." },
+    { "id": "org-policy", "front": "Políticas de organización", "back": "Restricciones que se heredan hacia abajo y se aplican aunque tengas permisos de IAM. Ej.: `gcp.resourceLocations`, `iam.disableServiceAccountKeyCreation`." },
+    { "id": "vpc-sc", "front": "VPC Service Controls", "back": "Perímetro alrededor de proyectos y APIs de Google contra la exfiltración de datos, aunque las credenciales sean válidas. Tiene modo dry run." },
+    { "id": "cloud-armor", "front": "Cloud Armor", "back": "WAF (reglas OWASP CRS como `sqli-v422-stable`) y anti-DDoS delante del balanceador de carga; rate limiting y Adaptive Protection." },
+    { "id": "iap", "front": "Identity-Aware Proxy", "back": "Zero trust: cada petición se autentica por identidad. Web (`roles/iap.httpsResourceAccessor`) y SSH/RDP por TCP forwarding desde `35.235.240.0/20`." },
+    { "id": "scc", "front": "Security Command Center", "back": "Panel central de seguridad: inventario de recursos y hallazgos (buckets públicos, puertos abiertos, vulnerabilidades, amenazas)." },
+    { "id": "defensa-profundidad", "front": "Defensa en profundidad", "back": "Varias capas independientes (identidad, políticas, red, borde, detección): si una falla, las demás siguen protegiendo." }
+  ]
+}

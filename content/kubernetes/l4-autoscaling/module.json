@@ -1,0 +1,8 @@
+{
+  "title": "Autoescalado",
+  "summary": "HorizontalPodAutoscaler y metrics-server, cómo calcula las réplicas, y las nociones de Vertical Pod Autoscaler y Cluster Autoscaler.",
+  "level": 4,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

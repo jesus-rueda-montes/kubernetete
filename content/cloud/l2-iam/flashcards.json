@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "iam", "front": "¿Qué responde IAM?", "back": "Quién (principal) puede hacer qué (rol) sobre qué recurso (dónde se adjunta la política)." },
+    { "id": "permiso", "front": "Formato de un permiso de IAM", "back": "`servicio.recurso.verbo`, p. ej. `storage.objects.get`. Se conceden siempre dentro de roles." },
+    { "id": "tipos-rol", "front": "Tipos de roles", "back": "Básicos (owner/editor/viewer, evitar en producción), predefinidos (los habituales) y personalizados." },
+    { "id": "minimo-privilegio", "front": "Mínimo privilegio en IAM", "back": "Solo los permisos necesarios, con roles específicos, a grupos y en el nivel más bajo posible." },
+    { "id": "publico", "front": "`allUsers` frente a `allAuthenticatedUsers`", "back": "Cualquiera en internet / cualquiera con cuenta de Google. Ambos hacen el recurso prácticamente público." },
+    { "id": "sa", "front": "¿Qué es una cuenta de servicio?", "back": "Identidad para aplicaciones: `NOMBRE@PROJECT_ID.iam.gserviceaccount.com`. Es principal (tiene roles) y recurso (controlas quién la usa)." },
+    { "id": "sin-claves", "front": "Alternativas a las claves JSON de cuentas de servicio", "back": "Cuenta de servicio adjunta al recurso (dentro de GCP), Workload Identity Federation (fuera) y suplantación." }
+  ]
+}

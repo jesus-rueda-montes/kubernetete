@@ -1,0 +1,8 @@
+{
+  "title": "Organización, proyectos y gcloud",
+  "summary": "La jerarquía de recursos de Google Cloud, proyectos y facturación, APIs, y cómo trabajar con la CLI gcloud.",
+  "level": 2,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Compute Engine: máquinas virtuales",
+  "summary": "Tipos de máquina, imágenes y discos, VMs Spot, grupos de instancias gestionados y cómo pagar menos por cómputo.",
+  "level": 2,
+  "order": 3,
+  "xp": 100,
+  "prereqs": []
+}

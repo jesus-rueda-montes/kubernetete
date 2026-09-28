@@ -1,0 +1,8 @@
+{
+  "title": "Variables, facts y plantillas Jinja2",
+  "summary": "Dónde definir variables y cuál gana, los facts de cada host y cómo generar archivos de configuración con plantillas.",
+  "level": 2,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

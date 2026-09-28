@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "crd", "front": "¿Qué es una CRD?", "back": "Un tipo nuevo en la API de Kubernetes, con grupo, nombres, versiones y esquema de validación." },
+    { "id": "cr", "front": "¿Qué es un custom resource?", "back": "Un objeto de un tipo definido por una CRD (p. ej. un `Certificate` de cert-manager)." },
+    { "id": "sola", "front": "¿Hace algo una CRD por sí sola?", "back": "No: solo valida y guarda objetos. Hace falta un controlador que actúe." },
+    { "id": "borrar", "front": "¿Qué pasa al borrar una CRD?", "back": "Se borran todos los objetos de ese tipo en el clúster." },
+    { "id": "storage", "front": "`served` y `storage` en las versiones de una CRD", "back": "`served`: la API ofrece esa versión. `storage`: la versión con la que se guarda en etcd (solo una)." },
+    { "id": "no-matches", "front": "Error «no matches for kind» al aplicar un objeto", "back": "La CRD de ese tipo no está instalada (o la versión de API no existe)." },
+    { "id": "bucle", "front": "Bucle de reconciliación", "back": "Observar (spec y realidad) → comparar → actuar → actualizar status. Continuamente." },
+    { "id": "spec-status", "front": "`spec` frente a `status`", "back": "`spec`: lo que pides. `status`: lo que el controlador informa que hay." },
+    { "id": "operator", "front": "¿Qué es un operator?", "back": "CRDs + un controlador que automatiza la operación de una aplicación (despliegue, backups, failover…)." },
+    { "id": "ejemplos", "front": "Operators conocidos", "back": "cert-manager (Certificate), Prometheus Operator (ServiceMonitor), CloudNativePG (Cluster)." }
+  ]
+}

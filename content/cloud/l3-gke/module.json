@@ -1,0 +1,8 @@
+{
+  "title": "GKE: Kubernetes en Google Cloud",
+  "summary": "Autopilot frente a Standard, clústeres regionales y zonales, node pools, canales de versiones, redes VPC-native, nodos privados y Workload Identity Federation.",
+  "level": 3,
+  "order": 4,
+  "xp": 100,
+  "prereqs": ["kubernetes/l2-services"]
+}

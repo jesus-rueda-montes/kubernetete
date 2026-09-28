@@ -1,0 +1,839 @@
+{
+  "entries": [
+    {
+      "term": "SSH",
+      "definition": "Protocolo para abrir una sesión cifrada en una máquina remota y ejecutar comandos en ella.",
+      "introducedIn": "fundamentos/f0-terminal-linux"
+    },
+    {
+      "term": "DNS",
+      "definition": "El sistema que traduce nombres (tienda.com) a direcciones IP.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "TCP",
+      "definition": "Protocolo de transporte con conexión: garantiza que los datos llegan completos y en orden.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "UDP",
+      "definition": "Protocolo de transporte sin conexión: más ligero que TCP, pero no garantiza la entrega.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "HTTP",
+      "definition": "El protocolo de la web: peticiones (GET, POST…) y respuestas con un código de estado.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "HTTPS",
+      "definition": "HTTP cifrado con TLS.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "TLS",
+      "definition": "Protocolo que cifra y autentica una conexión con certificados; es la «S» de HTTPS.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "CIDR",
+      "definition": "Notación de rangos de IP como 10.0.0.0/24: el número tras la barra indica cuántos bits fijos tiene la red.",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "YAML",
+      "definition": "Formato de texto para datos estructurados basado en la indentación; lo usan Kubernetes, Ansible y muchas herramientas.",
+      "introducedIn": "fundamentos/f0-yaml"
+    },
+    {
+      "term": "JSON",
+      "definition": "Formato de datos con llaves, corchetes y comillas; muy usado por las APIs.",
+      "introducedIn": "fundamentos/f0-yaml"
+    },
+    {
+      "term": "Docker",
+      "definition": "Herramienta para construir imágenes de contenedor y ejecutar contenedores.",
+      "introducedIn": "fundamentos/f0-contenedores"
+    },
+    {
+      "term": "Dockerfile",
+      "definition": "Archivo con las instrucciones para construir una imagen de contenedor, paso a paso.",
+      "introducedIn": "fundamentos/f0-contenedores"
+    },
+    {
+      "term": "systemd",
+      "definition": "El sistema que arranca y gestiona los servicios en la mayoría de distribuciones Linux (systemctl).",
+      "introducedIn": "fundamentos/f0-terminal-linux"
+    },
+    {
+      "term": "firewall",
+      "definition": "Filtro que permite o bloquea tráfico de red según reglas (origen, destino, puerto, protocolo).",
+      "introducedIn": "fundamentos/f0-redes"
+    },
+    {
+      "term": "root",
+      "definition": "El superusuario de Linux: puede hacerlo todo en la máquina.",
+      "introducedIn": "fundamentos/f0-terminal-linux"
+    },
+    {
+      "term": "stdout",
+      "definition": "Salida estándar: donde un programa escribe su resultado normal (stderr es la de errores).",
+      "introducedIn": "fundamentos/f0-terminal-linux"
+    },
+    {
+      "term": "IaaS",
+      "definition": "Infrastructure as a Service: el proveedor da máquinas, discos y redes; tú gestionas el sistema operativo y lo de encima.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "PaaS",
+      "definition": "Platform as a Service: subes código o contenedores y el proveedor gestiona los servidores.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "SaaS",
+      "definition": "Software as a Service: usas una aplicación completa que gestiona el proveedor (p. ej. Gmail).",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "VPC",
+      "definition": "Virtual Private Cloud: red privada y aislada en la nube, con subredes, rutas y firewall.",
+      "introducedIn": "cloud/l1-regiones-zonas"
+    },
+    {
+      "term": "IAM",
+      "definition": "Identity and Access Management: quién (principal) puede hacer qué (rol) sobre qué recurso.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "Compute Engine",
+      "definition": "El servicio de máquinas virtuales de Google Cloud (IaaS).",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "Cloud Storage",
+      "definition": "Almacenamiento de objetos de Google Cloud: archivos en buckets, accesibles por API.",
+      "introducedIn": "cloud/l2-gcp-organizacion"
+    },
+    {
+      "term": "Cloud SQL",
+      "definition": "MySQL, PostgreSQL y SQL Server gestionados por Google Cloud.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "Cloud Run",
+      "definition": "Servicio de Google Cloud que ejecuta contenedores sin gestionar servidores y escala (incluso a cero) según las peticiones.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "GKE",
+      "definition": "Google Kubernetes Engine: Kubernetes gestionado por Google Cloud.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "Autopilot",
+      "definition": "Modo de GKE en el que Google gestiona también los nodos y se paga por los recursos que piden los Pods.",
+      "introducedIn": "cloud/l3-serverless"
+    },
+    {
+      "term": "Pub/Sub",
+      "definition": "Servicio de mensajería de Google Cloud: unos publican mensajes en un tema y otros los reciben de forma asíncrona.",
+      "introducedIn": "cloud/l3-serverless"
+    },
+    {
+      "term": "Cloud NAT",
+      "definition": "Servicio gestionado que da salida a Internet a máquinas sin IP pública, sin permitir conexiones entrantes.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "Cloud Armor",
+      "definition": "WAF y protección anti-DDoS de Google Cloud delante de los balanceadores de carga.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "IAP",
+      "definition": "Identity-Aware Proxy: da acceso a aplicaciones o por SSH comprobando la identidad del usuario en cada petición, sin VPN.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "VPC Service Controls",
+      "definition": "Perímetro alrededor de proyectos y APIs de Google que impide sacar datos fuera aunque las credenciales sean válidas.",
+      "introducedIn": "cloud/l4-seguridad"
+    },
+    {
+      "term": "Secret Manager",
+      "definition": "Servicio de Google Cloud para guardar secretos con versiones, permisos por secreto y auditoría.",
+      "introducedIn": "cloud/l3-bases-de-datos"
+    },
+    {
+      "term": "Cloud KMS",
+      "definition": "Servicio de Google Cloud para crear, rotar y controlar el uso de claves de cifrado.",
+      "introducedIn": "cloud/l2-almacenamiento"
+    },
+    {
+      "term": "CMEK",
+      "definition": "Customer-managed encryption keys: los datos de un servicio se cifran con una clave tuya de Cloud KMS.",
+      "introducedIn": "cloud/l4-seguridad"
+    },
+    {
+      "term": "SLO",
+      "definition": "Service Level Objective: el objetivo interno de fiabilidad (p. ej. 99,9 % de peticiones correctas en 30 días).",
+      "introducedIn": "cloud/l4-observabilidad"
+    },
+    {
+      "term": "SLI",
+      "definition": "Service Level Indicator: la métrica con la que se mide un SLO (p. ej. % de peticiones sin error).",
+      "introducedIn": "cloud/l4-observabilidad"
+    },
+    {
+      "term": "SLA",
+      "definition": "Service Level Agreement: compromiso contractual de disponibilidad, con compensaciones si se incumple.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "RTO",
+      "definition": "Recovery Time Objective: tiempo máximo que un servicio puede estar caído tras un desastre.",
+      "introducedIn": "cloud/l5-entrevista"
+    },
+    {
+      "term": "RPO",
+      "definition": "Recovery Point Objective: cantidad máxima de datos (medida en tiempo) que se puede perder tras un desastre.",
+      "introducedIn": "cloud/l5-entrevista"
+    },
+    {
+      "term": "CUD",
+      "definition": "Committed use discount: descuento a cambio de comprometerse 1 o 3 años a un uso o gasto mínimo.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "SUD",
+      "definition": "Sustained use discount: descuento automático de Compute Engine por usar una VM gran parte del mes.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "Spot VM",
+      "definition": "VM muy barata que usa capacidad sobrante y que Google puede recuperar en cualquier momento.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "FinOps",
+      "definition": "Práctica de gestionar el coste de la nube entre ingeniería y finanzas: verlo, repartirlo y optimizarlo.",
+      "introducedIn": "cloud/l4-costes"
+    },
+    {
+      "term": "Workload Identity Federation",
+      "definition": "Mecanismo para que una carga de trabajo externa (o de GKE) obtenga credenciales temporales de Google sin claves JSON.",
+      "introducedIn": "cloud/l2-iam"
+    },
+    {
+      "term": "Artifact Registry",
+      "definition": "Registro de Google Cloud para imágenes de contenedor y paquetes.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "Cloud Build",
+      "definition": "Servicio de CI de Google Cloud: ejecuta pasos de compilación, cada uno en un contenedor.",
+      "introducedIn": "cloud/l4-cicd"
+    },
+    {
+      "term": "Cloud Deploy",
+      "definition": "Servicio de entrega continua de Google Cloud: promociona releases por una secuencia de entornos.",
+      "introducedIn": "cloud/l4-cicd"
+    },
+    {
+      "term": "egress",
+      "definition": "Tráfico de salida (desde tus recursos hacia fuera). El de entrada es ingress.",
+      "introducedIn": "cloud/l4-costes"
+    },
+    {
+      "term": "load balancer",
+      "definition": "Balanceador de carga: reparte las peticiones entre varios backends y deja de enviar a los que fallan.",
+      "introducedIn": "cloud/l1-regiones-zonas"
+    },
+    {
+      "term": "BigQuery",
+      "definition": "Data warehouse serverless de Google Cloud para analizar grandes volúmenes de datos con SQL.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "Spanner",
+      "definition": "Base de datos relacional de Google Cloud que escala horizontalmente y puede replicarse entre regiones.",
+      "introducedIn": "cloud/l3-bases-de-datos"
+    },
+    {
+      "term": "Firestore",
+      "definition": "Base de datos NoSQL de documentos de Google Cloud, serverless.",
+      "introducedIn": "cloud/l3-bases-de-datos"
+    },
+    {
+      "term": "Persistent Disk",
+      "definition": "Disco en red de Compute Engine que se conecta a una VM y sobrevive a ella.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "Managed Instance Group",
+      "definition": "Grupo de VMs idénticas creadas desde una plantilla, con autoescalado y autorreparación.",
+      "introducedIn": "cloud/l2-computo"
+    },
+    {
+      "term": "Shared VPC",
+      "definition": "VPC de un proyecto «host» cuyas subredes usan otros proyectos de la organización.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "bucket",
+      "definition": "Contenedor de objetos en un almacenamiento de objetos (Cloud Storage, S3…); su nombre es único en todo el mundo.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "EKS",
+      "definition": "Elastic Kubernetes Service: Kubernetes gestionado de AWS.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "AKS",
+      "definition": "Azure Kubernetes Service: Kubernetes gestionado de Azure.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "multicloud",
+      "definition": "Usar varios proveedores de nube pública a la vez.",
+      "introducedIn": "cloud/l1-que-es-cloud"
+    },
+    {
+      "term": "Cloud Logging",
+      "definition": "Servicio de Google Cloud que recoge, guarda y permite consultar los logs.",
+      "introducedIn": "cloud/l4-observabilidad"
+    },
+    {
+      "term": "Cloud Monitoring",
+      "definition": "Servicio de Google Cloud de métricas, dashboards, alertas y uptime checks.",
+      "introducedIn": "cloud/l4-observabilidad"
+    },
+    {
+      "term": "audit logs",
+      "definition": "Registros de quién hizo qué, cuándo y desde dónde sobre los recursos de la nube.",
+      "introducedIn": "cloud/l4-observabilidad"
+    },
+    {
+      "term": "sink",
+      "definition": "En Cloud Logging, regla que copia los logs que cumplen un filtro a un destino (bucket, BigQuery, Pub/Sub).",
+      "introducedIn": "cloud/l4-observabilidad",
+      "trackOnly": true
+    },
+    {
+      "term": "Private Google Access",
+      "definition": "Permite que VMs sin IP pública de una subred lleguen a las APIs de Google.",
+      "introducedIn": "cloud/l3-redes-vpc"
+    },
+    {
+      "term": "Security Command Center",
+      "definition": "Panel central de seguridad de Google Cloud: inventario de recursos y hallazgos de riesgos.",
+      "introducedIn": "cloud/l4-seguridad"
+    },
+    {
+      "term": "Pod",
+      "definition": "La unidad mínima que Kubernetes crea y gestiona: uno o varios contenedores que comparten red y pueden compartir almacenamiento.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "Node",
+      "definition": "Una máquina (física o virtual) del clúster donde se ejecutan los Pods.",
+      "introducedIn": "kubernetes/l1-arquitectura",
+      "trackOnly": true
+    },
+    {
+      "term": "kubectl",
+      "definition": "La herramienta de línea de comandos para hablar con un clúster de Kubernetes.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "manifest",
+      "definition": "Archivo (normalmente YAML) que describe el estado deseado de un objeto de Kubernetes.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "control plane",
+      "definition": "El «cerebro» del clúster: API server, etcd, scheduler y controladores. Decide; los nodos ejecutan.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "etcd",
+      "definition": "Base de datos clave-valor distribuida donde Kubernetes guarda todo el estado del clúster.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "kubelet",
+      "definition": "Agente que corre en cada nodo y arranca y vigila los contenedores de los Pods asignados a él.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "controller",
+      "definition": "Bucle que compara el estado deseado con el real y actúa para igualarlos.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "container runtime",
+      "definition": "El software que ejecuta los contenedores en el nodo (containerd, CRI-O…).",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "namespace",
+      "definition": "Espacio de nombres: divide un clúster en grupos lógicos de recursos (por equipo o entorno).",
+      "introducedIn": "kubernetes/l1-namespaces-labels",
+      "trackOnly": true
+    },
+    {
+      "term": "label",
+      "definition": "Par clave=valor que se pone a los objetos para agruparlos y seleccionarlos.",
+      "introducedIn": "kubernetes/l1-namespaces-labels",
+      "trackOnly": true
+    },
+    {
+      "term": "selector",
+      "definition": "Condición sobre labels que elige un conjunto de objetos (p. ej. los Pods con app=web).",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "annotation",
+      "definition": "Par clave=valor con información para herramientas; a diferencia de las labels, no sirve para seleccionar.",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "Deployment",
+      "definition": "Objeto que mantiene N réplicas de un Pod sin estado y gestiona sus actualizaciones y rollbacks.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "ReplicaSet",
+      "definition": "Objeto que mantiene un número fijo de Pods iguales; lo crea y gestiona un Deployment.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "Service",
+      "definition": "Nombre e IP estables que reparten el tráfico entre los Pods que cumplen un selector.",
+      "introducedIn": "kubernetes/l1-arquitectura",
+      "trackOnly": true
+    },
+    {
+      "term": "Ingress",
+      "definition": "Reglas HTTP(S) por host y ruta para llevar tráfico externo a Services; necesita un Ingress controller.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "Ingress controller",
+      "definition": "El componente (Traefik, un balanceador del proveedor…) que aplica las reglas de los Ingress.",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "ConfigMap",
+      "definition": "Objeto con configuración no sensible que los Pods reciben como variables o archivos.",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "Secret",
+      "definition": "Objeto para datos sensibles; va en base64, que no es cifrado.",
+      "introducedIn": "kubernetes/l1-namespaces-labels",
+      "trackOnly": true
+    },
+    {
+      "term": "PersistentVolume",
+      "definition": "Un trozo de almacenamiento del clúster (un disco) disponible para los Pods.",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "PersistentVolumeClaim",
+      "definition": "Petición de almacenamiento de un Pod (tamaño y modo de acceso) que se enlaza con un PersistentVolume.",
+      "introducedIn": "kubernetes/l3-almacenamiento"
+    },
+    {
+      "term": "StorageClass",
+      "definition": "Tipo de almacenamiento que permite crear PersistentVolumes automáticamente (provisión dinámica).",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "StatefulSet",
+      "definition": "Como un Deployment, pero con nombres estables, un volumen por Pod y orden al crear y borrar; para aplicaciones con estado.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "DaemonSet",
+      "definition": "Ejecuta una copia de un Pod en cada nodo (agentes de logs, monitorización…).",
+      "introducedIn": "kubernetes/l3-workloads"
+    },
+    {
+      "term": "Job",
+      "definition": "Ejecuta Pods hasta que una tarea termina con éxito.",
+      "introducedIn": "kubernetes/l1-arquitectura",
+      "trackOnly": true
+    },
+    {
+      "term": "CronJob",
+      "definition": "Crea Jobs según un horario con sintaxis cron.",
+      "introducedIn": "kubernetes/l3-workloads"
+    },
+    {
+      "term": "taint",
+      "definition": "Marca en un nodo que repele a los Pods que no la toleran.",
+      "introducedIn": "kubernetes/l3-workloads"
+    },
+    {
+      "term": "toleration",
+      "definition": "Permiso de un Pod para ejecutarse en nodos con un taint concreto.",
+      "introducedIn": "kubernetes/l3-scheduling"
+    },
+    {
+      "term": "affinity",
+      "definition": "Reglas para colocar Pods cerca o lejos de ciertos nodos u otros Pods.",
+      "introducedIn": "kubernetes/l3-scheduling"
+    },
+    {
+      "term": "liveness probe",
+      "definition": "Comprobación periódica: si falla, el kubelet reinicia el contenedor.",
+      "introducedIn": "kubernetes/l2-probes-recursos"
+    },
+    {
+      "term": "readiness probe",
+      "definition": "Comprobación periódica: si falla, el Pod deja de recibir tráfico de los Services.",
+      "introducedIn": "kubernetes/l2-deployments"
+    },
+    {
+      "term": "startup probe",
+      "definition": "Comprobación para aplicaciones lentas en arrancar: desactiva las otras probes hasta que pasa.",
+      "introducedIn": "kubernetes/l2-probes-recursos"
+    },
+    {
+      "term": "requests",
+      "definition": "Recursos (CPU, memoria) que el scheduler reserva para un contenedor al elegir nodo.",
+      "introducedIn": "kubernetes/l2-probes-recursos",
+      "trackOnly": true
+    },
+    {
+      "term": "limits",
+      "definition": "Máximo de recursos de un contenedor: con CPU se ralentiza; con memoria, se mata (OOMKilled).",
+      "introducedIn": "kubernetes/l2-probes-recursos",
+      "trackOnly": true
+    },
+    {
+      "term": "QoS",
+      "definition": "Clase de calidad de servicio (Guaranteed, Burstable, BestEffort) según requests y limits; decide quién se desaloja antes.",
+      "introducedIn": "kubernetes/l2-probes-recursos"
+    },
+    {
+      "term": "OOMKilled",
+      "definition": "Estado de un contenedor que se ha matado por superar su limit de memoria.",
+      "introducedIn": "kubernetes/l2-probes-recursos"
+    },
+    {
+      "term": "CrashLoopBackOff",
+      "definition": "Estado de un Pod cuyo contenedor falla una y otra vez; Kubernetes espera cada vez más antes de reintentarlo.",
+      "introducedIn": "kubernetes/l5-troubleshooting"
+    },
+    {
+      "term": "ImagePullBackOff",
+      "definition": "Estado de un Pod que no consigue descargar su imagen (nombre, tag o permisos).",
+      "introducedIn": "kubernetes/l5-troubleshooting"
+    },
+    {
+      "term": "Pending",
+      "definition": "Estado de un Pod que aún no se ha asignado a un nodo o cuyos contenedores no han arrancado.",
+      "introducedIn": "kubernetes/l4-autoscaling",
+      "trackOnly": true
+    },
+    {
+      "term": "metrics-server",
+      "definition": "Componente que recoge el consumo de CPU y memoria de Pods y nodos; lo usan kubectl top y el HPA.",
+      "introducedIn": "kubernetes/l2-probes-recursos"
+    },
+    {
+      "term": "HPA",
+      "definition": "HorizontalPodAutoscaler: sube o baja el número de réplicas según métricas.",
+      "introducedIn": "kubernetes/l4-autoscaling"
+    },
+    {
+      "term": "VPA",
+      "definition": "VerticalPodAutoscaler: recomienda o ajusta las requests de los Pods.",
+      "introducedIn": "kubernetes/l4-autoscaling"
+    },
+    {
+      "term": "Cluster Autoscaler",
+      "definition": "Añade nodos cuando hay Pods pendientes por falta de recursos y quita los que sobran.",
+      "introducedIn": "kubernetes/l4-autoscaling"
+    },
+    {
+      "term": "PodDisruptionBudget",
+      "definition": "Límite de Pods de una aplicación que se pueden desalojar a la vez en interrupciones voluntarias.",
+      "introducedIn": "kubernetes/l3-scheduling"
+    },
+    {
+      "term": "RBAC",
+      "definition": "Role-Based Access Control: permisos mediante roles asignados a usuarios, grupos o ServiceAccounts.",
+      "introducedIn": "kubernetes/l1-namespaces-labels"
+    },
+    {
+      "term": "ServiceAccount",
+      "definition": "Identidad de una aplicación dentro del clúster, para llamar a la API de Kubernetes.",
+      "introducedIn": "kubernetes/l4-rbac"
+    },
+    {
+      "term": "Role",
+      "definition": "Conjunto de permisos (verbos sobre recursos) dentro de un namespace.",
+      "introducedIn": "kubernetes/l4-rbac",
+      "trackOnly": true
+    },
+    {
+      "term": "ClusterRole",
+      "definition": "Conjunto de permisos para todo el clúster o reutilizable en varios namespaces.",
+      "introducedIn": "kubernetes/l4-rbac"
+    },
+    {
+      "term": "RoleBinding",
+      "definition": "Asigna un Role o ClusterRole a usuarios, grupos o ServiceAccounts en un namespace.",
+      "introducedIn": "kubernetes/l4-rbac"
+    },
+    {
+      "term": "NetworkPolicy",
+      "definition": "Reglas que permiten o limitan el tráfico entre Pods; necesitan un CNI que las aplique.",
+      "introducedIn": "kubernetes/l4-networkpolicies"
+    },
+    {
+      "term": "CNI",
+      "definition": "Container Network Interface: el plugin que da red a los Pods (Calico, Cilium…).",
+      "introducedIn": "kubernetes/l4-networkpolicies"
+    },
+    {
+      "term": "CoreDNS",
+      "definition": "El servidor DNS del clúster: resuelve los nombres de los Services.",
+      "introducedIn": "kubernetes/l4-networkpolicies"
+    },
+    {
+      "term": "kube-proxy",
+      "definition": "Componente de cada nodo que programa las reglas para que la IP de un Service llegue a sus Pods.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "kube-scheduler",
+      "definition": "Componente del control plane que elige en qué nodo se ejecuta cada Pod nuevo.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "API server",
+      "definition": "La puerta de entrada al clúster: valida y guarda los objetos; todos los componentes hablan con él.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "reconciliation",
+      "definition": "Reconciliación: el ciclo continuo de comparar el estado deseado con el real y corregir la diferencia.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "rolling update",
+      "definition": "Actualización gradual: se sustituyen los Pods antiguos por nuevos poco a poco, sin cortar el servicio.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "rollback",
+      "definition": "Volver a la versión anterior de un despliegue.",
+      "introducedIn": "kubernetes/l1-arquitectura"
+    },
+    {
+      "term": "ClusterIP",
+      "definition": "Tipo de Service por defecto: una IP accesible solo dentro del clúster.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "NodePort",
+      "definition": "Tipo de Service que abre el mismo puerto en todos los nodos.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "LoadBalancer",
+      "definition": "Tipo de Service que pide un balanceador de carga externo al proveedor cloud.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "EndpointSlice",
+      "definition": "Objeto con las IPs y puertos de los Pods listos detrás de un Service.",
+      "introducedIn": "kubernetes/l2-services"
+    },
+    {
+      "term": "Gateway API",
+      "definition": "API más moderna y expresiva que Ingress para enrutar tráfico hacia el clúster.",
+      "introducedIn": "kubernetes/l3-ingress"
+    },
+    {
+      "term": "sidecar",
+      "definition": "Contenedor auxiliar que acompaña al principal en el mismo Pod (logs, proxy…).",
+      "introducedIn": "kubernetes/l1-pods"
+    },
+    {
+      "term": "Helm",
+      "definition": "Gestor de paquetes de Kubernetes: instala charts y gestiona sus releases.",
+      "introducedIn": "kubernetes/l4-helm-kustomize"
+    },
+    {
+      "term": "chart",
+      "definition": "Paquete de Helm: plantillas de manifiestos más valores configurables.",
+      "introducedIn": "kubernetes/l4-helm-kustomize"
+    },
+    {
+      "term": "Kustomize",
+      "definition": "Herramienta integrada en kubectl que adapta manifiestos por entorno con parches, sin plantillas.",
+      "introducedIn": "kubernetes/l4-helm-kustomize"
+    },
+    {
+      "term": "CRD",
+      "definition": "CustomResourceDefinition: añade un tipo de objeto nuevo a la API de Kubernetes.",
+      "introducedIn": "kubernetes/l3-ingress"
+    },
+    {
+      "term": "operator",
+      "definition": "Controlador que gestiona una aplicación compleja (p. ej. una base de datos) a partir de un recurso personalizado.",
+      "introducedIn": "kubernetes/l3-workloads",
+      "trackOnly": true
+    },
+    {
+      "term": "cordon",
+      "definition": "Marcar un nodo como no programable: no recibe Pods nuevos, pero conserva los que tiene.",
+      "introducedIn": "kubernetes/l3-scheduling"
+    },
+    {
+      "term": "drain",
+      "definition": "Vaciar un nodo: marcarlo con cordon y desalojar sus Pods para hacer mantenimiento.",
+      "introducedIn": "kubernetes/l5-entrevista"
+    },
+    {
+      "term": "Terraform",
+      "definition": "Herramienta de infraestructura como código: describes la infraestructura en archivos y Terraform la crea y mantiene.",
+      "introducedIn": "terraform/l1-primer-recurso"
+    },
+    {
+      "term": "HCL",
+      "definition": "HashiCorp Configuration Language: el lenguaje de los archivos .tf, hecho de bloques y atributos nombre = valor.",
+      "introducedIn": "terraform/l1-primer-recurso"
+    },
+    {
+      "term": "provider",
+      "definition": "Plugin de Terraform que habla con una API concreta (google, aws, azurerm…) y aporta sus tipos de recurso.",
+      "introducedIn": "terraform/l1-primer-recurso"
+    },
+    {
+      "term": "state",
+      "definition": "Archivo donde Terraform guarda qué recursos reales corresponden a cada bloque del código.",
+      "introducedIn": "terraform/l1-primer-recurso"
+    },
+    {
+      "term": "IaC",
+      "definition": "Infraestructura como código: definir la infraestructura en archivos versionados en vez de crearla a mano.",
+      "introducedIn": "terraform/l1-primer-recurso"
+    },
+    {
+      "term": "plan",
+      "definition": "Vista previa de lo que Terraform va a crear, cambiar o destruir, sin tocar nada.",
+      "introducedIn": "terraform/l1-primer-recurso",
+      "trackOnly": true
+    },
+    {
+      "term": "backend",
+      "definition": "Dónde guarda Terraform el state (local o remoto, como un bucket de GCS con bloqueo).",
+      "introducedIn": "terraform/l1-primer-recurso",
+      "trackOnly": true
+    },
+    {
+      "term": "data source",
+      "definition": "Bloque de Terraform que lee información de algo que ya existe, sin gestionarlo.",
+      "introducedIn": "terraform/l2-expresiones"
+    },
+    {
+      "term": "workspace",
+      "definition": "Varios states independientes para la misma configuración (p. ej. dev y prod).",
+      "introducedIn": "terraform/l1-variables-outputs"
+    },
+    {
+      "term": "drift",
+      "definition": "Diferencia entre la infraestructura real y el código, causada por cambios hechos fuera de la herramienta.",
+      "introducedIn": "terraform/l2-state"
+    },
+    {
+      "term": "tfvars",
+      "definition": "Archivo (.tfvars) con valores para las variables de una configuración de Terraform.",
+      "introducedIn": "terraform/l4-ci-buenas-practicas"
+    },
+    {
+      "term": "Terraform Registry",
+      "definition": "Catálogo público de providers y módulos de Terraform (registry.terraform.io).",
+      "introducedIn": "terraform/l3-modulos"
+    },
+    {
+      "term": "OpenTofu",
+      "definition": "Fork abierto (MPL 2.0) de Terraform mantenido bajo la Linux Foundation.",
+      "introducedIn": "terraform/l5-entrevista"
+    },
+    {
+      "term": "Ansible",
+      "definition": "Herramienta de automatización sin agente: se conecta por SSH y aplica configuraciones descritas en YAML.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "playbook",
+      "definition": "Archivo YAML de Ansible con uno o varios plays: qué tareas aplicar a qué hosts.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "play",
+      "definition": "Parte de un playbook que aplica una lista de tareas a un grupo de hosts.",
+      "introducedIn": "ansible/l1-playbooks",
+      "trackOnly": true
+    },
+    {
+      "term": "handler",
+      "definition": "Tarea que solo se ejecuta si otra la notifica tras un cambio, una vez al final del play.",
+      "introducedIn": "ansible/l2-modulos-idempotencia"
+    },
+    {
+      "term": "ad-hoc",
+      "definition": "Comando de Ansible de una sola tarea, lanzado directamente sin playbook.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "FQCN",
+      "definition": "Fully Qualified Collection Name: nombre completo de un módulo, como ansible.builtin.copy.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "idempotente",
+      "definition": "Que se puede ejecutar varias veces con el mismo resultado: si ya está como se pide, no cambia nada.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "Jinja2",
+      "definition": "Lenguaje de plantillas con {{ variables }}, filtros y condiciones que usa Ansible.",
+      "introducedIn": "ansible/l1-playbooks"
+    },
+    {
+      "term": "facts",
+      "definition": "Datos que Ansible recoge de cada host al empezar (sistema operativo, IPs, memoria…).",
+      "introducedIn": "ansible/l2-variables-jinja"
+    },
+    {
+      "term": "collection",
+      "definition": "Paquete de distribución de Ansible con módulos, roles y plugins (p. ej. google.cloud).",
+      "introducedIn": "ansible/l3-roles"
+    },
+    {
+      "term": "Ansible Galaxy",
+      "definition": "Repositorio público de roles y collections de Ansible, y el comando ansible-galaxy para instalarlos.",
+      "introducedIn": "ansible/l3-roles"
+    },
+    {
+      "term": "Ansible Vault",
+      "definition": "Función de Ansible para cifrar archivos o variables con secretos.",
+      "introducedIn": "ansible/l1-inventarios-adhoc"
+    },
+    {
+      "term": "ansible-lint",
+      "definition": "Herramienta que revisa playbooks y roles en busca de errores y malas prácticas.",
+      "introducedIn": "ansible/l4-vault-buenas-practicas"
+    }
+  ]
+}

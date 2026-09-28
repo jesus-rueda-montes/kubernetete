@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "vault", "front": "¿Qué hace Ansible Vault?", "back": "Cifra archivos o valores con una contraseña para poder versionarlos; Ansible los descifra en memoria al ejecutar." },
+    { "id": "comandos", "front": "Comandos de ansible-vault para archivos", "back": "`create`, `edit`, `view`, `encrypt`, `decrypt`, `rekey` (cambiar contraseña)." },
+    { "id": "encrypt-string", "front": "Cifrar un solo valor", "back": "`ansible-vault encrypt_string 'valor' --name variable` → bloque `!vault |` para pegar en un archivo de variables." },
+    { "id": "patron", "front": "Patrón vars + vault", "back": "`vars.yml` en claro con `x: \"{{ vault_x }}\"` y `vault.yml` cifrado con `vault_x`." },
+    { "id": "password", "front": "Dar la contraseña del vault", "back": "`--ask-vault-pass` (-J) o `--vault-password-file` (archivo o script, nunca en git). Vault IDs para varios entornos." },
+    { "id": "no-log", "front": "`no_log: true`", "back": "Oculta los datos de la tarea en la salida y los logs. Para tareas que manejan secretos." },
+    { "id": "become", "front": "`become`, `become_user`, `become_method`", "back": "Escalar privilegios (root con sudo por defecto). `become_user` solo no basta: hace falta `become: true`." },
+    { "id": "lint", "front": "¿Qué revisa ansible-lint?", "back": "FQCN, tareas sin name, command/shell sin idempotencia, `mode` en archivos, `latest`… Excepciones con `# noqa: regla`." },
+    { "id": "estructura", "front": "Estructura recomendada de un proyecto", "back": "Inventario por entorno con group_vars (y vault), roles/, requirements.yml, playbooks finos y ansible.cfg." },
+    { "id": "probar", "front": "Cómo probar un playbook antes de producción", "back": "syntax-check, ansible-lint, `--check --diff`, dev/staging, segunda ejecución con changed=0; Molecule para roles." }
+  ]
+}

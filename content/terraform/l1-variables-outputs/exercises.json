@@ -1,0 +1,162 @@
+{
+  "exercises": [
+    {
+      "id": "prioridad-variables",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La variable `region` tiene `default = \"europe-west1\"`, el archivo `terraform.tfvars` dice `region = \"europe-west4\"` y ejecutas `terraform plan -var 'region=us-central1'`. ¿Qué valor usa Terraform?",
+      "hints": [
+        "Hay un orden de prioridad: gana la fuente más «cercana» a la ejecución.",
+        "La línea de comandos es lo último que se aplica."
+      ],
+      "options": [
+        { "id": "a", "text": "`europe-west1` (el default)", "correct": false, "explanation": "El default es la opción de menor prioridad: solo se usa si nadie da otro valor." },
+        { "id": "b", "text": "`europe-west4` (terraform.tfvars)", "correct": false, "explanation": "terraform.tfvars gana al default, pero no a `-var`." },
+        { "id": "c", "text": "`us-central1` (el flag -var)", "correct": true, "explanation": "Correcto: `-var` y `-var-file` tienen la máxima prioridad." },
+        { "id": "d", "text": "Da error porque hay dos valores", "correct": false, "explanation": "No es un error: hay un orden de prioridad bien definido." }
+      ],
+      "solution": {
+        "answer": "us-central1",
+        "explanation": "Prioridad creciente: default → TF_VAR_ → terraform.tfvars → *.auto.tfvars → -var/-var-file. El flag de la línea de comandos gana."
+      }
+    },
+    {
+      "id": "sin-default",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Declaras `variable \"project_id\" { type = string }` sin `default` y ejecutas `terraform plan` sin dar ningún valor. ¿Qué pasa?",
+      "hints": ["Sin default, la variable es obligatoria. ¿Cómo consigue Terraform el valor?"],
+      "options": [
+        { "id": "a", "text": "Terraform te pide el valor por teclado", "correct": true, "explanation": "Correcto: una variable sin default es obligatoria y, si no tiene valor, Terraform lo pregunta." },
+        { "id": "b", "text": "Usa un texto vacío", "correct": false, "explanation": "No hay valor por defecto implícito." },
+        { "id": "c", "text": "Usa `null` y sigue", "correct": false, "explanation": "No: la variable es obligatoria." }
+      ],
+      "solution": {
+        "answer": "Pide el valor",
+        "explanation": "Sin `default`, la variable es obligatoria. De forma interactiva, Terraform la pregunta; en automatización (con `-input=false`) el comando falla."
+      }
+    },
+    {
+      "id": "sensitive-cifra",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Marcar una variable u output como `sensitive = true` hace que su valor se guarde **cifrado** en el state.",
+      "hints": ["¿Dónde afecta `sensitive`: en la terminal o en el almacenamiento?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "`sensitive` solo oculta el valor en la salida de plan y apply. En el state sigue en claro." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: solo lo oculta en la terminal. Hay que proteger el propio state." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "`sensitive` redacta el valor en la salida de la CLI, pero el valor se guarda en el state en texto plano. Por eso el state debe guardarse en un backend seguro."
+      }
+    },
+    {
+      "id": "leer-local",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Has declarado `locals { prefijo = \"tienda-dev\" }`. ¿Cómo lo usas dentro de un recurso?",
+      "hints": ["Se declara en plural y se lee en singular."],
+      "options": [
+        { "id": "a", "text": "`locals.prefijo`", "correct": false, "explanation": "Es el error más típico: el bloque se llama `locals`, pero la referencia es `local.`" },
+        { "id": "b", "text": "`local.prefijo`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "`var.prefijo`", "correct": false, "explanation": "`var.` es para variables de entrada, no para locals." },
+        { "id": "d", "text": "`${prefijo}`", "correct": false, "explanation": "La interpolación necesita la referencia completa: `${local.prefijo}`." }
+      ],
+      "solution": {
+        "answer": "local.prefijo",
+        "explanation": "Los locals se declaran en un bloque `locals { }` y se leen con `local.<nombre>`."
+      }
+    },
+    {
+      "id": "orden-recursos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En tu archivo, el bloque de la subred aparece **antes** que el de la red, y la subred usa `network = google_compute_network.vpc.id`. ¿Qué hace Terraform?",
+      "hints": ["¿Importa el orden de los bloques en el archivo, o algo más?"],
+      "options": [
+        { "id": "a", "text": "Falla, porque la red no existe todavía al leer la subred", "correct": false, "explanation": "El orden en el archivo no importa." },
+        { "id": "b", "text": "Crea primero la red y después la subred", "correct": true, "explanation": "Correcto: la referencia crea una dependencia implícita en el grafo." },
+        { "id": "c", "text": "Crea las dos a la vez", "correct": false, "explanation": "Solo se paraleliza lo que no depende entre sí." },
+        { "id": "d", "text": "Hace falta añadir `depends_on`", "correct": false, "explanation": "No: la referencia ya expresa la dependencia. `depends_on` es para dependencias que no se ven en el código." }
+      ],
+      "solution": {
+        "answer": "Primero la red",
+        "explanation": "Terraform construye un grafo de dependencias con las referencias entre recursos. El orden de los bloques en los archivos es irrelevante."
+      }
+    },
+    {
+      "id": "plan-con-tfvars",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Genera el plan usando los valores del archivo `prod.tfvars`.",
+      "hints": [
+        "Es un `terraform plan` con un flag para cargar un archivo de variables.",
+        "El flag es `-var-file` (con un solo guion, al estilo de Terraform)."
+      ],
+      "accepted": ["terraform plan -var-file=prod.tfvars"],
+      "output": "Terraform will perform the following actions:\n\n  # google_storage_bucket.datos will be created\n  + resource \"google_storage_bucket\" \"datos\" {\n      + location = \"EUROPE-WEST1\"\n      + name     = \"tienda-prod-123-datos\"\n      ...\n    }\n\nPlan: 1 to add, 0 to change, 0 to destroy.",
+      "solution": {
+        "answer": "terraform plan -var-file=prod.tfvars",
+        "explanation": "`-var-file` carga un archivo `.tfvars`. Solo `terraform.tfvars` y `*.auto.tfvars` se cargan solos; cualquier otro nombre hay que pasarlo con este flag."
+      }
+    },
+    {
+      "id": "output-raw",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Un script necesita el valor del output `red`, **sin comillas**. Muéstralo.",
+      "hints": [
+        "El comando para consultar outputs se llama igual que el bloque.",
+        "Hay un flag que imprime el valor «en crudo» (raw)."
+      ],
+      "accepted": ["terraform output -raw red"],
+      "output": "tienda-dev-vpc",
+      "solution": {
+        "answer": "terraform output -raw red",
+        "explanation": "`terraform output red` mostraría `\"tienda-dev-vpc\"` con comillas. Con `-raw` sale el texto tal cual, listo para usar en un script."
+      }
+    },
+    {
+      "id": "referencia-red",
+      "type": "fill",
+      "language": "hcl",
+      "prompt": "Completa la referencia para que la subred use el ID de la red `vpc` (tipo `google_compute_network`).",
+      "template": "resource \"google_compute_subnetwork\" \"web\" {\n  name          = \"web\"\n  ip_cidr_range = \"10.0.1.0/24\"\n  region        = \"europe-west1\"\n  network       = {{ref}}\n}",
+      "blanks": [{ "id": "ref", "accepted": ["google_compute_network.vpc.id"] }],
+      "hints": [
+        "El formato es `TIPO.NOMBRE.ATRIBUTO`, sin comillas.",
+        "TIPO es `google_compute_network`, NOMBRE es `vpc` y el atributo es `id`."
+      ],
+      "solution": {
+        "answer": "google_compute_network.vpc.id",
+        "explanation": "`google_compute_network.vpc.id` lee el ID de la red y, además, hace que Terraform cree la red antes que la subred. Va sin comillas: entre comillas sería un texto literal."
+      }
+    },
+    {
+      "id": "variable-entorno",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Declara una variable `entorno` de tipo `string`, con la descripción que quieras, valor por defecto `\"dev\"` y un bloque `validation` que solo acepte `dev` o `pro` (usa `contains`). Añade también un output `entorno_actual` cuyo valor sea la propia variable.",
+      "starter": "variable \"entorno\" {\n  \n}\n",
+      "assertions": [
+        { "path": "variable.entorno", "op": "count", "value": 1, "message": "Hay un único bloque variable \"entorno\"" },
+        { "path": "variable.entorno[0].type", "op": "equals", "value": "string", "message": "type = string (sin comillas: es un tipo, no un texto)" },
+        { "path": "variable.entorno[0].description", "op": "exists", "message": "Tiene description" },
+        { "path": "variable.entorno[0].default", "op": "equals", "value": "dev", "message": "default = \"dev\"" },
+        { "path": "variable.entorno[0].validation[0].condition", "op": "matches", "value": "contains\\(.*var\\.entorno", "message": "El bloque validation tiene una condition que usa contains(..., var.entorno)" },
+        { "path": "variable.entorno[0].validation[0].error_message", "op": "exists", "message": "El bloque validation tiene error_message" },
+        { "path": "output.entorno_actual[0].value", "op": "equals", "value": "var.entorno", "message": "El output entorno_actual tiene value = var.entorno" }
+      ],
+      "hints": [
+        "`validation` es un **bloque** dentro de la variable: `validation { ... }`, sin `=`.",
+        "La condición: `condition = contains([\"dev\", \"pro\"], var.entorno)`.",
+        "El output va aparte, fuera de la variable: `output \"entorno_actual\" { value = var.entorno }`."
+      ],
+      "solution": {
+        "answer": "variable \"entorno\" {\n  type        = string\n  description = \"Entorno de despliegue\"\n  default     = \"dev\"\n\n  validation {\n    condition     = contains([\"dev\", \"pro\"], var.entorno)\n    error_message = \"El entorno debe ser dev o pro.\"\n  }\n}\n\noutput \"entorno_actual\" {\n  value = var.entorno\n}\n",
+        "explanation": "`type`, `description` y `default` son atributos (`=`); `validation` es un bloque anidado con `condition` y `error_message`. El output es un bloque independiente que expone `var.entorno`."
+      }
+    }
+  ]
+}

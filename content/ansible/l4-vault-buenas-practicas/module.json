@@ -1,0 +1,8 @@
+{
+  "title": "Vault, privilegios y buenas prácticas",
+  "summary": "Cifrar secretos con Ansible Vault, escalar privilegios con become, ocultar datos sensibles con no_log, revisar el código con ansible-lint y organizar un proyecto real.",
+  "level": 4,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "CI/CD en Google Cloud",
+  "summary": "Construir imágenes con Cloud Build, guardarlas en Artifact Registry y desplegarlas por entornos con Cloud Deploy.",
+  "level": 4,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

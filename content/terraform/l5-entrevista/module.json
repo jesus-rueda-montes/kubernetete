@@ -1,0 +1,8 @@
+{
+  "title": "Preparación de entrevista",
+  "summary": "Las preguntas de Terraform que más se repiten, con respuestas modelo, y los escenarios prácticos típicos: drift, estado bloqueado, renombrar recursos, dividir el state y organizar varios entornos.",
+  "level": 5,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

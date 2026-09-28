@@ -1,0 +1,126 @@
+{
+  "exercises": [
+    {
+      "id": "present-latest",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué diferencia hay entre `state: present` y `state: latest` en el módulo `apt`?",
+      "hints": ["Uno solo asegura que está instalado; el otro, además, que está al día."],
+      "options": [
+        { "id": "a", "text": "`present` instala si falta; `latest` además actualiza a la última versión en cada ejecución", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Son sinónimos", "correct": false, "explanation": "No: latest puede actualizar paquetes en cada ejecución." },
+        { "id": "c", "text": "`latest` desinstala las versiones antiguas y no instala nada", "correct": false, "explanation": "latest instala o actualiza." }
+      ],
+      "solution": {
+        "answer": "latest también actualiza",
+        "explanation": "`present` no toca un paquete ya instalado. `latest` lo actualiza si hay versión nueva, lo que puede provocar cambios no planificados en producción."
+      }
+    },
+    {
+      "id": "restarted",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea usa `ansible.builtin.service` con `state: restarted`. ¿Qué pasa al ejecutar el playbook por segunda vez sin cambiar nada?",
+      "hints": ["¿Es `restarted` un estado final o una acción?"],
+      "options": [
+        { "id": "a", "text": "No hace nada: el servicio ya estaba en marcha", "correct": false, "explanation": "Eso haría `started`." },
+        { "id": "b", "text": "Reinicia el servicio otra vez y marca `changed`", "correct": true, "explanation": "Correcto: `restarted` es una acción que se ejecuta siempre." },
+        { "id": "c", "text": "Da error porque ya se reinició", "correct": false, "explanation": "No es un error." }
+      ],
+      "solution": {
+        "answer": "Reinicia siempre",
+        "explanation": "`started`/`stopped` son estados (idempotentes). `restarted`/`reloaded` son acciones. Para reiniciar solo cuando cambie algo se usan handlers."
+      }
+    },
+    {
+      "id": "append-grupos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Añades el usuario `ana` al grupo `docker` con `ansible.builtin.user` y `groups: [docker]`, sin más opciones. `ana` ya estaba en el grupo `sudo`. ¿Qué pasa?",
+      "hints": ["Por defecto, `groups` define la lista **completa** de grupos secundarios."],
+      "options": [
+        { "id": "a", "text": "Ana queda en docker y sudo", "correct": false, "explanation": "Solo si añades `append: true`." },
+        { "id": "b", "text": "Ana queda solo en docker: sale de sudo", "correct": true, "explanation": "Correcto: sin `append: true`, se sustituye la lista de grupos." },
+        { "id": "c", "text": "Da error porque ya tiene grupos", "correct": false, "explanation": "No es un error." }
+      ],
+      "solution": {
+        "answer": "Sale de sudo",
+        "explanation": "Sin `append: true`, `groups` fija exactamente los grupos secundarios del usuario. Con `append: true`, los añade a los que ya tiene."
+      }
+    },
+    {
+      "id": "shell-idempotente",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la forma idempotente de asegurar que `/etc/hosts` contiene la línea `10.0.0.5 db.interno`?",
+      "hints": ["Hay un módulo que asegura que una línea está en un archivo."],
+      "options": [
+        { "id": "a", "text": "`shell: echo \"10.0.0.5 db.interno\" >> /etc/hosts`", "correct": false, "explanation": "Añadiría la línea en cada ejecución." },
+        { "id": "b", "text": "`lineinfile` con `path: /etc/hosts` y `line: \"10.0.0.5 db.interno\"`", "correct": true, "explanation": "Correcto: si la línea ya está, no hace nada." },
+        { "id": "c", "text": "`copy` con `content: \"10.0.0.5 db.interno\"`", "correct": false, "explanation": "Sustituiría todo el archivo por esa línea." }
+      ],
+      "solution": {
+        "answer": "lineinfile",
+        "explanation": "`lineinfile` asegura que la línea existe (o la sustituye si coincide con `regexp`). Repetirlo no la duplica."
+      }
+    },
+    {
+      "id": "changed-when",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una tarea `command: df -h` solo consulta el disco, pero siempre aparece como `changed`. ¿Cómo lo corriges?",
+      "hints": ["Hay una palabra clave de tarea que decide cuándo se considera un cambio."],
+      "options": [
+        { "id": "a", "text": "Añadir `changed_when: false`", "correct": true, "explanation": "Correcto: una consulta no cambia nada." },
+        { "id": "b", "text": "Cambiar a `shell`", "correct": false, "explanation": "shell también marcaría changed." },
+        { "id": "c", "text": "Añadir `become: true`", "correct": false, "explanation": "No afecta al estado changed." }
+      ],
+      "solution": {
+        "answer": "changed_when: false",
+        "explanation": "`command` y `shell` marcan changed por defecto. `changed_when: false` indica que esa tarea nunca cambia el sistema."
+      }
+    },
+    {
+      "id": "creates",
+      "type": "fill",
+      "language": "yaml",
+      "prompt": "Completa la tarea para que el script de inicialización **solo se ejecute si no existe** `/opt/tienda/.inicializado`.",
+      "template": "- name: Inicializar la aplicación\n  ansible.builtin.command:\n    cmd: /opt/tienda/bin/init\n    {{param}}: /opt/tienda/.inicializado",
+      "blanks": [{ "id": "param", "accepted": ["creates"] }],
+      "hints": ["El parámetro dice qué archivo **crea** el comando; si ya existe, no se ejecuta."],
+      "solution": {
+        "answer": "creates: /opt/tienda/.inicializado",
+        "explanation": "Con `creates`, el módulo `command` salta la tarea si la ruta ya existe. `removes` hace lo contrario: solo ejecuta si existe."
+      }
+    },
+    {
+      "id": "servidor-web",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa las tareas del playbook: (1) crear la carpeta `/var/www/tienda` con `ansible.builtin.file` (`state: directory`, `mode: \"0755\"`); (2) copiar el texto `<h1>Tienda</h1>` a `/var/www/tienda/index.html` con `ansible.builtin.copy` (`mode: \"0644\"`); (3) dejar `nginx` arrancado y habilitado con `ansible.builtin.service`. Cada tarea con su `name`.",
+      "starter": "---\n- name: Servidor web\n  hosts: web\n  become: true\n  tasks:\n",
+      "assertions": [
+        { "path": "[0].tasks", "op": "count", "value": 3, "message": "Hay exactamente 3 tareas" },
+        { "path": "[0].tasks[0]['ansible.builtin.file'].path", "op": "equals", "value": "/var/www/tienda", "message": "Tarea 1: file con path /var/www/tienda" },
+        { "path": "[0].tasks[0]['ansible.builtin.file'].state", "op": "equals", "value": "directory", "message": "Tarea 1: state: directory" },
+        { "path": "[0].tasks[0]['ansible.builtin.file'].mode", "op": "equals", "value": "0755", "message": "Tarea 1: mode: \"0755\" (entre comillas)" },
+        { "path": "[0].tasks[1]['ansible.builtin.copy'].dest", "op": "equals", "value": "/var/www/tienda/index.html", "message": "Tarea 2: copy con dest /var/www/tienda/index.html" },
+        { "path": "[0].tasks[1]['ansible.builtin.copy'].content", "op": "matches", "value": "<h1>Tienda</h1>", "message": "Tarea 2: content con <h1>Tienda</h1>" },
+        { "path": "[0].tasks[1]['ansible.builtin.copy'].mode", "op": "equals", "value": "0644", "message": "Tarea 2: mode: \"0644\" (entre comillas)" },
+        { "path": "[0].tasks[2]['ansible.builtin.service'].name", "op": "equals", "value": "nginx", "message": "Tarea 3: service con name: nginx" },
+        { "path": "[0].tasks[2]['ansible.builtin.service'].state", "op": "equals", "value": "started", "message": "Tarea 3: state: started" },
+        { "path": "[0].tasks[2]['ansible.builtin.service'].enabled", "op": "equals", "value": true, "message": "Tarea 3: enabled: true" },
+        { "path": "[0].tasks[*].name", "op": "exists", "message": "Las tareas tienen name" }
+      ],
+      "hints": [
+        "Cada tarea: `- name: ...` y, debajo, el módulo con sus parámetros indentados.",
+        "Pon los modos **entre comillas**: `mode: \"0755\"`; sin ellas, YAML los leería como número.",
+        "El texto con `<` conviene entrecomillarlo: `content: \"<h1>Tienda</h1>\"`."
+      ],
+      "solution": {
+        "answer": "---\n- name: Servidor web\n  hosts: web\n  become: true\n  tasks:\n    - name: Carpeta de la web\n      ansible.builtin.file:\n        path: /var/www/tienda\n        state: directory\n        mode: \"0755\"\n\n    - name: Página de inicio\n      ansible.builtin.copy:\n        content: \"<h1>Tienda</h1>\"\n        dest: /var/www/tienda/index.html\n        mode: \"0644\"\n\n    - name: Nginx arrancado y habilitado\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n",
+        "explanation": "Cada módulo describe un estado: la carpeta existe, el archivo tiene ese contenido y el servicio está arrancado. Ejecutarlo dos veces no cambia nada la segunda vez."
+      }
+    }
+  ]
+}

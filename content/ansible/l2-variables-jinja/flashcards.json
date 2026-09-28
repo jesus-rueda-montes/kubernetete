@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "sintaxis", "front": "¿Cómo se usa una variable en Ansible?", "back": "Con Jinja2: `{{ variable }}`. Si el valor empieza por `{{`, todo entre comillas." },
+    { "id": "donde", "front": "¿Dónde se definen las variables por grupo y por host?", "back": "En `group_vars/<grupo>.yml` y `host_vars/<host>.yml`, junto al inventario o al playbook." },
+    { "id": "precedencia", "front": "Regla práctica de precedencia de variables", "back": "Lo específico gana a lo general (all < grupo < host < play…) y `-e` gana siempre. Los defaults de roles, lo más débil." },
+    { "id": "facts", "front": "¿Qué son los facts?", "back": "Datos de cada host recogidos por el módulo `setup` al empezar el play, en `ansible_facts` (os_family, default_ipv4…)." },
+    { "id": "magicas", "front": "Variables mágicas más usadas", "back": "`inventory_hostname`, `groups`, `group_names` y `hostvars`." },
+    { "id": "jinja", "front": "`{{ }}`, `{% %}` y `{# #}` en Jinja2", "back": "Imprimir un valor, lógica (for, if) y comentarios." },
+    { "id": "template-validate", "front": "¿Para qué sirve `validate` en el módulo template?", "back": "Comprueba el archivo generado (`%s`) antes de sustituir el actual, p. ej. `visudo -cf %s`." }
+  ]
+}

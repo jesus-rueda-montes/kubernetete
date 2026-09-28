@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "cloud-build", "front": "¿Cómo funciona una compilación de Cloud Build?", "back": "Una lista de pasos; cada uno se ejecuta en un contenedor y todos comparten `/workspace`. Se define en `cloudbuild.yaml`." },
+    { "id": "sustituciones", "front": "Sustituciones de Cloud Build", "back": "Integradas: `$PROJECT_ID`, `$COMMIT_SHA`, `$SHORT_SHA`, `$BRANCH_NAME` (estas las rellenan los triggers). Propias: empiezan por `_`." },
+    { "id": "triggers", "front": "Triggers de Cloud Build", "back": "Lanzan compilaciones al hacer push a una rama, abrir una pull request o crear una etiqueta." },
+    { "id": "submit-tag", "front": "`gcloud builds submit --tag IMAGEN`", "back": "Construye con el Dockerfile del directorio y publica la imagen, sin cloudbuild.yaml." },
+    { "id": "ar", "front": "Nombre de una imagen en Artifact Registry", "back": "`REGIÓN-docker.pkg.dev/PROYECTO/REPOSITORIO/IMAGEN:ETIQUETA`." },
+    { "id": "gcr", "front": "¿Se puede seguir usando Container Registry (gcr.io)?", "back": "No para publicar: se cerró el 18 de marzo de 2025. Se usa Artifact Registry." },
+    { "id": "cloud-deploy", "front": "Piezas de Cloud Deploy", "back": "Delivery pipeline (secuencia de targets), targets (con aprobación opcional), releases inmutables y rollouts." },
+    { "id": "promocionar", "front": "¿Por qué construir una vez y promocionar?", "back": "Para que lo que llega a producción sea exactamente lo que se probó en los entornos anteriores." },
+    { "id": "estrategias", "front": "Rolling, blue/green y canary", "back": "Rolling: poco a poco. Blue/green: versión nueva completa y cambio de golpe. Canary: un % pequeño del tráfico que va subiendo." },
+    { "id": "binauthz", "front": "Binary Authorization", "back": "Solo permite desplegar en GKE o Cloud Run imágenes firmadas o verificadas." }
+  ]
+}

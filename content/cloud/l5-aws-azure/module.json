@@ -1,0 +1,8 @@
+{
+  "title": "GCP, AWS y Azure",
+  "summary": "Equivalencias de servicios entre las tres nubes y las diferencias de modelo que más se preguntan: organización (proyectos, cuentas, suscripciones), identidad y permisos, redes y zonas.",
+  "level": 5,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

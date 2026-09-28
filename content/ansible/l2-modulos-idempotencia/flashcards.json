@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "present-latest", "front": "`state: present` frente a `state: latest`", "back": "present: instalado (no lo toca si ya está). latest: además lo actualiza a la última versión en cada ejecución." },
+    { "id": "started-restarted", "front": "`started` frente a `restarted` en el módulo service", "back": "started es un estado (idempotente); restarted es una acción que reinicia siempre. Para reiniciar al cambiar algo: handlers." },
+    { "id": "mode", "front": "¿Cómo se escriben los permisos en Ansible?", "back": "Entre comillas y con cero inicial: `mode: \"0644\"`." },
+    { "id": "append", "front": "`user` con `groups`: ¿qué hace `append: true`?", "back": "Añade esos grupos a los que ya tiene el usuario. Sin él, la lista de grupos secundarios se sustituye." },
+    { "id": "creates", "front": "¿Cómo hacer idempotente una tarea `command`?", "back": "`creates`/`removes` (según exista una ruta), `changed_when`, o comprobar antes con `register` y `when`." },
+    { "id": "lineinfile", "front": "Asegurar una línea en un archivo", "back": "`ansible.builtin.lineinfile` con `path` y `line` (y `regexp` para sustituir). Para archivos completos, template o copy." },
+    { "id": "ansible-doc", "front": "¿Cómo consultas los parámetros de un módulo desde la terminal?", "back": "`ansible-doc ansible.builtin.<módulo>`." }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "exercises": [
+    {
+      "id": "vpc-global",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes una VM en una subred de `europe-west1` y otra en una subred de `us-central1`, las dos en la misma VPC de GCP. ¿Pueden comunicarse por IP privada?",
+      "hints": ["¿Qué alcance tiene una VPC en GCP?"],
+      "options": [
+        { "id": "a", "text": "Sí, directamente, si el firewall lo permite", "correct": true, "explanation": "Correcto: la VPC es global." },
+        { "id": "b", "text": "No, hace falta un VPC Peering entre regiones", "correct": false, "explanation": "El peering conecta VPC distintas, no regiones de la misma VPC." },
+        { "id": "c", "text": "Solo a través de internet", "correct": false, "explanation": "El tráfico va por la red privada de Google." }
+      ],
+      "solution": {
+        "answer": "Sí",
+        "explanation": "En GCP la VPC es global y las subredes regionales. Las rutas de cada subred permiten la comunicación entre regiones sin configurar nada más (el firewall debe permitir ese tráfico)."
+      }
+    },
+    {
+      "id": "implicitas",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas una red nueva en modo custom y una VM con un servidor web en el puerto 80, sin crear ninguna regla de firewall. ¿Qué pasa?",
+      "hints": ["Piensa en las reglas implícitas de toda VPC."],
+      "options": [
+        { "id": "a", "text": "Nadie puede conectarse al puerto 80, pero la VM puede salir", "correct": true, "explanation": "Correcto: se deniega toda la entrada y se permite toda la salida." },
+        { "id": "b", "text": "Todo el mundo puede conectarse", "correct": false, "explanation": "La entrada está denegada por defecto." },
+        { "id": "c", "text": "La VM no puede ni entrar ni salir", "correct": false, "explanation": "La salida está permitida por defecto." }
+      ],
+      "solution": {
+        "answer": "Entrada denegada, salida permitida",
+        "explanation": "Las reglas implícitas (prioridad 65535) deniegan toda la entrada y permiten toda la salida. Hay que crear una regla que permita tcp:80."
+      }
+    },
+    {
+      "id": "prioridad",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Hay dos reglas de entrada para tcp:22: una `ALLOW` con prioridad 1000 y otra `DENY` con prioridad 500. ¿Qué pasa con una conexión SSH?",
+      "hints": ["¿Gana el número alto o el bajo?"],
+      "options": [
+        { "id": "a", "text": "Se permite: gana la prioridad 1000", "correct": false, "explanation": "Un número más alto significa menos prioridad." },
+        { "id": "b", "text": "Se deniega: gana la prioridad 500", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Depende de qué regla se creó antes", "correct": false, "explanation": "El orden de creación no importa." }
+      ],
+      "solution": {
+        "answer": "Se deniega",
+        "explanation": "El número más bajo tiene más prioridad. Con la misma prioridad, DENY gana a ALLOW."
+      }
+    },
+    {
+      "id": "etiqueta-falta",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creaste una regla que permite tcp:443 con `--target-tags=web`, pero no llega tráfico a tu VM. ¿Qué es lo más probable?",
+      "hints": ["¿A qué VMs se aplica una regla con `--target-tags`?"],
+      "options": [
+        { "id": "a", "text": "La VM no tiene la etiqueta de red `web`", "correct": true, "explanation": "Correcto: la regla solo se aplica a las VMs con esa etiqueta." },
+        { "id": "b", "text": "Las reglas tardan 24 horas en aplicarse", "correct": false, "explanation": "Se aplican en segundos." },
+        { "id": "c", "text": "Hace falta una regla de salida para la respuesta", "correct": false, "explanation": "Las reglas son stateful: la respuesta sale sin otra regla." }
+      ],
+      "solution": {
+        "answer": "Falta la etiqueta",
+        "explanation": "Añade la etiqueta a la VM (`--tags=web` al crearla, o `gcloud compute instances add-tags`). Sin objetivo, la regla se aplicaría a todas las VMs de la red."
+      }
+    },
+    {
+      "id": "nat",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tus VMs no tienen IP pública y necesitan descargar paquetes de internet. ¿Qué usas?",
+      "hints": ["Quieres permitir conexiones salientes, pero no entrantes."],
+      "options": [
+        { "id": "a", "text": "Cloud NAT en un Cloud Router de la región", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Private Google Access", "correct": false, "explanation": "Solo da acceso a las APIs de Google, no a internet en general." },
+        { "id": "c", "text": "Una regla de firewall de salida", "correct": false, "explanation": "La salida ya está permitida; lo que falta es una dirección pública para salir." }
+      ],
+      "solution": {
+        "answer": "Cloud NAT",
+        "explanation": "Cloud NAT traduce las IPs privadas a IPs públicas para las conexiones salientes. Es regional y se configura sobre un Cloud Router."
+      }
+    },
+    {
+      "id": "peering-transitivo",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si la VPC A tiene peering con B, y B tiene peering con C, las VMs de A pueden comunicarse con las de C.",
+      "hints": ["¿El peering pasa a través de otras redes?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "El peering no es transitivo." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: haría falta un peering directo A–C." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "VPC Network Peering no es transitivo. Para conectar muchas redes se usa un diseño en estrella con otras soluciones, o una Shared VPC."
+      }
+    },
+    {
+      "id": "tipo-lb",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una web con usuarios en todo el mundo necesita HTTPS, enviar `/api` a un backend y `/` a otro, y servidores en Europa y en EE. UU. ¿Qué balanceador eliges?",
+      "hints": ["Rutas por URL = capa 7. Varias regiones = global."],
+      "options": [
+        { "id": "a", "text": "Application Load Balancer externo global", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Network Load Balancer passthrough regional", "correct": false, "explanation": "Es de capa 4 (no entiende URLs) y regional." },
+        { "id": "c", "text": "Application Load Balancer interno regional", "correct": false, "explanation": "Interno: no recibe tráfico de internet." }
+      ],
+      "solution": {
+        "answer": "Application Load Balancer externo global",
+        "explanation": "Capa 7 para enrutar por URL y terminar TLS; externo para recibir tráfico de internet; global para tener backends en varias regiones con una sola IP anycast."
+      }
+    },
+    {
+      "id": "cmd-red",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea una red VPC llamada `vpc-pro` en la que tú crearás las subredes a mano.",
+      "hints": [
+        "Es `gcloud compute networks create`.",
+        "El flag del modo de subredes es `--subnet-mode`, con el valor `custom`."
+      ],
+      "accepted": ["gcloud compute networks create vpc-pro --subnet-mode=custom"],
+      "output": "Created [https://www.googleapis.com/compute/v1/projects/tienda-pro/global/networks/vpc-pro].\nNAME     SUBNET_MODE  BGP_ROUTING_MODE  IPV4_RANGE  GATEWAY_IPV4\nvpc-pro  CUSTOM       REGIONAL",
+      "solution": {
+        "answer": "gcloud compute networks create vpc-pro --subnet-mode=custom",
+        "explanation": "Sin `--subnet-mode=custom`, la red sería de modo auto, con una subred en cada región. Fíjate en la URL: la red está en `global`."
+      }
+    },
+    {
+      "id": "cmd-subred",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea la subred `web-euw1` en la red `vpc-pro`, región `europe-west1`, con el rango `10.10.0.0/24`.",
+      "hints": [
+        "Es `gcloud compute networks subnets create NOMBRE`.",
+        "Necesitas `--network`, `--region` y `--range`."
+      ],
+      "accepted": ["gcloud compute networks subnets create web-euw1 --network=vpc-pro --region=europe-west1 --range=10.10.0.0/24"],
+      "output": "Created [https://www.googleapis.com/compute/v1/projects/tienda-pro/regions/europe-west1/subnetworks/web-euw1].\nNAME      REGION        NETWORK  RANGE         STACK_TYPE\nweb-euw1  europe-west1  vpc-pro  10.10.0.0/24  IPV4_ONLY",
+      "solution": {
+        "answer": "gcloud compute networks subnets create web-euw1 --network=vpc-pro --region=europe-west1 --range=10.10.0.0/24",
+        "explanation": "La subred es regional (fíjate en `regions/europe-west1` en la URL). De sus 256 direcciones, Google reserva 4."
+      }
+    },
+    {
+      "id": "cmd-firewall",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "En la red `vpc-pro`, crea la regla `permitir-web` que permita `tcp:80` y `tcp:443` desde cualquier IP (`0.0.0.0/0`), solo hacia las VMs con la etiqueta `web`.",
+      "hints": [
+        "Es `gcloud compute firewall-rules create NOMBRE`.",
+        "Flags: `--network`, `--allow`, `--source-ranges` y `--target-tags`.",
+        "Los puertos van separados por comas: `--allow=tcp:80,tcp:443`."
+      ],
+      "accepted": [
+        "gcloud compute firewall-rules create permitir-web --network=vpc-pro --allow=tcp:80,tcp:443 --source-ranges=0.0.0.0/0 --target-tags=web",
+        "gcloud compute firewall-rules create permitir-web --network=vpc-pro --allow=tcp:80,tcp:443 --source-ranges=0.0.0.0/0 --target-tags=web --direction=INGRESS"
+      ],
+      "output": "Creating firewall...done.\nNAME          NETWORK  DIRECTION  PRIORITY  ALLOW           DENY  DISABLED\npermitir-web  vpc-pro  INGRESS    1000      tcp:80,tcp:443        False",
+      "solution": {
+        "answer": "gcloud compute firewall-rules create permitir-web --network=vpc-pro --allow=tcp:80,tcp:443 --source-ranges=0.0.0.0/0 --target-tags=web",
+        "explanation": "La dirección por defecto es INGRESS y la prioridad, 1000. Sin `--network` la regla iría a la red `default`, y sin `--target-tags` se aplicaría a todas las VMs de la red."
+      }
+    }
+  ]
+}

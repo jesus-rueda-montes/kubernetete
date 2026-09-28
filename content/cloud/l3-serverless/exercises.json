@@ -1,0 +1,149 @@
+{
+  "exercises": [
+    {
+      "id": "sin-estado",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu app en Cloud Run guarda las sesiones de usuario en memoria. A veces los usuarios pierden la sesión de repente. ¿Por qué?",
+      "hints": ["¿Siempre atiende la misma instancia a un usuario? ¿Cuánto vive una instancia?"],
+      "options": [
+        { "id": "a", "text": "Las peticiones van a instancias distintas, y las instancias se crean y se eliminan según la carga", "correct": true, "explanation": "Correcto: el estado en memoria no se comparte ni sobrevive." },
+        { "id": "b", "text": "Cloud Run borra la memoria cada minuto", "correct": false, "explanation": "No existe ese comportamiento." },
+        { "id": "c", "text": "Falta `--allow-unauthenticated`", "correct": false, "explanation": "Eso controla quién puede llamar al servicio, no las sesiones." }
+      ],
+      "solution": {
+        "answer": "Las instancias son efímeras",
+        "explanation": "Cloud Run exige contenedores sin estado. Guarda las sesiones fuera, por ejemplo en Memorystore o Firestore."
+      }
+    },
+    {
+      "id": "cold-start",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu API tiene poco tráfico y la primera petición tras un rato sin uso tarda 4 segundos. ¿Qué ajuste lo mejora?",
+      "hints": ["No hay ninguna instancia lista cuando llega la petición."],
+      "options": [
+        { "id": "a", "text": "`--min-instances=1`", "correct": true, "explanation": "Correcto: siempre habrá una instancia lista (pagas por ella)." },
+        { "id": "b", "text": "`--max-instances=1`", "correct": false, "explanation": "Limita el máximo; no evita que se escale a cero." },
+        { "id": "c", "text": "`--timeout=3600`", "correct": false, "explanation": "Solo amplía el tiempo máximo de cada petición." }
+      ],
+      "solution": {
+        "answer": "--min-instances=1",
+        "explanation": "El retraso es un arranque en frío. Con instancias mínimas siempre hay alguna lista. También ayudan las imágenes pequeñas y un arranque rápido."
+      }
+    },
+    {
+      "id": "concurrencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un servicio tiene concurrencia máxima 80 y recibe 400 peticiones simultáneas. ¿Cuántas instancias necesita como mínimo?",
+      "hints": ["Cada instancia atiende hasta 80 peticiones a la vez."],
+      "options": [
+        { "id": "a", "text": "400", "correct": false, "explanation": "Eso sería con concurrencia 1." },
+        { "id": "b", "text": "5", "correct": true, "explanation": "Correcto: 400 / 80 = 5." },
+        { "id": "c", "text": "1", "correct": false, "explanation": "Una instancia solo acepta 80 a la vez." }
+      ],
+      "solution": {
+        "answer": "5",
+        "explanation": "La concurrencia es el número de peticiones que atiende cada instancia a la vez. En la práctica Cloud Run también mira el uso de CPU, así que podría crear alguna más."
+      }
+    },
+    {
+      "id": "job-o-servicio",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Cada noche hay que procesar un archivo grande durante unos 90 minutos. ¿Qué usas en Cloud Run?",
+      "hints": ["Un servicio responde a peticiones con un timeout máximo de 60 minutos."],
+      "options": [
+        { "id": "a", "text": "Un servicio con `--timeout=5400`", "correct": false, "explanation": "El timeout máximo de una petición es de 60 minutos." },
+        { "id": "b", "text": "Un Cloud Run job, programado con Cloud Scheduler", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Una función HTTP", "correct": false, "explanation": "Tiene los mismos límites que un servicio." }
+      ],
+      "solution": {
+        "answer": "Cloud Run job",
+        "explanation": "Los jobs ejecutan un contenedor hasta que termina, sin atender peticiones, y pueden dividir el trabajo en tareas paralelas y reintentarlas."
+      }
+    },
+    {
+      "id": "idempotencia",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una función envía un email de bienvenida por cada mensaje de Pub/Sub `usuario-creado`. Algunos usuarios reciben dos emails. ¿Qué pasa?",
+      "hints": ["¿Cuántas veces garantiza Pub/Sub que llega cada mensaje?"],
+      "options": [
+        { "id": "a", "text": "La entrega es al menos una vez: un mensaje puede llegar repetido y la función no lo controla", "correct": true, "explanation": "Correcto: la función debe ser idempotente." },
+        { "id": "b", "text": "Pub/Sub siempre entrega cada mensaje dos veces", "correct": false, "explanation": "Normalmente llega una vez, pero puede repetirse." },
+        { "id": "c", "text": "Hay dos suscripciones iguales", "correct": false, "explanation": "Podría pasar, pero la causa general es la entrega al menos una vez." }
+      ],
+      "solution": {
+        "answer": "Entrega al menos una vez",
+        "explanation": "Guarda el ID de los mensajes procesados (o comprueba si el email ya se envió) para que procesar dos veces no duplique el resultado."
+      }
+    },
+    {
+      "id": "elegir-plataforma",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿En qué casos Cloud Run **no** es la mejor opción?",
+      "hints": ["Piensa en estado, acceso al nodo y control del sistema operativo."],
+      "options": [
+        { "id": "a", "text": "Un agente que debe ejecutarse en cada nodo del clúster", "correct": true, "explanation": "Eso es un DaemonSet de Kubernetes." },
+        { "id": "b", "text": "Software antiguo que necesita un sistema operativo concreto y licencias por máquina", "correct": true, "explanation": "Encaja mejor en VMs." },
+        { "id": "c", "text": "Una API REST sin estado con tráfico irregular", "correct": false, "explanation": "Es el caso ideal para Cloud Run." },
+        { "id": "d", "text": "Una web que responde a HTTP y guarda los datos en Cloud SQL", "correct": false, "explanation": "Encaja bien en Cloud Run." }
+      ],
+      "solution": {
+        "answer": "a y b",
+        "explanation": "Cloud Run es ideal para contenedores sin estado que responden a HTTP o a eventos. Necesidades de Kubernetes (DaemonSets, operators) apuntan a GKE; control del SO o licencias, a VMs."
+      }
+    },
+    {
+      "id": "cmd-deploy",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Despliega el servicio `web` en `europe-west1` con la imagen `europe-west1-docker.pkg.dev/tienda/apps/web:2.0.0`, accesible públicamente.",
+      "hints": [
+        "Es `gcloud run deploy NOMBRE`.",
+        "Flags: `--image`, `--region` y el que permite llamadas sin autenticar."
+      ],
+      "accepted": ["gcloud run deploy web --image=europe-west1-docker.pkg.dev/tienda/apps/web:2.0.0 --region=europe-west1 --allow-unauthenticated"],
+      "output": "Deploying container to Cloud Run service [web] in project [tienda] region [europe-west1]\nOK Deploying... Done.\n  OK Creating Revision...\n  OK Routing traffic...\n  OK Setting IAM Policy...\nDone.\nService [web] revision [web-00001-kx4] has been deployed and is serving 100 percent of traffic.\nService URL: https://web-123456789012.europe-west1.run.app",
+      "solution": {
+        "answer": "gcloud run deploy web --image=europe-west1-docker.pkg.dev/tienda/apps/web:2.0.0 --region=europe-west1 --allow-unauthenticated",
+        "explanation": "`--allow-unauthenticated` da el rol Cloud Run Invoker a `allUsers`. Fíjate en la revisión creada (`web-00001-...`) y en la URL HTTPS."
+      }
+    },
+    {
+      "id": "cmd-canary",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Envía el 10 % del tráfico del servicio `web` (región `europe-west1`) a la revisión etiquetada como `candidata`.",
+      "hints": [
+        "Es `gcloud run services update-traffic`.",
+        "El flag para repartir por etiqueta es `--to-tags=ETIQUETA=PORCENTAJE`."
+      ],
+      "accepted": ["gcloud run services update-traffic web --region=europe-west1 --to-tags=candidata=10"],
+      "output": "OK Updating traffic... Done.\n  OK Routing traffic...\nDone.\nTraffic:\n  90% web-00001-kx4\n  10% web-00002-p7d\n        candidata: https://candidata---web-123456789012.europe-west1.run.app",
+      "solution": {
+        "answer": "gcloud run services update-traffic web --region=europe-west1 --to-tags=candidata=10",
+        "explanation": "Es un despliegue canary: si va bien, subes el porcentaje; si falla, `--to-latest` o `--to-revisions` para volver atrás en segundos."
+      }
+    },
+    {
+      "id": "cmd-job",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Ejecuta el job `migrar-db` de la región `europe-west1` y espera a que termine.",
+      "hints": [
+        "Es un subcomando de `gcloud run jobs`.",
+        "El flag para esperar es `--wait`."
+      ],
+      "accepted": ["gcloud run jobs execute migrar-db --region=europe-west1 --wait"],
+      "output": "OK Creating execution... Done.\n  OK Provisioning resources...\nDone.\nExecution [migrar-db-4gq2x] has successfully completed.",
+      "solution": {
+        "answer": "gcloud run jobs execute migrar-db --region=europe-west1 --wait",
+        "explanation": "Cada ejecución crea una execution con sus tareas. Sin `--wait`, el comando vuelve en cuanto la ejecución empieza."
+      }
+    }
+  ]
+}

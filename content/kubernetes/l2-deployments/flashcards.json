@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "cadena", "front": "Relación Deployment, ReplicaSet y Pod", "back": "El Deployment crea un ReplicaSet por versión de la plantilla; el ReplicaSet mantiene N Pods idénticos." },
+    { "id": "selector-inmutable", "front": "¿Se puede cambiar el `selector` de un Deployment?", "back": "No: en `apps/v1` es obligatorio e inmutable. Además, las labels de la plantilla deben cumplirlo." },
+    { "id": "rollout-trigger", "front": "¿Qué dispara un rollout?", "back": "Solo un cambio en `spec.template` (imagen, env, recursos…). Cambiar `replicas` solo escala." },
+    { "id": "estrategias", "front": "RollingUpdate frente a Recreate", "back": "RollingUpdate (por defecto) sustituye Pods poco a poco sin corte; Recreate borra todos y luego crea los nuevos (hay corte)." },
+    { "id": "surge-unavailable", "front": "`maxSurge` y `maxUnavailable`", "back": "Pods extra permitidos por encima de replicas / Pods que pueden no estar disponibles durante la actualización. Por defecto, 25 % cada uno." },
+    { "id": "undo", "front": "Volver a la versión anterior de un Deployment", "back": "`kubectl rollout undo deployment/<nombre>` (o `--to-revision=N`)." },
+    { "id": "history-limit", "front": "¿Cuántas revisiones guarda un Deployment por defecto?", "back": "10 (`revisionHistoryLimit`): son ReplicaSets antiguos a 0 réplicas." },
+    { "id": "dry-run-yaml", "front": "Generar el YAML de un Deployment sin crearlo", "back": "`kubectl create deployment web --image=nginx --dry-run=client -o yaml`." }
+  ]
+}

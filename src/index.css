@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
+
+/* Resaltado de sintaxis (clases de @lezer/highlight classHighlighter),
+   compartido por los bloques de las lecciones y el editor. */
+.tok-comment { color: #64748b; font-style: italic; }
+.tok-propertyName { color: #7dd3fc; }
+.tok-string, .tok-string2 { color: #fcd34d; }
+.tok-number, .tok-bool, .tok-atom { color: #c4b5fd; }
+.tok-keyword { color: #f472b6; }
+.tok-variableName { color: #e2e8f0; }
+.tok-definition { color: #7dd3fc; }
+.tok-typeName, .tok-className { color: #5eead4; }
+.tok-operator, .tok-punctuation { color: #94a3b8; }
+.tok-meta { color: #94a3b8; }
+.tok-invalid { color: #fca5a5; }

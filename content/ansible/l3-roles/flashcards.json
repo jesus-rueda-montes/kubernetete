@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "estructura", "front": "Carpetas estándar de un rol", "back": "`tasks`, `handlers`, `templates`, `files`, `defaults`, `vars`, `meta` (cada una con su `main.yml` si aplica)." },
+    { "id": "defaults-vars", "front": "`defaults` frente a `vars` en un rol", "back": "`defaults`: precedencia mínima, ajustable por el usuario. `vars`: precedencia alta, valores internos." },
+    { "id": "roles-orden", "front": "¿Cuándo se ejecutan los roles de `roles:`?", "back": "Antes que las `tasks:` del play." },
+    { "id": "import-include", "front": "`import_role` frente a `include_role`", "back": "`import_role`: estático, al leer el playbook. `include_role`: dinámico, al ejecutar (sirve con bucles y condiciones de ejecución)." },
+    { "id": "meta", "front": "¿Dónde se declaran las dependencias de un rol?", "back": "En `meta/main.yml`, con `dependencies`. Se ejecutan antes que el rol." },
+    { "id": "init", "front": "Crear el esqueleto de un rol", "back": "`ansible-galaxy role init NOMBRE` (con `--init-path` para elegir la carpeta)." },
+    { "id": "collection", "front": "¿Qué es una collection?", "back": "Un paquete de módulos, plugins y roles con nombre `namespace.collection` (p. ej. `community.docker`)." },
+    { "id": "fqcn", "front": "¿Qué es el FQCN de un módulo?", "back": "Su nombre completo con la collection: `ansible.builtin.copy`, `community.docker.docker_container`." },
+    { "id": "core", "front": "`ansible-core` frente a `ansible`", "back": "`ansible-core`: motor + `ansible.builtin`. `ansible`: `ansible-core` + muchas collections." },
+    { "id": "requirements", "front": "¿Cómo instalas las dependencias de Galaxy de un proyecto?", "back": "`ansible-galaxy install -r requirements.yml` (o `collection install -r` / `role install -r`), con versiones fijadas." }
+  ]
+}

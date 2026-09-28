@@ -1,0 +1,8 @@
+{
+  "title": "RBAC y ServiceAccounts",
+  "summary": "Quién puede hacer qué en el clúster: Roles y ClusterRoles, RoleBindings y ClusterRoleBindings, ServiceAccounts para las aplicaciones y cómo comprobar permisos con kubectl auth can-i.",
+  "level": 4,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

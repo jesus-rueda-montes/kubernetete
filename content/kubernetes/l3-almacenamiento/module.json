@@ -1,0 +1,8 @@
+{
+  "title": "Volúmenes y almacenamiento persistente",
+  "summary": "Datos que sobreviven a los Pods: volúmenes, PersistentVolumes, PersistentVolumeClaims, StorageClasses y access modes.",
+  "level": 3,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

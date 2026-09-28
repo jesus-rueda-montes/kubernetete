@@ -1,0 +1,134 @@
+{
+  "cli": "ansible-playbook",
+  "description": "Ejecuta playbooks de Ansible",
+  "source": "https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html",
+  "args": [
+    {
+      "name": "PLAYBOOK"
+    }
+  ],
+  "globalFlags": [
+    {
+      "name": "inventory",
+      "short": "i",
+      "takesValue": true,
+      "description": "Archivo de inventario o lista de hosts separados por comas"
+    },
+    {
+      "name": "limit",
+      "short": "l",
+      "takesValue": true,
+      "description": "Restringe los hosts a un patrón"
+    },
+    {
+      "name": "tags",
+      "short": "t",
+      "takesValue": true,
+      "description": "Solo ejecuta las tareas con estos tags"
+    },
+    {
+      "name": "skip-tags",
+      "takesValue": true,
+      "description": "Salta las tareas con estos tags"
+    },
+    {
+      "name": "check",
+      "short": "C",
+      "takesValue": false,
+      "description": "Modo simulación: no cambia nada"
+    },
+    {
+      "name": "diff",
+      "short": "D",
+      "takesValue": false,
+      "description": "Muestra las diferencias en archivos y plantillas"
+    },
+    {
+      "name": "extra-vars",
+      "short": "e",
+      "takesValue": true,
+      "description": "Variables extra (clave=valor, YAML o JSON)"
+    },
+    {
+      "name": "become",
+      "short": "b",
+      "takesValue": false,
+      "description": "Escala privilegios (sudo por defecto)"
+    },
+    {
+      "name": "ask-become-pass",
+      "short": "K",
+      "takesValue": false,
+      "description": "Pide la contraseña para escalar privilegios"
+    },
+    {
+      "name": "user",
+      "short": "u",
+      "takesValue": true,
+      "description": "Usuario remoto para conectar"
+    },
+    {
+      "name": "forks",
+      "short": "f",
+      "takesValue": true,
+      "description": "Número de hosts en paralelo"
+    },
+    {
+      "name": "list-hosts",
+      "takesValue": false,
+      "description": "Lista los hosts afectados, sin ejecutar"
+    },
+    {
+      "name": "list-tasks",
+      "takesValue": false,
+      "description": "Lista las tareas que se ejecutarían"
+    },
+    {
+      "name": "list-tags",
+      "takesValue": false,
+      "description": "Lista los tags disponibles"
+    },
+    {
+      "name": "syntax-check",
+      "takesValue": false,
+      "description": "Solo comprueba la sintaxis del playbook"
+    },
+    {
+      "name": "start-at-task",
+      "takesValue": true,
+      "description": "Empieza en la tarea con este nombre"
+    },
+    {
+      "name": "step",
+      "takesValue": false,
+      "description": "Pide confirmación antes de cada tarea"
+    },
+    {
+      "name": "ask-vault-password",
+      "short": "J",
+      "takesValue": false,
+      "description": "Pide la contraseña de Vault"
+    },
+    {
+      "name": "vault-password-file",
+      "takesValue": true,
+      "description": "Archivo con la contraseña de Vault"
+    },
+    {
+      "name": "verbose",
+      "short": "v",
+      "takesValue": false,
+      "description": "Más detalle (-vvv para depurar)"
+    },
+    {
+      "name": "vault-id",
+      "takesValue": true,
+      "description": "Identidad del vault: etiqueta@origen"
+    },
+    {
+      "name": "force-handlers",
+      "takesValue": false,
+      "description": "Ejecuta los handlers notificados aunque falle una tarea"
+    }
+  ]
+}

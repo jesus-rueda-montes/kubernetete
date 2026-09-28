@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "que-es", "front": "¿Qué guarda el state de Terraform?", "back": "La correspondencia entre recursos del código y objetos reales (IDs y atributos, incluidos secretos) y metadatos como dependencias." },
+    { "id": "drift", "front": "¿Qué es el drift?", "back": "Diferencias entre la realidad y lo que espera Terraform, normalmente por cambios manuales. `plan` lo detecta al refrescar." },
+    { "id": "refresh-only", "front": "¿Qué hace `terraform apply -refresh-only`?", "back": "Actualiza el state (y los outputs) con la realidad, sin cambiar la infraestructura." },
+    { "id": "simbolos", "front": "Símbolos del plan: `+`, `-`, `~`, `-/+`", "back": "Crear, destruir, modificar en el sitio, sustituir (destruir y crear)." },
+    { "id": "state-rm", "front": "¿Borra `terraform state rm` el recurso real?", "back": "No: Terraform lo olvida. Hay que quitar también el bloque del código." },
+    { "id": "moved", "front": "Renombrar un recurso sin destruirlo", "back": "Bloque `moved { from = TIPO.viejo  to = TIPO.nuevo }` (Terraform ≥ 1.1), o `terraform state mv`." },
+    { "id": "replace", "front": "Forzar que se recree un recurso", "back": "`terraform apply -replace=DIRECCIÓN` (sustituye al antiguo `terraform taint`)." },
+    { "id": "state-git", "front": "¿Dónde guardar el state en un equipo?", "back": "En un backend remoto con bloqueo (GCS, S3, HCP Terraform), nunca en git." }
+  ]
+}

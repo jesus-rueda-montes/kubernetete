@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "volumen", "front": "Dos pasos para usar un volumen en un Pod", "back": "Declararlo en `spec.volumes` y montarlo con `volumeMounts` en cada contenedor (unidos por el nombre)." },
+    { "id": "emptydir", "front": "Vida de un `emptyDir`", "back": "La del Pod: sobrevive a reinicios de contenedores y se borra cuando el Pod desaparece." },
+    { "id": "pv-pvc", "front": "PV frente a PVC", "back": "PVC: petición de almacenamiento (con namespace). PV: almacenamiento real (de clúster). Se vinculan 1 a 1." },
+    { "id": "storageclass", "front": "¿Para qué sirve una StorageClass?", "back": "Define un tipo de almacenamiento y su provisioner, que crea discos y PVs automáticamente (aprovisionamiento dinámico)." },
+    { "id": "access-modes", "front": "RWO, ROX, RWX, RWOP", "back": "Escritura desde un Node / lectura desde varios Nodes / escritura desde varios Nodes / escritura desde un solo Pod." },
+    { "id": "reclaim", "front": "`reclaimPolicy` Delete frente a Retain", "back": "Delete (por defecto en dinámico): al borrar el PVC se borra el disco. Retain: el disco se conserva." },
+    { "id": "wffc", "front": "¿Para qué sirve `WaitForFirstConsumer`?", "back": "Retrasa la creación del disco hasta que un Pod lo usa, para crearlo en la zona de ese Pod." }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "exercises": [
+    {
+      "id": "cadena",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Creas un Deployment con `replicas: 3`. ¿Qué objetos existen después en el clúster?",
+      "hints": ["El Deployment no crea Pods directamente: delega en otro objeto."],
+      "options": [
+        { "id": "a", "text": "1 Deployment y 3 Pods", "correct": false, "explanation": "Falta el intermediario que mantiene el número de Pods." },
+        { "id": "b", "text": "1 Deployment, 1 ReplicaSet y 3 Pods", "correct": true, "explanation": "Correcto: Deployment → ReplicaSet → Pods." },
+        { "id": "c", "text": "3 Deployments, uno por Pod", "correct": false, "explanation": "Un solo Deployment gestiona todas las réplicas." }
+      ],
+      "solution": {
+        "answer": "Deployment, ReplicaSet y 3 Pods",
+        "explanation": "El Deployment crea un ReplicaSet por cada versión de la plantilla, y el ReplicaSet mantiene los 3 Pods."
+      }
+    },
+    {
+      "id": "que-dispara-rollout",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Qué cambios en un Deployment **disparan un rollout** (un ReplicaSet nuevo)? (Marca todos los correctos.)",
+      "hints": ["Solo cuenta lo que está dentro de `spec.template`."],
+      "options": [
+        { "id": "a", "text": "Cambiar la imagen del contenedor", "correct": true, "explanation": "Sí: está en la plantilla del Pod." },
+        { "id": "b", "text": "Cambiar `replicas` de 3 a 5", "correct": false, "explanation": "No: solo escala el ReplicaSet actual." },
+        { "id": "c", "text": "Añadir una variable de entorno al contenedor", "correct": true, "explanation": "Sí: está en la plantilla." },
+        { "id": "d", "text": "Cambiar `revisionHistoryLimit`", "correct": false, "explanation": "No: es configuración del Deployment, no de sus Pods." }
+      ],
+      "solution": {
+        "answer": "La imagen y la variable de entorno",
+        "explanation": "Un rollout se dispara solo cuando cambia `spec.template`. Escalar o tocar otros campos del Deployment no crea un ReplicaSet nuevo."
+      }
+    },
+    {
+      "id": "selector-template",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Deployment tiene `selector.matchLabels: {app: web}` y su plantilla tiene `labels: {app: api}`. ¿Qué pasa al aplicarlo?",
+      "hints": ["¿Podría el Deployment reconocer los Pods que él mismo crea?"],
+      "options": [
+        { "id": "a", "text": "Funciona, pero los Pods quedan huérfanos", "correct": false, "explanation": "No llega a crearse: la API lo valida antes." },
+        { "id": "b", "text": "La API lo rechaza porque el selector no coincide con las labels de la plantilla", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Kubernetes corrige las labels automáticamente", "correct": false, "explanation": "Kubernetes no cambia tus labels." }
+      ],
+      "solution": {
+        "answer": "Lo rechaza",
+        "explanation": "Las labels de `spec.template.metadata.labels` deben cumplir `spec.selector`; si no, la API devuelve «selector does not match template labels»."
+      }
+    },
+    {
+      "id": "max-surge",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Deployment tiene `replicas: 4`, `maxSurge: 1` y `maxUnavailable: 0`. Durante un rolling update, ¿cuántos Pods puede haber como máximo a la vez?",
+      "hints": ["maxSurge son los Pods que puede haber **por encima** de replicas."],
+      "options": [
+        { "id": "a", "text": "4", "correct": false, "explanation": "Con maxSurge 1 se permite uno más." },
+        { "id": "b", "text": "5", "correct": true, "explanation": "Correcto: 4 + 1." },
+        { "id": "c", "text": "8", "correct": false, "explanation": "No se duplican todos a la vez." }
+      ],
+      "solution": {
+        "answer": "5",
+        "explanation": "maxSurge 1 permite un Pod extra (5 en total) y maxUnavailable 0 obliga a mantener siempre 4 disponibles: se sube uno nuevo, se espera a que esté listo y se baja uno viejo."
+      }
+    },
+    {
+      "id": "recreate",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "La estrategia `Recreate` actualiza sin cortes de servicio.",
+      "hints": ["¿Qué hace Recreate con los Pods viejos antes de crear los nuevos?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Recreate borra todos los Pods viejos antes de crear los nuevos: hay un corte." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: solo se usa cuando dos versiones no pueden convivir." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Recreate para todo y después arranca la versión nueva. RollingUpdate, la estrategia por defecto, es la que evita cortes."
+      }
+    },
+    {
+      "id": "crear-deployment",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Crea sin YAML un Deployment llamado `web` con la imagen `nginx:1.27` y **3 réplicas**.",
+      "hints": [
+        "Es `kubectl create` seguido del tipo de objeto y su nombre.",
+        "Los flags son `--image` y `--replicas`."
+      ],
+      "accepted": ["kubectl create deployment web --image=nginx:1.27 --replicas=3"],
+      "output": "deployment.apps/web created",
+      "solution": {
+        "answer": "kubectl create deployment web --image=nginx:1.27 --replicas=3",
+        "explanation": "`kubectl create deployment` (alias `deploy`) crea el Deployment; `--image` es obligatorio y `--replicas` (`-r`) fija las réplicas."
+      }
+    },
+    {
+      "id": "escalar",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Escala el Deployment `web` a **5 réplicas**.",
+      "hints": [
+        "El verbo es «escalar» en inglés.",
+        "El número va en el flag `--replicas`."
+      ],
+      "accepted": ["kubectl scale deployment web --replicas=5"],
+      "output": "deployment.apps/web scaled",
+      "solution": {
+        "answer": "kubectl scale deployment web --replicas=5",
+        "explanation": "`kubectl scale` cambia las réplicas del ReplicaSet actual (no es un rollout). También vale `deploy/web`."
+      }
+    },
+    {
+      "id": "nueva-imagen",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Actualiza el contenedor `nginx` del Deployment `web` a la imagen `nginx:1.28`.",
+      "hints": [
+        "Hay un comando para **cambiar** (set) la **imagen** (image).",
+        "El formato del cambio es `CONTENEDOR=IMAGEN`."
+      ],
+      "accepted": ["kubectl set image deployment/web nginx=nginx:1.28"],
+      "output": "deployment.apps/web image updated",
+      "solution": {
+        "answer": "kubectl set image deployment/web nginx=nginx:1.28",
+        "explanation": "`kubectl set image` cambia la imagen en la plantilla del Pod, lo que dispara un rolling update. El contenedor se identifica por su nombre (`nginx=`)."
+      }
+    },
+    {
+      "id": "rollback",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "La versión nueva de `web` falla. Vuelve a la **revisión anterior**.",
+      "hints": [
+        "Es un subcomando de `kubectl rollout`.",
+        "«Deshacer» en inglés."
+      ],
+      "accepted": ["kubectl rollout undo deployment/web"],
+      "output": "deployment.apps/web rolled back",
+      "solution": {
+        "answer": "kubectl rollout undo deployment/web",
+        "explanation": "`kubectl rollout undo` reactiva el ReplicaSet de la revisión anterior. Con `--to-revision=N` vuelves a una concreta; mira las disponibles con `kubectl rollout history`."
+      }
+    },
+    {
+      "id": "estado-rollout",
+      "type": "fill",
+      "language": "shell",
+      "prompt": "Completa el comando que sigue el progreso de la actualización del Deployment `web` hasta que termine.",
+      "template": "kubectl rollout {{sub}} deployment/web",
+      "blanks": [{ "id": "sub", "accepted": ["status"] }],
+      "hints": ["«Estado» en inglés."],
+      "solution": {
+        "answer": "kubectl rollout status deployment/web",
+        "explanation": "`kubectl rollout status` espera y muestra el progreso hasta que el rollout termina o falla. Muy útil en pipelines de despliegue."
+      }
+    },
+    {
+      "id": "manifest-deployment",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el Deployment `api`: 2 réplicas, selector por la label `app: api`, y una plantilla de Pod con esa misma label y un contenedor `api` con la imagen `ghcr.io/tienda/api:2.1.0` que escucha en el puerto 8080.",
+      "starter": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: api\nspec:\n  replicas: \n  selector:\n  template:\n",
+      "assertions": [
+        { "path": "apiVersion", "op": "equals", "value": "apps/v1", "message": "apiVersion es apps/v1" },
+        { "path": "kind", "op": "equals", "value": "Deployment", "message": "kind es Deployment" },
+        { "path": "spec.replicas", "op": "equals", "value": 2, "message": "spec.replicas es el número 2" },
+        { "path": "spec.selector.matchLabels.app", "op": "equals", "value": "api", "message": "El selector usa matchLabels con app: api" },
+        { "path": "spec.template.metadata.labels.app", "op": "equals", "value": "api", "message": "La plantilla tiene la label app: api (spec.template.metadata.labels)" },
+        { "path": "spec.template.spec.containers", "op": "count", "value": 1, "message": "La plantilla tiene un único contenedor (spec.template.spec.containers)" },
+        { "path": "spec.template.spec.containers[0].name", "op": "equals", "value": "api", "message": "El contenedor se llama api" },
+        { "path": "spec.template.spec.containers[0].image", "op": "equals", "value": "ghcr.io/tienda/api:2.1.0", "message": "La imagen es ghcr.io/tienda/api:2.1.0" },
+        { "path": "spec.template.spec.containers[0].ports[*].containerPort", "op": "equals", "value": 8080, "message": "El contenedor declara containerPort: 8080" }
+      ],
+      "hints": [
+        "El selector va así: `selector:` → `matchLabels:` → `app: api`.",
+        "La plantilla es un Pod sin nombre: `template:` → `metadata:` (con `labels`) y `spec:` (con `containers`).",
+        "Cuidado con la indentación: `containers` está dentro de `template.spec`, no de `spec` del Deployment."
+      ],
+      "solution": {
+        "answer": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: api\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: api\n  template:\n    metadata:\n      labels:\n        app: api\n    spec:\n      containers:\n        - name: api\n          image: ghcr.io/tienda/api:2.1.0\n          ports:\n            - containerPort: 8080\n",
+        "explanation": "Hay dos `spec`: el del Deployment (réplicas, selector, plantilla) y el del Pod, dentro de `template`. Las labels de la plantilla deben cumplir el selector para que el Deployment reconozca sus Pods."
+      }
+    }
+  ]
+}

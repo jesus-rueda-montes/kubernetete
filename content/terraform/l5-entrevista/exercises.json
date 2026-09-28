@@ -1,0 +1,168 @@
+{
+  "exercises": [
+    {
+      "id": "state",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuál es la función principal del state de Terraform?",
+      "hints": ["¿Cómo sabe Terraform que el bloque `google_storage_bucket.logs` es un bucket concreto de GCP?"],
+      "options": [
+        { "id": "a", "text": "Relacionar cada recurso del código con el objeto real que gestiona", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Guardar una copia de seguridad del código", "correct": false, "explanation": "El código está en git; el state guarda la relación con la realidad." },
+        { "id": "c", "text": "Acelerar el plan; se puede borrar sin consecuencias", "correct": false, "explanation": "Sin state, Terraform cree que no gestiona nada." }
+      ],
+      "solution": {
+        "answer": "Relacionar código y realidad",
+        "explanation": "Por eso va en un backend remoto con bloqueo y versionado, y con acceso restringido: además guarda valores sensibles."
+      }
+    },
+    {
+      "id": "count-foreach",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes 3 buckets creados con `count` a partir de la lista `[\"a\", \"b\", \"c\"]`. Quitas `\"a\"`. ¿Qué pasa en el plan?",
+      "hints": ["`count` identifica cada copia por su posición."],
+      "options": [
+        { "id": "a", "text": "Los índices se desplazan: se destruyen y recrean buckets que no querías tocar", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Solo se destruye el bucket `a`", "correct": false, "explanation": "Eso pasaría con `for_each`." },
+        { "id": "c", "text": "No cambia nada hasta que hagas `terraform init`", "correct": false, "explanation": "El plan refleja el cambio en la lista." }
+      ],
+      "solution": {
+        "answer": "Se recrean buckets de más",
+        "explanation": "`[0]` pasa a ser `b` y `[1]` pasa a ser `c`. Con `for_each` sobre un set, cada bucket tiene una clave estable y solo se destruye `a`."
+      }
+    },
+    {
+      "id": "lock-file",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "El archivo `.terraform.lock.hcl` se debe añadir a `.gitignore`.",
+      "hints": ["¿Quieres que todo el equipo y el CI usen la misma versión exacta del provider?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Se sube a git." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "Fija la versión exacta y los hashes de cada provider. Lo que se ignora es el directorio `.terraform/`."
+      }
+    },
+    {
+      "id": "revisar-plan",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Revisas un plan en una pull request. ¿Qué símbolo exige más atención?",
+      "hints": ["Uno significa que algo se destruye y se vuelve a crear."],
+      "options": [
+        { "id": "a", "text": "`-/+` (replace)", "correct": true, "explanation": "Correcto: el recurso se destruye y se recrea." },
+        { "id": "b", "text": "`~` (update in-place)", "correct": false, "explanation": "Se modifica sin recrearse; hay que revisarlo, pero es menos arriesgado." },
+        { "id": "c", "text": "`+` (create)", "correct": false, "explanation": "Crear algo nuevo no destruye nada existente." }
+      ],
+      "solution": {
+        "answer": "-/+",
+        "explanation": "Un atributo que fuerza sustitución puede recrear una base de datos. Revisa siempre los destroy y los replace primero."
+      }
+    },
+    {
+      "id": "apply-mitad",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un `apply` que crea 10 recursos falla en el sexto por falta de cuota. ¿Qué ocurre?",
+      "hints": ["¿Terraform deshace lo creado?"],
+      "options": [
+        { "id": "a", "text": "Los 5 creados quedan en el state; tras corregir la cuota, otro apply crea el resto", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Terraform destruye automáticamente los 5 creados (rollback)", "correct": false, "explanation": "Terraform no hace rollback." },
+        { "id": "c", "text": "El state queda vacío y hay que importar los 5", "correct": false, "explanation": "Lo creado se guarda en el state." }
+      ],
+      "solution": {
+        "answer": "Continúa desde donde quedó",
+        "explanation": "No hay transacciones: corrige la causa, lanza `plan` para ver lo que falta y aplica."
+      }
+    },
+    {
+      "id": "opentofu",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué es OpenTofu?",
+      "hints": ["Tiene que ver con el cambio de licencia de Terraform en 2023."],
+      "options": [
+        { "id": "a", "text": "Un fork abierto (MPL 2.0) de Terraform bajo la Linux Foundation", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Un provider de Terraform para bases de datos", "correct": false, "explanation": "Es una herramienta completa, no un provider." },
+        { "id": "c", "text": "La versión de pago de Terraform", "correct": false, "explanation": "Es un proyecto comunitario abierto." }
+      ],
+      "solution": {
+        "answer": "Fork abierto de Terraform",
+        "explanation": "Terraform pasó de MPL 2.0 a BUSL 1.1 desde la versión 1.6. OpenTofu nació como fork con la licencia original."
+      }
+    },
+    {
+      "id": "cmd-unlock",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Has confirmado que el pipeline que tenía el bloqueo `1718035912345678` está cancelado. Libera el bloqueo del state.",
+      "hints": [
+        "Es `terraform force-unlock`.",
+        "Recibe el ID del bloqueo como argumento."
+      ],
+      "accepted": ["terraform force-unlock 1718035912345678", "terraform force-unlock -force 1718035912345678"],
+      "output": "Do you really want to force-unlock?\n  Terraform will remove the lock on the remote state.\n  This will allow local Terraform commands to modify this state, even though it\n  may still be in use. Only 'yes' will be accepted to confirm.\n\n  Enter a value: yes\n\nTerraform state has been successfully unlocked!",
+      "solution": {
+        "answer": "terraform force-unlock 1718035912345678",
+        "explanation": "Solo tras confirmar que nadie está aplicando: dos escrituras simultáneas pueden corromper el state."
+      }
+    },
+    {
+      "id": "cmd-refresh-only",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Sospechas que alguien cambió recursos a mano. Muestra solo los cambios hechos fuera de Terraform, sin proponer cambios en la infraestructura.",
+      "hints": [
+        "Es un modo especial de `terraform plan`.",
+        "El flag es `-refresh-only`."
+      ],
+      "accepted": ["terraform plan -refresh-only"],
+      "output": "Note: Objects have changed outside of Terraform\n\nTerraform detected the following changes made outside of Terraform since the\nlast \"terraform apply\":\n\n  # google_compute_firewall.ssh has changed\n  ~ resource \"google_compute_firewall\" \"ssh\" {\n      ~ source_ranges = [\n          + \"0.0.0.0/0\",\n            \"35.235.240.0/20\",\n        ]\n    }",
+      "solution": {
+        "answer": "terraform plan -refresh-only",
+        "explanation": "Alguien abrió SSH a Internet. Aquí lo correcto es revertirlo con un `apply` normal, que vuelve a dejarlo como en el código."
+      }
+    },
+    {
+      "id": "cmd-replace",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "La VM `google_compute_instance.web` está corrupta. Fuerza su sustitución al aplicar.",
+      "hints": [
+        "Es `terraform apply` con un flag.",
+        "`-replace=DIRECCIÓN`."
+      ],
+      "accepted": ["terraform apply -replace=google_compute_instance.web", "terraform apply -replace google_compute_instance.web"],
+      "output": "  # google_compute_instance.web will be replaced, as requested\n-/+ resource \"google_compute_instance\" \"web\" {\n      ...\n    }\n\nPlan: 1 to add, 0 to change, 1 to destroy.",
+      "solution": {
+        "answer": "terraform apply -replace=google_compute_instance.web",
+        "explanation": "Sustituye al antiguo `terraform taint`, y el reemplazo se ve en el plan antes de confirmar."
+      }
+    },
+    {
+      "id": "editor-moved",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Has renombrado el recurso `google_storage_bucket.logs` a `google_storage_bucket.registros`. Añade el bloque que evita que Terraform destruya y recree el bucket.",
+      "starter": "resource \"google_storage_bucket\" \"registros\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n",
+      "assertions": [
+        { "path": "moved", "op": "count", "value": 1, "message": "Hay un bloque moved" },
+        { "path": "moved[0].from", "op": "equals", "value": "google_storage_bucket.logs", "message": "from = google_storage_bucket.logs (sin comillas)" },
+        { "path": "moved[0].to", "op": "equals", "value": "google_storage_bucket.registros", "message": "to = google_storage_bucket.registros (sin comillas)" },
+        { "path": "resource.google_storage_bucket.registros[0].name", "op": "equals", "value": "tienda-logs", "message": "El recurso registros se mantiene igual" }
+      ],
+      "hints": [
+        "El bloque se llama `moved` y no lleva etiquetas.",
+        "Dentro: `from` (la dirección antigua) y `to` (la nueva), sin comillas."
+      ],
+      "solution": {
+        "answer": "resource \"google_storage_bucket\" \"registros\" {\n  name     = \"tienda-logs\"\n  location = \"EU\"\n}\n\nmoved {\n  from = google_storage_bucket.logs\n  to   = google_storage_bucket.registros\n}\n",
+        "explanation": "El plan mostrará «has moved to» y 0 to destroy: el bucket y sus datos no se tocan."
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Troubleshooting",
+  "summary": "Un método para depurar cualquier problema del clúster: Pods en Pending, ImagePullBackOff, CrashLoopBackOff u OOMKilled; Services sin endpoints, DNS y NetworkPolicies; nodos NotReady; y kubectl events y kubectl debug.",
+  "level": 5,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

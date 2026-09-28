@@ -1,0 +1,137 @@
+{
+  "exercises": [
+    {
+      "id": "required-vs-preferred",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod tiene una node affinity `requiredDuringSchedulingIgnoredDuringExecution` que ningún Node cumple. ¿Qué pasa?",
+      "hints": ["«Required» es obligatoria."],
+      "options": [
+        { "id": "a", "text": "Se coloca en cualquier Node", "correct": false, "explanation": "Eso pasaría con una preferencia (preferred)." },
+        { "id": "b", "text": "Se queda en Pending", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Kubernetes añade la label a un Node", "correct": false, "explanation": "Kubernetes no cambia las labels de tus Nodes." }
+      ],
+      "solution": {
+        "answer": "Pending",
+        "explanation": "Una regla required es obligatoria: sin Nodes que la cumplan, el Pod no se programa. `kubectl describe pod` lo explica en los eventos."
+      }
+    },
+    {
+      "id": "ignored-during-execution",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si quitas a un Node la label que exigía la node affinity de un Pod ya en marcha, Kubernetes desaloja ese Pod.",
+      "hints": ["Fíjate en el final del nombre: …IgnoredDuringExecution."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "La regla solo se evalúa al programar." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: el Pod sigue donde está." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "IgnoredDuringExecution significa que, una vez programado, el Pod no se mueve aunque cambien las labels del Node."
+      }
+    },
+    {
+      "id": "repartir-zonas",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que las réplicas de `app: web` **prefieran** estar en zonas distintas. ¿Qué configuras?",
+      "hints": ["Se trata de separarse de otros Pods iguales, dentro del dominio «zona»."],
+      "options": [
+        { "id": "a", "text": "podAntiAffinity preferred con labelSelector `app: web` y `topologyKey: topology.kubernetes.io/zone`", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "podAffinity con `topologyKey: kubernetes.io/hostname`", "correct": false, "explanation": "Eso las juntaría en el mismo Node." },
+        { "id": "c", "text": "Un taint en cada zona", "correct": false, "explanation": "Los taints repelen Pods; no los reparten." }
+      ],
+      "solution": {
+        "answer": "podAntiAffinity por zona",
+        "explanation": "La antiafinidad con las labels de la propia app y `topologyKey` de zona separa las réplicas. Como preferencia, no deja Pods en Pending si hay más réplicas que zonas."
+      }
+    },
+    {
+      "id": "toleration-no-obliga",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un Pod tiene una toleration para el taint `gpu=true:NoSchedule` de los Nodes con GPU, y nada más. ¿Dónde puede acabar?",
+      "hints": ["Una toleration permite; ¿obliga?"],
+      "options": [
+        { "id": "a", "text": "Solo en Nodes con GPU", "correct": false, "explanation": "Para eso hace falta además afinidad o nodeSelector." },
+        { "id": "b", "text": "En Nodes con GPU o en cualquier otro Node", "correct": true, "explanation": "Correcto: la toleration solo le permite entrar en los Nodes con taint." },
+        { "id": "c", "text": "En ningún Node", "correct": false, "explanation": "Sí puede programarse." }
+      ],
+      "solution": {
+        "answer": "En cualquiera",
+        "explanation": "La toleration permite ir a Nodes con ese taint, pero no le obliga. Para dedicarlos: taint + toleration + afinidad/nodeSelector."
+      }
+    },
+    {
+      "id": "noexecute",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Añades un taint con efecto `NoExecute` a un Node. ¿Qué pasa con los Pods que ya corren en él y no lo toleran?",
+      "hints": ["«Execute»: afecta también a lo que ya se está ejecutando."],
+      "options": [
+        { "id": "a", "text": "Se quedan", "correct": false, "explanation": "Eso pasaría con NoSchedule." },
+        { "id": "b", "text": "Se desalojan", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Se reinician en el mismo Node", "correct": false, "explanation": "No pueden seguir en ese Node." }
+      ],
+      "solution": {
+        "answer": "Se desalojan",
+        "explanation": "NoExecute impide programar Pods nuevos y desaloja los que ya están si no lo toleran (o cuando vence su `tolerationSeconds`)."
+      }
+    },
+    {
+      "id": "taint-nodo",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Añade al Node `nodo-gpu-1` un taint con clave `gpu`, valor `true` y efecto `NoSchedule`.",
+      "hints": [
+        "El verbo es `kubectl taint nodes <node>`.",
+        "Formato del taint: `clave=valor:Efecto`."
+      ],
+      "accepted": ["kubectl taint nodes nodo-gpu-1 gpu=true:NoSchedule"],
+      "output": "node/nodo-gpu-1 tainted",
+      "solution": {
+        "answer": "kubectl taint nodes nodo-gpu-1 gpu=true:NoSchedule",
+        "explanation": "Para quitarlo, el mismo taint con un guion al final: `gpu=true:NoSchedule-`."
+      }
+    },
+    {
+      "id": "drain",
+      "type": "command",
+      "cli": "kubectl",
+      "prompt": "Vacía el Node `nodo-2` para mantenimiento. Tiene Pods de DaemonSets, que deben ignorarse.",
+      "hints": [
+        "El verbo significa «vaciar, drenar».",
+        "El flag para ignorar los DaemonSets es `--ignore-daemonsets`."
+      ],
+      "accepted": ["kubectl drain nodo-2 --ignore-daemonsets"],
+      "output": "node/nodo-2 cordoned\nWarning: ignoring DaemonSet-managed Pods: kube-system/kube-proxy-q2w9d\nevicting pod default/web-7d9c6b5f4-2xk8p\npod/web-7d9c6b5f4-2xk8p evicted\nnode/nodo-2 drained",
+      "solution": {
+        "answer": "kubectl drain nodo-2 --ignore-daemonsets",
+        "explanation": "`drain` marca el Node como no programable (cordon) y desaloja sus Pods. Al terminar el mantenimiento: `kubectl uncordon nodo-2`."
+      }
+    },
+    {
+      "id": "manifest-toleration",
+      "type": "editor",
+      "language": "yaml",
+      "prompt": "Completa el Pod `entrenamiento` para que **solo** pueda ir a Nodes con GPU: una toleration para el taint `gpu=true:NoSchedule` (operator `Equal`) y un `nodeSelector` con `gpu: \"true\"`.",
+      "starter": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: entrenamiento\nspec:\n  containers:\n    - name: entrenamiento\n      image: ghcr.io/tienda/ml:0.4.0\n",
+      "assertions": [
+        { "path": "spec.tolerations[key=gpu].operator", "op": "equals", "value": "Equal", "message": "Hay una toleration con key: gpu y operator: Equal" },
+        { "path": "spec.tolerations[key=gpu].value", "op": "equals", "value": "true", "message": "La toleration tiene value: \"true\" (texto, entre comillas)" },
+        { "path": "spec.tolerations[key=gpu].effect", "op": "equals", "value": "NoSchedule", "message": "La toleration tiene effect: NoSchedule" },
+        { "path": "spec.nodeSelector.gpu", "op": "equals", "value": "true", "message": "nodeSelector con gpu: \"true\" (texto, entre comillas)" }
+      ],
+      "hints": [
+        "`tolerations` y `nodeSelector` van en el `spec` del Pod, al nivel de `containers`.",
+        "`tolerations` es una lista: `- key: gpu` y debajo `operator`, `value` y `effect`.",
+        "Los valores de labels y tolerations son textos: `\"true\"` entre comillas."
+      ],
+      "solution": {
+        "answer": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: entrenamiento\nspec:\n  tolerations:\n    - key: gpu\n      operator: Equal\n      value: \"true\"\n      effect: NoSchedule\n  nodeSelector:\n    gpu: \"true\"\n  containers:\n    - name: entrenamiento\n      image: ghcr.io/tienda/ml:0.4.0\n",
+        "explanation": "La toleration le permite entrar en los Nodes con el taint; el `nodeSelector` hace que solo vaya a ellos. Sin comillas, `true` sería un booleano y no coincidiría con el texto de la label."
+      }
+    }
+  ]
+}

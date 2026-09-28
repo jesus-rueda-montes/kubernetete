@@ -1,0 +1,8 @@
+{
+  "title": "Tu primer recurso con Terraform",
+  "summary": "Qué es la infraestructura como código, la anatomía de un archivo .tf y el ciclo init → plan → apply.",
+  "level": 1,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

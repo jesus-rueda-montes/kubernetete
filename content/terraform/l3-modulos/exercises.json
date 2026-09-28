@@ -1,0 +1,168 @@
+{
+  "exercises": [
+    {
+      "id": "raiz-hijo",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Ejecutas `terraform plan` en el directorio `entornos/pro`, que llama a `../../modules/bucket`. ¿Qué es cada uno?",
+      "hints": ["El módulo raíz es el directorio donde ejecutas Terraform."],
+      "options": [
+        { "id": "a", "text": "`entornos/pro` es el módulo raíz y `modules/bucket` un módulo hijo", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "`modules/bucket` es el módulo raíz porque es el que define recursos", "correct": false, "explanation": "La raíz no depende de dónde estén los recursos, sino de dónde ejecutas Terraform." },
+        { "id": "c", "text": "Ninguno es un módulo: los módulos solo vienen del Registry", "correct": false, "explanation": "Cualquier directorio con archivos `.tf` es un módulo." }
+      ],
+      "solution": {
+        "answer": "entornos/pro es el raíz",
+        "explanation": "El directorio donde ejecutas Terraform es el módulo raíz. Los que llama con bloques `module` son módulos hijos, estén donde estén."
+      }
+    },
+    {
+      "id": "leer-interno",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "El módulo `logs` crea `google_storage_bucket.this` pero no tiene ningún output. Desde el módulo raíz necesitas el nombre del bucket. ¿Qué haces?",
+      "hints": ["Desde fuera de un módulo, ¿qué se puede leer?"],
+      "options": [
+        { "id": "a", "text": "Usar `module.logs.google_storage_bucket.this.name`", "correct": false, "explanation": "Los recursos internos no son accesibles desde fuera." },
+        { "id": "b", "text": "Añadir al módulo un output con el nombre y leerlo con `module.logs.NOMBRE_DEL_OUTPUT`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Declarar en el raíz otro `google_storage_bucket` con el mismo nombre", "correct": false, "explanation": "Eso intentaría crear un segundo bucket." }
+      ],
+      "solution": {
+        "answer": "Añadir un output al módulo",
+        "explanation": "Los outputs son la interfaz de salida del módulo. Todo lo que no se expone como output queda oculto."
+      }
+    },
+    {
+      "id": "ruta-sin-punto",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Escribes `source = \"modules/bucket\"` y `terraform init` falla. ¿Por qué?",
+      "hints": ["¿Cómo distingue Terraform una ruta local de una dirección del Registry?"],
+      "options": [
+        { "id": "a", "text": "Sin `./` delante, Terraform lo interpreta como una dirección del Registry", "correct": true, "explanation": "Correcto: debe ser `./modules/bucket`." },
+        { "id": "b", "text": "Los módulos locales tienen que estar en el mismo directorio", "correct": false, "explanation": "Pueden estar en cualquier ruta relativa, también con `../`." },
+        { "id": "c", "text": "Falta el argumento `version`", "correct": false, "explanation": "Los módulos locales no admiten `version`." }
+      ],
+      "solution": {
+        "answer": "Falta ./",
+        "explanation": "Las rutas locales deben empezar por `./` o `../`. Sin eso, Terraform busca un módulo del Registry con esa dirección."
+      }
+    },
+    {
+      "id": "version-git",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tu módulo interno está en un repositorio git y quieres usar la etiqueta `v1.4.0`. ¿Cómo lo indicas?",
+      "hints": ["El argumento `version` solo sirve para módulos de un registry."],
+      "options": [
+        { "id": "a", "text": "`version = \"1.4.0\"`", "correct": false, "explanation": "Terraform no acepta `version` con fuentes git." },
+        { "id": "b", "text": "`?ref=v1.4.0` al final de la URL de `source`", "correct": true, "explanation": "Correcto." },
+        { "id": "c", "text": "Con `terraform init -upgrade`", "correct": false, "explanation": "Eso busca la versión más nueva permitida; no elige una etiqueta." }
+      ],
+      "solution": {
+        "answer": "?ref=v1.4.0",
+        "explanation": "En fuentes git, `?ref=` elige una etiqueta, rama o commit. Mejor una etiqueta o un commit que una rama, porque no cambian."
+      }
+    },
+    {
+      "id": "tilde",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "Un módulo tiene `version = \"~> 5.1\"`. ¿Qué versiones puede instalar Terraform?",
+      "hints": ["`~>` deja subir solo la última cifra que escribes."],
+      "options": [
+        { "id": "a", "text": "5.1.0", "correct": true, "explanation": "Es el mínimo." },
+        { "id": "b", "text": "5.4.2", "correct": true, "explanation": "Sigue siendo 5.x y es mayor que 5.1." },
+        { "id": "c", "text": "6.0.0", "correct": false, "explanation": "`~> 5.1` no deja cambiar la versión mayor." },
+        { "id": "d", "text": "5.0.9", "correct": false, "explanation": "Es menor que 5.1." }
+      ],
+      "solution": {
+        "answer": "5.1.0 y 5.4.2",
+        "explanation": "`~> 5.1` equivale a `>= 5.1, < 6.0`. Si escribes `~> 5.1.0`, solo admite 5.1.x."
+      }
+    },
+    {
+      "id": "lock-modulos",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "El archivo `.terraform.lock.hcl` guarda la versión exacta de los módulos del Registry para que todo el equipo use la misma.",
+      "hints": ["¿Qué tipo de dependencias registra ese archivo?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Solo registra providers." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "El lock file solo registra providers. Terraform no recuerda qué versión de un módulo eligió: siempre coge la más nueva que permita la restricción. Para fijarla del todo, pon una versión exacta."
+      }
+    },
+    {
+      "id": "init-upgrade",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Has cambiado la restricción de un módulo de `~> 17.0` a `~> 18.0`. Ejecuta el comando que descarga la versión más nueva permitida.",
+      "hints": [
+        "Los módulos se instalan con el mismo comando que los providers.",
+        "Es `terraform init` con un flag para actualizar."
+      ],
+      "accepted": ["terraform init -upgrade"],
+      "output": "Upgrading modules...\nDownloading registry.terraform.io/terraform-google-modules/network/google 18.3.0 for red...\n- red in .terraform/modules/red\n\nInitializing the backend...\n\nTerraform has been successfully initialized!",
+      "solution": {
+        "answer": "terraform init -upgrade",
+        "explanation": "`-upgrade` busca las versiones más nuevas que permitan las restricciones, tanto de módulos como de providers. Después, revisa el plan antes de aplicar."
+      }
+    },
+    {
+      "id": "plan-modulo",
+      "type": "command",
+      "cli": "terraform",
+      "prompt": "Solo quieres ver el plan de los recursos del módulo `logs`. Usa el flag que limita el plan a una dirección.",
+      "hints": [
+        "Es un `terraform plan` con un flag que apunta a un objetivo.",
+        "El flag es `-target=` y la dirección de un módulo empieza por `module.`."
+      ],
+      "accepted": ["terraform plan -target=module.logs"],
+      "output": "  # module.logs.google_storage_bucket.this will be created\n  + resource \"google_storage_bucket\" \"this\" {\n      + name     = \"tienda-logs\"\n      ...\n    }\n\nPlan: 1 to add, 0 to change, 0 to destroy.\n\nWarning: Resource targeting is in effect",
+      "solution": {
+        "answer": "terraform plan -target=module.logs",
+        "explanation": "Los recursos de un módulo tienen direcciones `module.NOMBRE.TIPO.NOMBRE`, y `-target=module.logs` los incluye todos. Es para casos puntuales: lo normal es planificar toda la configuración."
+      }
+    },
+    {
+      "id": "fill-source",
+      "type": "fill",
+      "language": "hcl",
+      "prompt": "Completa la llamada al módulo local que está en el directorio `modules/bucket`, junto al módulo raíz.",
+      "template": "module \"logs\" {\n  source = \"{{ruta}}\"\n  nombre = \"tienda-logs\"\n}",
+      "blanks": [{ "id": "ruta", "accepted": ["./modules/bucket", "./modules/bucket/"] }],
+      "hints": ["Una ruta local debe empezar por `./` o `../`."],
+      "solution": {
+        "answer": "./modules/bucket",
+        "explanation": "El `./` indica a Terraform que es una ruta local y no una dirección del Registry."
+      }
+    },
+    {
+      "id": "llamar-modulo",
+      "type": "editor",
+      "language": "hcl",
+      "prompt": "Llama al módulo local `./modules/bucket` con el nombre de instancia `backups`, pasándole `nombre = \"tienda-backups\"` y `location = \"europe-west1\"`. Añade un output `url_backups` cuyo valor sea el output `url` de ese módulo.",
+      "starter": "# Llama aquí al módulo y declara el output\n",
+      "assertions": [
+        { "path": "module.backups", "op": "count", "value": 1, "message": "Hay un bloque module \"backups\"" },
+        { "path": "module.backups[0].source", "op": "equals", "value": "./modules/bucket", "message": "source = \"./modules/bucket\"" },
+        { "path": "module.backups[0].nombre", "op": "equals", "value": "tienda-backups", "message": "nombre = \"tienda-backups\"" },
+        { "path": "module.backups[0].location", "op": "equals", "value": "europe-west1", "message": "location = \"europe-west1\"" },
+        { "path": "output.url_backups[0].value", "op": "equals", "value": "module.backups.url", "message": "El output url_backups vale module.backups.url (sin comillas)" }
+      ],
+      "hints": [
+        "El bloque es `module \"backups\" { ... }` con `source` y los valores de las variables.",
+        "Las salidas de un módulo se leen con `module.NOMBRE.OUTPUT`.",
+        "El output: `output \"url_backups\" { value = module.backups.url }`."
+      ],
+      "solution": {
+        "answer": "module \"backups\" {\n  source   = \"./modules/bucket\"\n  nombre   = \"tienda-backups\"\n  location = \"europe-west1\"\n}\n\noutput \"url_backups\" {\n  value = module.backups.url\n}\n",
+        "explanation": "Los argumentos del bloque `module` rellenan las variables del módulo, y `module.backups.url` lee su output `url`. Va sin comillas: es una referencia, no un texto."
+      }
+    }
+  ]
+}

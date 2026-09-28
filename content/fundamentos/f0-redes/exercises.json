@@ -1,0 +1,134 @@
+{
+  "exercises": [
+    {
+      "id": "cidr-24",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Cuántas direcciones IP contiene el rango `10.0.1.0/24`?",
+      "hints": ["Son 2 elevado a (32 − prefijo)."],
+      "options": [
+        { "id": "a", "text": "24", "correct": false, "explanation": "24 es el prefijo (bits fijos), no el número de direcciones." },
+        { "id": "b", "text": "256", "correct": true, "explanation": "Correcto: 2^(32−24) = 2^8 = 256." },
+        { "id": "c", "text": "65 536", "correct": false, "explanation": "Eso sería un /16." }
+      ],
+      "solution": {
+        "answer": "256",
+        "explanation": "Quedan 8 bits libres: 2^8 = 256 direcciones, de `10.0.1.0` a `10.0.1.255`. En GCP, 252 serían utilizables (se reservan 4)."
+      }
+    },
+    {
+      "id": "prefijo-mayor",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Una subred `/28` es **más grande** (tiene más direcciones) que una `/24`.",
+      "hints": ["Cuantos más bits fijos, menos bits quedan para los hosts."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Al revés: /28 tiene 16 direcciones y /24 tiene 256." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: mayor prefijo = red más pequeña." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "/28 → 2^4 = 16 direcciones; /24 → 2^8 = 256. Cuanto mayor el número tras la barra, más pequeña la red."
+      }
+    },
+    {
+      "id": "ip-privada",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles de estas IPs son **privadas** (RFC 1918)?",
+      "hints": ["Los rangos privados son 10.0.0.0/8, 172.16.0.0/12 y 192.168.0.0/16."],
+      "options": [
+        { "id": "a", "text": "`10.20.30.40`", "correct": true, "explanation": "Sí: dentro de 10.0.0.0/8." },
+        { "id": "b", "text": "`172.20.1.1`", "correct": true, "explanation": "Sí: 172.16.0.0/12 va de 172.16.0.0 a 172.31.255.255." },
+        { "id": "c", "text": "`192.168.1.10`", "correct": true, "explanation": "Sí: dentro de 192.168.0.0/16." },
+        { "id": "d", "text": "`8.8.8.8`", "correct": false, "explanation": "No: es pública (un servidor DNS de Google)." },
+        { "id": "e", "text": "`172.40.1.1`", "correct": false, "explanation": "No: 172.40 queda fuera de 172.16.0.0/12." }
+      ],
+      "solution": {
+        "answer": "10.20.30.40, 172.20.1.1 y 192.168.1.10",
+        "explanation": "Los rangos privados son 10.0.0.0/8, 172.16.0.0/12 (172.16–172.31) y 192.168.0.0/16."
+      }
+    },
+    {
+      "id": "puertos",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En un firewall quieres permitir solo el tráfico web **cifrado**. ¿Qué puerto TCP abres?",
+      "hints": ["HTTP va por un puerto y HTTPS por otro."],
+      "options": [
+        { "id": "a", "text": "22", "correct": false, "explanation": "22 es SSH." },
+        { "id": "b", "text": "80", "correct": false, "explanation": "80 es HTTP sin cifrar." },
+        { "id": "c", "text": "443", "correct": true, "explanation": "Correcto: HTTPS." },
+        { "id": "d", "text": "53", "correct": false, "explanation": "53 es DNS." }
+      ],
+      "solution": {
+        "answer": "443",
+        "explanation": "HTTPS (HTTP sobre TLS) usa el puerto 443; HTTP sin cifrar, el 80."
+      }
+    },
+    {
+      "id": "tcp-udp",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "¿Qué protocolo usa principalmente el DNS para las consultas normales, por ser rápido y no necesitar conexión?",
+      "hints": ["Uno garantiza entrega y orden; el otro no, pero tiene menos latencia."],
+      "options": [
+        { "id": "a", "text": "TCP", "correct": false, "explanation": "DNS puede usar TCP en casos concretos (respuestas grandes), pero la consulta normal es UDP." },
+        { "id": "b", "text": "UDP", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "UDP",
+        "explanation": "Las consultas DNS normales van por UDP al puerto 53: una pregunta, una respuesta, sin establecer conexión."
+      }
+    },
+    {
+      "id": "401-403",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Te identificas correctamente en una API, pero al pedir un recurso de otro usuario recibes un error porque no tienes permiso. ¿Qué código es el adecuado?",
+      "hints": ["Uno significa «no sé quién eres»; el otro, «sé quién eres, pero no puedes»."],
+      "options": [
+        { "id": "a", "text": "401 Unauthorized", "correct": false, "explanation": "401 es para peticiones sin autenticar." },
+        { "id": "b", "text": "403 Forbidden", "correct": true, "explanation": "Correcto: autenticado pero sin permiso." },
+        { "id": "c", "text": "404 Not Found", "correct": false, "explanation": "404 significa que el recurso no existe." },
+        { "id": "d", "text": "500 Internal Server Error", "correct": false, "explanation": "500 es un fallo del servidor." }
+      ],
+      "solution": {
+        "answer": "403",
+        "explanation": "401: no autenticado. 403: autenticado, pero sin permiso para ese recurso."
+      }
+    },
+    {
+      "id": "error-502",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tras un despliegue, los usuarios reciben **502 Bad Gateway** del load balancer. ¿Dónde miras primero?",
+      "hints": ["El load balancer es la «puerta»: ¿quién no le está respondiendo bien?"],
+      "options": [
+        { "id": "a", "text": "En el DNS", "correct": false, "explanation": "Si el DNS fallara, el usuario no llegaría al load balancer." },
+        { "id": "b", "text": "En los backends: si arrancan, escuchan en el puerto correcto y pasan el health check", "correct": true, "explanation": "Correcto: un 502 suele indicar una respuesta inválida o ausente del backend." },
+        { "id": "c", "text": "En el navegador del usuario", "correct": false, "explanation": "Los 5xx son errores del lado del servidor." }
+      ],
+      "solution": {
+        "answer": "Los backends",
+        "explanation": "Un 502 lo genera un proxy o load balancer que no obtiene una respuesta válida de la aplicación de detrás. Revisa si la app arrancó, su puerto y el health check."
+      }
+    },
+    {
+      "id": "registro-dns",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que `www.example.com` sea un alias de `tienda.example.com`. ¿Qué tipo de registro DNS creas?",
+      "hints": ["Un registro apunta a una IP; otro, a otro nombre."],
+      "options": [
+        { "id": "a", "text": "A", "correct": false, "explanation": "A apunta a una IPv4, no a otro nombre." },
+        { "id": "b", "text": "CNAME", "correct": true, "explanation": "Correcto: un alias de otro nombre." },
+        { "id": "c", "text": "MX", "correct": false, "explanation": "MX indica los servidores de correo." }
+      ],
+      "solution": {
+        "answer": "CNAME",
+        "explanation": "CNAME hace que un nombre sea alias de otro; A asigna una IPv4 a un nombre."
+      }
+    }
+  ]
+}

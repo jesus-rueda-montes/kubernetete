@@ -1,0 +1,8 @@
+{
+  "title": "YAML sin miedo",
+  "summary": "Mapas, listas, tipos e indentación: el formato de Kubernetes y Ansible, y sus trampas.",
+  "level": 0,
+  "order": 3,
+  "xp": 50,
+  "prereqs": []
+}

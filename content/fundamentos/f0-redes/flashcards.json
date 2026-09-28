@@ -1,0 +1,12 @@
+{
+  "cards": [
+    { "id": "rfc1918", "front": "Rangos de IPs privadas (RFC 1918)", "back": "`10.0.0.0/8`, `172.16.0.0/12` y `192.168.0.0/16`." },
+    { "id": "cidr-formula", "front": "¿Cuántas direcciones tiene un bloque `/n`?", "back": "2^(32 − n). Ejemplos: /24 = 256, /28 = 16, /16 = 65 536." },
+    { "id": "gcp-reservadas", "front": "¿Cuántas IPs reserva GCP en cada subred?", "back": "4: la de red, la de la puerta de enlace, la penúltima y la de broadcast." },
+    { "id": "puertos", "front": "Puertos de SSH, HTTP, HTTPS, DNS y PostgreSQL", "back": "22, 80, 443, 53 y 5432." },
+    { "id": "tcp-udp", "front": "TCP frente a UDP", "back": "TCP: con conexión, fiable y ordenado (web, SSH). UDP: sin conexión ni garantías, más rápido (DNS, streaming)." },
+    { "id": "http-familias", "front": "Familias de códigos HTTP", "back": "2xx éxito, 3xx redirección, 4xx error del cliente, 5xx error del servidor." },
+    { "id": "401-403", "front": "401 frente a 403", "back": "401: no autenticado. 403: autenticado pero sin permiso." },
+    { "id": "l4-l7", "front": "Load balancer de capa 4 frente a capa 7", "back": "Capa 4: reparte por IP y puerto. Capa 7: entiende HTTP (rutas, hosts, cabeceras, TLS)." }
+  ]
+}

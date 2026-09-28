@@ -1,0 +1,14 @@
+{
+  "cards": [
+    { "id": "por-defecto", "front": "Tráfico entre Pods sin NetworkPolicies", "back": "Todo permitido: cualquier Pod habla con cualquier Pod, en cualquier namespace." },
+    { "id": "plugin", "front": "¿Qué necesita una NetworkPolicy para funcionar?", "back": "Un plugin de red que las aplique (Calico, Cilium, GKE Dataplane V2). Si no, se ignoran sin error." },
+    { "id": "aislado", "front": "¿Cuándo queda aislado un Pod?", "back": "Cuando una política lo selecciona con Ingress (o Egress) en policyTypes: solo pasa lo que alguna política permita." },
+    { "id": "suman", "front": "Varias NetworkPolicies sobre el mismo Pod", "back": "Se suman: se permite todo lo que permita cualquiera. No hay reglas de denegar." },
+    { "id": "deny", "front": "Política de denegar toda la entrada en un namespace", "back": "`podSelector: {}` + `policyTypes: [Ingress]` sin reglas `ingress`." },
+    { "id": "selectores", "front": "podSelector, namespaceSelector e ipBlock en from/to", "back": "Pods de mi namespace; todos los Pods de ciertos namespaces; rangos de IPs (tráfico externo)." },
+    { "id": "and-or", "front": "namespaceSelector y podSelector: ¿AND u OR?", "back": "En el mismo elemento: AND. En elementos separados (dos guiones): OR." },
+    { "id": "ns-label", "front": "Label automática de cada namespace", "back": "`kubernetes.io/metadata.name: NOMBRE`." },
+    { "id": "dns", "front": "¿Qué rompe una política de egress sin excepciones?", "back": "El DNS. Permite la salida al puerto 53 (UDP y TCP) de CoreDNS (`k8s-app: kube-dns` en kube-system)." },
+    { "id": "dos-puntas", "front": "Conexión de A a B con políticas", "back": "Debe permitirla la salida de A (si está aislado para egress) y la entrada de B (si está aislado para ingress)." }
+  ]
+}

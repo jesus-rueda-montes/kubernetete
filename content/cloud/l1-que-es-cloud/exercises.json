@@ -1,0 +1,104 @@
+{
+  "exercises": [
+    {
+      "id": "caracteristicas-nist",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles de estas son **características esenciales** de la nube según el NIST?",
+      "hints": [
+        "Son cinco: tienen que ver con cómo se piden, se comparten, se escalan y se pagan los recursos.",
+        "El precio bajo o la ubicación del proveedor no forman parte de la definición."
+      ],
+      "options": [
+        { "id": "a", "text": "Autoservicio bajo demanda", "correct": true, "explanation": "Sí: creas recursos tú mismo, sin intermediarios." },
+        { "id": "b", "text": "Elasticidad rápida", "correct": true, "explanation": "Sí: crecer y encoger en minutos." },
+        { "id": "c", "text": "Siempre más barata que un centro de datos propio", "correct": false, "explanation": "No: el coste depende de cómo la uses. No es parte de la definición." },
+        { "id": "d", "text": "Servicio medido (pago por uso)", "correct": true, "explanation": "Sí: el consumo se mide y se factura." },
+        { "id": "e", "text": "Los servidores están en otro país", "correct": false, "explanation": "No: la ubicación no define la nube; puedes elegir la región." }
+      ],
+      "solution": {
+        "answer": "Autoservicio, elasticidad y servicio medido",
+        "explanation": "Las cinco características del NIST son: autoservicio bajo demanda, acceso amplio por red, recursos compartidos, elasticidad rápida y servicio medido."
+      }
+    },
+    {
+      "id": "capex-opex",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una empresa deja de comprar servidores cada 3 años y pasa a pagar cada mes lo que consume en la nube. ¿Cómo se describe ese cambio?",
+      "hints": ["Uno de los dos términos es «gasto de inversión» y el otro «gasto operativo»."],
+      "options": [
+        { "id": "a", "text": "De OpEx a CapEx", "correct": false, "explanation": "Al revés: comprar servidores es inversión (CapEx)." },
+        { "id": "b", "text": "De CapEx a OpEx", "correct": true, "explanation": "Correcto: pasa de invertir por adelantado a pagar por uso." },
+        { "id": "c", "text": "De SaaS a IaaS", "correct": false, "explanation": "Esos son modelos de servicio, no tipos de gasto." }
+      ],
+      "solution": {
+        "answer": "De CapEx a OpEx",
+        "explanation": "CapEx es gasto de inversión (comprar hardware); OpEx es gasto operativo (pagar por consumo). La nube convierte gran parte del primero en el segundo."
+      }
+    },
+    {
+      "id": "clasificar-cloud-run",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Subes una imagen de contenedor a **Cloud Run** y Google se encarga de servidores, sistema operativo y escalado. ¿Qué modelo de servicio es?",
+      "hints": ["¿Gestionas tú el sistema operativo? ¿Y la aplicación?"],
+      "options": [
+        { "id": "a", "text": "IaaS", "correct": false, "explanation": "En IaaS gestionarías tú la VM y su sistema operativo." },
+        { "id": "b", "text": "PaaS (serverless)", "correct": true, "explanation": "Correcto: tú aportas la aplicación; la plataforma gestiona el resto." },
+        { "id": "c", "text": "SaaS", "correct": false, "explanation": "En SaaS usarías una aplicación terminada, no desplegarías la tuya." }
+      ],
+      "solution": {
+        "answer": "PaaS",
+        "explanation": "Cloud Run es una plataforma gestionada (serverless): despliegas tu contenedor y Google gestiona infraestructura, sistema operativo y escalado."
+      }
+    },
+    {
+      "id": "responsabilidad-parches",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Tienes una máquina virtual en **Compute Engine** (IaaS). Sale un parche de seguridad crítico para su sistema operativo. ¿Quién debe aplicarlo?",
+      "hints": ["En IaaS, ¿desde qué capa hacia arriba gestionas tú?"],
+      "options": [
+        { "id": "a", "text": "Google, automáticamente", "correct": false, "explanation": "En IaaS el sistema operativo de la VM es tuyo." },
+        { "id": "b", "text": "Tú (o tu equipo)", "correct": true, "explanation": "Correcto: en IaaS gestionas desde el sistema operativo hacia arriba." },
+        { "id": "c", "text": "Nadie: en la nube no hace falta parchear", "correct": false, "explanation": "Un sistema sin parchear es vulnerable esté donde esté." }
+      ],
+      "solution": {
+        "answer": "Tú",
+        "explanation": "Según el modelo de responsabilidad compartida, en IaaS el proveedor asegura el hardware y la virtualización; el sistema operativo, sus parches y todo lo que está encima son responsabilidad del cliente."
+      }
+    },
+    {
+      "id": "datos-siempre-tuyos",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si usas un servicio **SaaS**, la configuración de accesos a tus datos (quién puede ver qué) es responsabilidad del proveedor.",
+      "hints": ["Mira la primera fila de la tabla de responsabilidad compartida."],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Los datos y los accesos son siempre del cliente, en cualquier modelo." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto: aunque el proveedor gestione todo lo demás, quién accede a tus datos lo decides tú." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "En IaaS, PaaS y SaaS, los datos, las identidades y los permisos son responsabilidad del cliente."
+      }
+    },
+    {
+      "id": "hibrida-multicloud",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Una empresa tiene su ERP en su propio centro de datos y su web en Google Cloud, conectados entre sí. ¿Qué modelo de despliegue es?",
+      "hints": ["¿Cuántos proveedores públicos hay? ¿Hay infraestructura propia?"],
+      "options": [
+        { "id": "a", "text": "Multicloud", "correct": false, "explanation": "Multicloud implica varios proveedores públicos; aquí solo hay uno." },
+        { "id": "b", "text": "Nube híbrida", "correct": true, "explanation": "Correcto: combina infraestructura propia con nube pública." },
+        { "id": "c", "text": "Nube privada", "correct": false, "explanation": "Parte de su infraestructura está en una nube pública." }
+      ],
+      "solution": {
+        "answer": "Nube híbrida",
+        "explanation": "Híbrida = infraestructura propia (on-premises o nube privada) + nube pública, conectadas. Multicloud = varios proveedores públicos."
+      }
+    }
+  ]
+}

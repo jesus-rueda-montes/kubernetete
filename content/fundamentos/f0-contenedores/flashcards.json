@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "contenedor", "front": "¿Qué es un contenedor, técnicamente?", "back": "Un proceso de Linux aislado con namespaces (qué ve) y cgroups (cuánto consume), que comparte el kernel del anfitrión." },
+    { "id": "imagen", "front": "Imagen frente a contenedor", "back": "La imagen es una plantilla de solo lectura hecha de capas; el contenedor es una instancia en ejecución con su capa de escritura." },
+    { "id": "nombre-imagen", "front": "Partes del nombre de una imagen", "back": "`registro/repositorio:etiqueta`. Sin registro: Docker Hub. Sin etiqueta: `latest`." },
+    { "id": "puertos", "front": "Formato de `-p` en `docker run`", "back": "`-p PUERTO_HOST:PUERTO_CONTENEDOR`, p. ej. `-p 8080:80`." },
+    { "id": "run-cmd", "front": "`RUN` frente a `CMD`", "back": "`RUN` se ejecuta al construir la imagen; `CMD`, al arrancar el contenedor." },
+    { "id": "expose", "front": "¿Abre `EXPOSE` un puerto?", "back": "No: solo documenta en qué puerto escucha la app. Publicarlo es `-p` (o un Service en Kubernetes)." },
+    { "id": "multistage", "front": "¿Para qué sirve un multi-stage build?", "back": "Compilar en una etapa con todas las herramientas y copiar solo el resultado a una imagen final pequeña." }
+  ]
+}

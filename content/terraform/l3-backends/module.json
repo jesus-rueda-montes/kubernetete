@@ -1,0 +1,8 @@
+{
+  "title": "Backends remotos y bloqueo",
+  "summary": "Guardar el state en GCS o S3 para trabajar en equipo, el bloqueo del state, la configuración parcial y cómo migrar de un backend a otro.",
+  "level": 3,
+  "order": 2,
+  "xp": 100,
+  "prereqs": []
+}

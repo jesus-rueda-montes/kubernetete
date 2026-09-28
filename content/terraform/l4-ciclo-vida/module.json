@@ -1,0 +1,8 @@
+{
+  "title": "Ciclo de vida, import y refactorización",
+  "summary": "Controlar cómo se crean, sustituyen y destruyen los recursos con lifecycle, traer a Terraform recursos que ya existen con import, y dejar de gestionarlos con removed.",
+  "level": 4,
+  "order": 1,
+  "xp": 100,
+  "prereqs": []
+}

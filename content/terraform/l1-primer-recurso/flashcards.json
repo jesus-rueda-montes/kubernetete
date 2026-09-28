@@ -1,0 +1,8 @@
+{
+  "cards": [
+    { "id": "tf-declarativo", "front": "¿Qué significa que Terraform sea declarativo?", "back": "Describes el estado final que quieres y Terraform calcula los cambios necesarios para llegar a él." },
+    { "id": "tf-ciclo", "front": "Ciclo básico de Terraform", "back": "`terraform init` → `terraform plan` → `terraform apply` (y `terraform destroy` para borrar)." },
+    { "id": "tf-state", "front": "¿Para qué sirve el state de Terraform?", "back": "Relaciona cada recurso del código con el recurso real, para poder calcular qué crear, cambiar o borrar." },
+    { "id": "tf-nombre-local", "front": "En resource \"TIPO\" \"NOMBRE\", ¿qué es NOMBRE?", "back": "Un nombre local para referirse al recurso dentro de Terraform (TIPO.NOMBRE). El nombre real va en los atributos." }
+  ]
+}

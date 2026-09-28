@@ -1,0 +1,11 @@
+{
+  "cards": [
+    { "id": "valores-rwx", "front": "Valor numérico de r, w y x", "back": "r = 4, w = 2, x = 1. Se suman por dueño, grupo y resto (p. ej. 7 = rwx, 5 = r-x)." },
+    { "id": "755-644-600", "front": "¿Para qué se usan 755, 644 y 600?", "back": "755: programas y carpetas. 644: archivos normales. 600: secretos (clave SSH privada)." },
+    { "id": "tail-f", "front": "Seguir un log en directo", "back": "`tail -f archivo.log` (Ctrl+C para salir)." },
+    { "id": "sigterm-sigkill", "front": "SIGTERM frente a SIGKILL", "back": "SIGTERM (`kill`): pide terminar, permite cerrar ordenadamente. SIGKILL (`kill -9`): mata al instante, no se puede ignorar." },
+    { "id": "export", "front": "¿Qué hace `export VAR=valor`?", "back": "Crea una variable de entorno que heredan los programas que lances después. Se lee con `$VAR`." },
+    { "id": "redirecciones", "front": "`|`, `>`, `>>` y `2>`", "back": "`|` pasa la salida al siguiente comando; `>` sobrescribe un archivo; `>>` añade; `2>` redirige los errores." },
+    { "id": "exit-code", "front": "¿Qué indica el código de salida 0?", "back": "Éxito. Cualquier otro valor es error. Se consulta con `echo $?`." }
+  ]
+}

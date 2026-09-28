@@ -1,0 +1,208 @@
+{
+  "exercises": [
+    {
+      "id": "accessor-alcance",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "La API de pedidos necesita leer el secreto `db-password`. ¿Dónde concedes `roles/secretmanager.secretAccessor` a su cuenta de servicio?",
+      "hints": ["Piensa en el mínimo privilegio: ¿qué más podría leer?"],
+      "options": [
+        { "id": "a", "text": "Sobre el secreto `db-password`", "correct": true, "explanation": "Correcto: solo podrá leer ese secreto." },
+        { "id": "b", "text": "Sobre el proyecto", "correct": false, "explanation": "Podría leer todos los secretos del proyecto." },
+        { "id": "c", "text": "Sobre la organización", "correct": false, "explanation": "Podría leer todos los secretos de todos los proyectos." }
+      ],
+      "solution": {
+        "answer": "Sobre el secreto",
+        "explanation": "Secret Manager admite IAM por secreto. Dar el rol solo sobre los secretos que la aplicación necesita es mínimo privilegio."
+      }
+    },
+    {
+      "id": "rotacion",
+      "type": "quiz",
+      "mode": "truefalse",
+      "prompt": "Si configuras `--rotation-period` en un secreto de Secret Manager, Secret Manager genera automáticamente la contraseña nueva y la cambia en la base de datos.",
+      "hints": ["¿Cómo sabría Secret Manager cambiar la contraseña en tu base de datos?"],
+      "options": [
+        { "id": "v", "text": "Verdadero", "correct": false, "explanation": "Solo envía un aviso." },
+        { "id": "f", "text": "Falso", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "Falso",
+        "explanation": "En la fecha de rotación, Secret Manager publica un aviso en Pub/Sub. Tu proceso genera el valor nuevo, lo aplica y añade la versión."
+      }
+    },
+    {
+      "id": "cmek",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Un auditor dice: «Los datos de Cloud Storage no están cifrados porque no usáis CMEK». ¿Qué respondes?",
+      "hints": ["¿Qué pasa con los datos en reposo por defecto en Google Cloud?"],
+      "options": [
+        { "id": "a", "text": "Que sí están cifrados, con claves gestionadas por Google; CMEK añadiría control sobre la clave, no el cifrado", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Que tiene razón y hay que activar el cifrado", "correct": false, "explanation": "El cifrado en reposo está siempre activo." },
+        { "id": "c", "text": "Que el cifrado solo existe con HSM", "correct": false, "explanation": "HSM es un nivel de protección de las claves de KMS, no un requisito para cifrar." }
+      ],
+      "solution": {
+        "answer": "Ya están cifrados",
+        "explanation": "Todo se cifra en reposo por defecto. CMEK hace que la KEK sea una clave tuya en Cloud KMS: tú controlas la rotación, el acceso y la revocación."
+      }
+    },
+    {
+      "id": "kms-borrar",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "En Cloud KMS, ¿qué se puede destruir?",
+      "hints": ["Hay dos niveles que no se pueden borrar nunca."],
+      "options": [
+        { "id": "a", "text": "Las versiones de una clave, tras un periodo de espera", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "El llavero completo, con todas sus claves", "correct": false, "explanation": "Los llaveros no se pueden borrar." },
+        { "id": "c", "text": "La clave, al instante", "correct": false, "explanation": "Las claves tampoco se pueden borrar; solo sus versiones, y con espera." }
+      ],
+      "solution": {
+        "answer": "Las versiones",
+        "explanation": "Llaveros y claves son permanentes. Las versiones se programan para destrucción (por defecto, 30 días de espera), y lo cifrado con ellas queda ilegible."
+      }
+    },
+    {
+      "id": "org-policy",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Quieres que en **ningún** proyecto de la empresa se puedan crear claves JSON de cuentas de servicio, ni siquiera por los propietarios. ¿Qué usas?",
+      "hints": ["IAM dice quién puede; necesitas algo que diga qué no se puede hacer."],
+      "options": [
+        { "id": "a", "text": "Una política de organización con la restricción `iam.disableServiceAccountKeyCreation` en la organización", "correct": true, "explanation": "Correcto: se hereda a todos los proyectos." },
+        { "id": "b", "text": "Quitar el rol de propietario a todo el mundo", "correct": false, "explanation": "Otros roles también pueden crear claves, y no evita errores futuros." },
+        { "id": "c", "text": "Una regla de firewall", "correct": false, "explanation": "El firewall controla tráfico de red, no acciones de la API." }
+      ],
+      "solution": {
+        "answer": "Política de organización",
+        "explanation": "Las políticas de organización son guardarraíles que se heredan hacia abajo y se aplican aunque el usuario tenga permisos de IAM."
+      }
+    },
+    {
+      "id": "exfiltracion",
+      "type": "quiz",
+      "mode": "single",
+      "prompt": "Te preocupa que, si roban las credenciales de una cuenta de servicio, copien los datos de BigQuery a un proyecto del atacante. ¿Qué capa lo evita?",
+      "hints": ["Las credenciales serían válidas; hace falta algo que mire desde dónde y hacia dónde."],
+      "options": [
+        { "id": "a", "text": "VPC Service Controls", "correct": true, "explanation": "Correcto." },
+        { "id": "b", "text": "Cloud Armor", "correct": false, "explanation": "Protege aplicaciones web detrás de un balanceador, no las APIs de Google." },
+        { "id": "c", "text": "Security Command Center", "correct": false, "explanation": "Detecta problemas, pero no bloquea las peticiones." }
+      ],
+      "solution": {
+        "answer": "VPC Service Controls",
+        "explanation": "El perímetro de servicio rechaza las peticiones desde fuera y las copias a proyectos externos, aunque las credenciales sean válidas."
+      }
+    },
+    {
+      "id": "capas",
+      "type": "quiz",
+      "mode": "multi",
+      "prompt": "¿Cuáles de estas afirmaciones son correctas?",
+      "hints": ["Repasa qué protege cada servicio y dónde se aplica."],
+      "options": [
+        { "id": "a", "text": "Cloud Armor incluye reglas WAF basadas en el OWASP Core Rule Set", "correct": true, "explanation": "Correcto: por ejemplo, `sqli-v422-stable`." },
+        { "id": "b", "text": "IAP permite entrar por SSH a VMs sin IP externa", "correct": true, "explanation": "Correcto: con IAP TCP forwarding." },
+        { "id": "c", "text": "Las reglas WAF de Cloud Armor protegen un backend aunque se acceda a él sin pasar por el balanceador", "correct": false, "explanation": "Solo protegen el tráfico que pasa por el balanceador." },
+        { "id": "d", "text": "Un perímetro de VPC Service Controls se puede probar primero en modo dry run", "correct": true, "explanation": "Correcto." }
+      ],
+      "solution": {
+        "answer": "a, b y d",
+        "explanation": "Cloud Armor actúa en el balanceador; si el backend es accesible directamente, se esquiva. Por eso se combinan capas."
+      }
+    },
+    {
+      "id": "cmd-secret",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Crea el secreto `api-token` con replicación automática, leyendo el valor de la entrada estándar.",
+      "hints": [
+        "Es `gcloud secrets create NOMBRE`.",
+        "`--replication-policy=automatic` y `--data-file=-` (el guion es la entrada estándar)."
+      ],
+      "accepted": [
+        "gcloud secrets create api-token --replication-policy=automatic --data-file=-",
+        "gcloud secrets create api-token --data-file=- --replication-policy=automatic"
+      ],
+      "output": "Created version [1] of the secret [api-token].",
+      "solution": {
+        "answer": "gcloud secrets create api-token --replication-policy=automatic --data-file=-",
+        "explanation": "Normalmente se usa con una tubería (`printf '...' | gcloud secrets create ...`) para que el valor no quede en el historial de la shell como argumento."
+      }
+    },
+    {
+      "id": "cmd-access",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Lee el valor de la última versión del secreto `api-token`.",
+      "hints": [
+        "Es `gcloud secrets versions access`.",
+        "La versión es `latest` y el secreto va con `--secret`."
+      ],
+      "accepted": ["gcloud secrets versions access latest --secret=api-token"],
+      "output": "tk_9f2c1a7e4b",
+      "solution": {
+        "answer": "gcloud secrets versions access latest --secret=api-token",
+        "explanation": "Requiere `roles/secretmanager.secretAccessor` sobre el secreto. Si los Data Access audit logs están activos, el acceso queda registrado."
+      }
+    },
+    {
+      "id": "cmd-binding",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "Permite que la cuenta de servicio `api@tienda.iam.gserviceaccount.com` lea el secreto `api-token`.",
+      "hints": [
+        "Es `gcloud secrets add-iam-policy-binding SECRETO`.",
+        "`--member=serviceAccount:...` y `--role=roles/secretmanager.secretAccessor`."
+      ],
+      "accepted": [
+        "gcloud secrets add-iam-policy-binding api-token --member=serviceAccount:api@tienda.iam.gserviceaccount.com --role=roles/secretmanager.secretAccessor"
+      ],
+      "output": "Updated IAM policy for secret [api-token].\nbindings:\n- members:\n  - serviceAccount:api@tienda.iam.gserviceaccount.com\n  role: roles/secretmanager.secretAccessor\netag: BwYd3kQ2x1A=\nversion: 1",
+      "solution": {
+        "answer": "gcloud secrets add-iam-policy-binding api-token --member=serviceAccount:api@tienda.iam.gserviceaccount.com --role=roles/secretmanager.secretAccessor",
+        "explanation": "El rol se concede solo sobre ese secreto, no sobre el proyecto: mínimo privilegio."
+      }
+    },
+    {
+      "id": "cmd-kms",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "En el llavero `tienda` (`europe-west1`), crea la clave de cifrado `datos` con rotación automática cada 90 días. La primera rotación es el `2026-12-01T00:00:00Z`.",
+      "hints": [
+        "Es `gcloud kms keys create NOMBRE`.",
+        "Necesitas `--keyring`, `--location`, `--purpose=encryption`, `--rotation-period=90d` y `--next-rotation-time`."
+      ],
+      "accepted": [
+        "gcloud kms keys create datos --keyring=tienda --location=europe-west1 --purpose=encryption --rotation-period=90d --next-rotation-time=2026-12-01T00:00:00Z"
+      ],
+      "output": "",
+      "solution": {
+        "answer": "gcloud kms keys create datos --keyring=tienda --location=europe-west1 --purpose=encryption --rotation-period=90d --next-rotation-time=2026-12-01T00:00:00Z",
+        "explanation": "`--purpose=encryption` es una clave simétrica, la que se usa para CMEK. Las versiones antiguas siguen sirviendo para descifrar lo que cifraron."
+      }
+    },
+    {
+      "id": "cmd-fw-iap",
+      "type": "command",
+      "cli": "gcloud",
+      "prompt": "En la red `tienda-vpc`, crea la regla `permitir-ssh-iap` que permita la entrada por `tcp:22` solo desde el rango de IAP TCP forwarding.",
+      "hints": [
+        "Es `gcloud compute firewall-rules create NOMBRE --network=...`.",
+        "`--allow=tcp:22` y `--source-ranges=35.235.240.0/20`."
+      ],
+      "accepted": [
+        "gcloud compute firewall-rules create permitir-ssh-iap --network=tienda-vpc --allow=tcp:22 --source-ranges=35.235.240.0/20",
+        "gcloud compute firewall-rules create permitir-ssh-iap --network=tienda-vpc --direction=INGRESS --allow=tcp:22 --source-ranges=35.235.240.0/20",
+        "gcloud compute firewall-rules create permitir-ssh-iap --network=tienda-vpc --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20",
+        "gcloud compute firewall-rules create permitir-ssh-iap --network=tienda-vpc --direction=INGRESS --action=ALLOW --rules=tcp:22 --source-ranges=35.235.240.0/20"
+      ],
+      "output": "Creating firewall...done.\nNAME              NETWORK     DIRECTION  PRIORITY  ALLOW   DENY  DISABLED\npermitir-ssh-iap  tienda-vpc  INGRESS    1000      tcp:22        False",
+      "solution": {
+        "answer": "gcloud compute firewall-rules create permitir-ssh-iap --network=tienda-vpc --allow=tcp:22 --source-ranges=35.235.240.0/20",
+        "explanation": "`35.235.240.0/20` es el rango que usa IAP para el TCP forwarding. Así las VMs no necesitan IP externa y SSH no está abierto a Internet."
+      }
+    }
+  ]
+}
